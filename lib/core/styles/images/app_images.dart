@@ -7,9 +7,9 @@ class AppImages {
       "assets/animations/flowery_error_animation.json";
   static const pinkDoneAnimation =
       "assets/animations/flowery_success_animation.json";
-  static const authBackground =
-      "assets/images/auth_background.png";
-  static const logoIcon =
-      "assets/images/logoIcon.png";
-
+  static const authBackground = "assets/images/auth_background.png";
+  static const logoIcon = "assets/images/logoIcon.png";
+  static const maleIcon = "assets/images/maleIcon.png";
+  static const femaleIcon = "assets/images/femaleIcon.png";
+  static const back = "assets/images/back.png";
 }

@@ -2,13 +2,16 @@ import 'package:fitness_app/core/routes/page_route_name.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../presentation/auth/sign_up/view/sign_up_screen.dart';
+import '../../presentation/auth/sign_up/view/gender_screen.dart';
+import '../../presentation/auth/sign_up/view/main_sign_up_screen.dart';
 
 class AppRoutes {
   static Route<dynamic> onGenerateRoute(RouteSettings setting) {
     switch (setting.name) {
-      case PageRouteName.signUp:
+      case PageRouteName.mainSignUp:
         return _handleMaterialPageRoute(widget: SignUpPage());
+        case PageRouteName.genderSignUp:
+        return _handleMaterialPageRoute(widget: GenderScreen());
       default:
         return _handleMaterialPageRoute(widget: const Scaffold());
     }

@@ -59,7 +59,7 @@ class _MyAppState extends State<MyApp> {
           supportedLocales: S.delegate.supportedLocales,
           debugShowCheckedModeBanner: false,
           theme: AppTheme.appTheme,
-          initialRoute: PageRouteName.signUp,
+          initialRoute: PageRouteName.mainSignUp,
           onGenerateRoute: AppRoutes.onGenerateRoute,
         );
       },

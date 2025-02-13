@@ -117,6 +117,11 @@ static TextStyle font14LightOrangeWeight400 = TextStyle(
     color: AppColors.kBlack,
     fontWeight: FontWeight.w600,
   );
+ static TextStyle font14WhiteWeight800 = TextStyle(
+    fontSize: 14.sp,
+    color: AppColors.kWhite,
+    fontWeight: FontWeight.w800,
+  );
 
   static TextStyle font14BlackWeight500 = TextStyle(
     fontSize: 14.sp,

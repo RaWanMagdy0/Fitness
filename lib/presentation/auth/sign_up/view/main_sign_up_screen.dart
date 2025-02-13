@@ -1,3 +1,4 @@
+import 'package:fitness_app/core/routes/page_route_name.dart';
 import 'package:fitness_app/core/utils/widget/custom_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -79,8 +80,10 @@ class SignUpPage extends StatelessWidget {
                   SizedBox(
                     width: double.infinity,
                     child: CustomButton(
-                      onPressed: () {},
-                      child: Text("Register", style: AppFonts.font16WhiteWeight500),
+                      onPressed: () {
+                        Navigator.pushReplacementNamed(context, PageRouteName.genderSignUp);
+                      },
+                      child: Text("Next", style: AppFonts.font16WhiteWeight500),
                     ),
                   ),
                   Row(
