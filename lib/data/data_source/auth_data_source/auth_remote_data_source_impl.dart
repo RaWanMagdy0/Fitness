@@ -3,6 +3,7 @@ import 'package:fitness_app/core/api/execute_api_call.dart';
 import 'package:fitness_app/data/api/auth_api/auth_api_manager.dart';
 import 'package:fitness_app/data/models/sign_up/request/sign_up_request_body.dart';
 import 'package:injectable/injectable.dart';
+import '../../models/login/request/login_request_model.dart' show LoginRequestModel;
 import 'auth_remote_data_source.dart';
 
 
@@ -17,6 +18,13 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource{
      return response.message;
    }
    );
+  }
+  @override
+  Future<Result<String?>> login(LoginRequestModel loginRequestBody) {
+    return executeApiCall<String?>(() async {
+      final response = await authApiManager.login(loginRequestBody);
+      return response.message;
+    });
   }
 
 }

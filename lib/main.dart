@@ -11,33 +11,30 @@ import 'core/utils/bloc_observer/app_bloc_observer.dart';
 import 'core/utils/functions/providers/local_provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  configureDependencies();
+  configureDependencies(); // Initialize dependency injection
   Bloc.observer = AppBlocObserver();
+
+  // Initialize local provider for language settings
   LocalProvider provider = LocalProvider();
   await provider.loadSavedLanguage();
+
+  // Check if user is already logged in (you can implement this logic)
+  // final token = await TokenManager.getToken();
+  // final initialRoute = token != null ? PageRouteName.home : PageRouteName.login;
 
   runApp(
     ChangeNotifierProvider(
       create: (context) => provider,
-      child: MyApp(),
+      child: const MyApp(),
     ),
   );
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +56,7 @@ class _MyAppState extends State<MyApp> {
           supportedLocales: S.delegate.supportedLocales,
           debugShowCheckedModeBanner: false,
           theme: AppTheme.appTheme,
-          initialRoute: PageRouteName.mainSignUp,
+          initialRoute: PageRouteName.login, // Change initial route to login
           onGenerateRoute: AppRoutes.onGenerateRoute,
         );
       },
