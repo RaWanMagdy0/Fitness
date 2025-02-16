@@ -3,28 +3,28 @@ import 'package:fitness_app/core/styles/colors/app_colors.dart';
 import 'package:fitness_app/core/styles/fonts/app_fonts.dart';
 import 'package:fitness_app/core/styles/images/app_images.dart';
 import 'package:fitness_app/core/utils/const/app_string.dart';
-import 'package:fitness_app/core/utils/widget/custom%20scaffold.dart'
-    show CustomScaffold;
 import 'package:fitness_app/core/utils/widget/custom_button.dart';
 import 'package:fitness_app/core/utils/widget/custom_radio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class ActvityScreen extends StatefulWidget {
-  const ActvityScreen({super.key});
+import '../../../../core/utils/widget/custom scaffold.dart';
+
+class ActivityScreen extends StatefulWidget {
+  const ActivityScreen({super.key});
 
   @override
-  _ActvityScreenState createState() => _ActvityScreenState();
+  _ActivityScreenState createState() => _ActivityScreenState();
 }
 
-class _ActvityScreenState extends State<ActvityScreen> {
+class _ActivityScreenState extends State<ActivityScreen> {
   final ValueNotifier<String?> _selectedActivityLevel =
       ValueNotifier<String?>(null);
-  double blurHeight = 375.0;
+  double blurHeight = 380.0;
 
   @override
   void dispose() {
-    _selectedActivityLevel.dispose(); // 🔹 تحرير الموارد عند التخلص من الصفحة
+    _selectedActivityLevel.dispose();
     super.dispose();
   }
 
@@ -34,17 +34,16 @@ class _ActvityScreenState extends State<ActvityScreen> {
       backgroundImage: AppImages.authBackground,
       enableBlur: true,
       blurStrength: 5.0,
-      blurHeight: blurHeight,
+      blurHeight: 400,
       blurWidth: 354.0,
       borderRadius: 30.0,
-      blurStartPosition: MediaQuery.of(context).size.height * 0.46,
+      blurStartPosition: MediaQuery.of(context).size.height * 0.4,
       child: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: 24.w),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             40.verticalSpace,
-
             Row(
               children: [
                 InkWell(
@@ -84,7 +83,6 @@ class _ActvityScreenState extends State<ActvityScreen> {
 
             32.verticalSpace,
 
-            /// 🔹 **خيارات مستويات النشاط البدني باستخدام `ValueListenableBuilder`**
             ValueListenableBuilder<String?>(
               valueListenable: _selectedActivityLevel,
               builder: (context, selectedValue, child) {
@@ -133,10 +131,7 @@ class _ActvityScreenState extends State<ActvityScreen> {
                 );
               },
             ),
-
             40.verticalSpace,
-
-            /// 🔹 **زر المتابعة (Next)**
             ValueListenableBuilder<String?>(
               valueListenable: _selectedActivityLevel,
               builder: (context, selectedValue, child) {

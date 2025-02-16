@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 
 import 'core/di/di.dart';
 import 'core/generated/l10n.dart';
+import 'core/local/sign_up_provider.dart';
 import 'core/routes/app_routes.dart';
 import 'core/routes/page_route_name.dart';
 import 'core/theme/app_theme.dart';
@@ -15,17 +16,24 @@ import 'core/utils/functions/providers/local_provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   configureDependencies();
+
   Bloc.observer = AppBlocObserver();
-  LocalProvider provider = LocalProvider();
-  await provider.loadSavedLanguage();
+
+  LocalProvider localProvider = LocalProvider();
+  SignupProvider signupProvider = SignupProvider();
+
+  await localProvider.loadSavedLanguage();
+  await signupProvider.loadUserData();
 
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => provider,
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => localProvider),
+        ChangeNotifierProvider(create: (context) => signupProvider),
+      ],
       child: MyApp(),
     ),
-  );
-}
+  );}
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
@@ -36,14 +44,8 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final provider = Provider.of<LocalProvider>(context);
-
     return ScreenUtilInit(
       designSize: const Size(375, 812),
       minTextAdapt: true,
@@ -60,7 +62,7 @@ class _MyAppState extends State<MyApp> {
           supportedLocales: S.delegate.supportedLocales,
           debugShowCheckedModeBanner: false,
           theme: AppTheme.appTheme,
-          initialRoute: PageRouteName.goalScreen,
+          initialRoute: PageRouteName.mainSignUp,
           onGenerateRoute: AppRoutes.onGenerateRoute,
         );
       },

@@ -1,14 +1,16 @@
 import 'package:fitness_app/core/routes/page_route_name.dart';
 import 'package:fitness_app/core/styles/colors/app_colors.dart';
 import 'package:fitness_app/core/utils/widget/custom_button.dart';
-import 'package:fitness_app/presentation/auth/sign_up/view/widgets/custom_gender_container.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../core/generated/l10n.dart';
+import '../../../../core/local/sign_up_provider.dart';
 import '../../../../core/styles/fonts/app_fonts.dart';
 import '../../../../core/styles/images/app_images.dart';
 import '../../../../core/utils/widget/custom scaffold.dart';
+import '../widgets/custom_gender_container.dart';
 
 class GenderScreen extends StatefulWidget {
   const GenderScreen({super.key});
@@ -20,17 +22,27 @@ class GenderScreen extends StatefulWidget {
 class _GenderScreenState extends State<GenderScreen> {
   String? selectedGender;
   double blurHeight = 300.0;
+  @override
+  void initState() {
+    super.initState();
+    final signupProvider = context.read<SignupProvider>();
+    selectedGender = signupProvider.getData("gender") ?? "";
+  }
 
   void _onGenderSelected(String gender) {
     setState(() {
       selectedGender = gender;
       blurHeight = 400.0;
     });
+    final signupProvider = context.read<SignupProvider>();
+    signupProvider.saveData("gender", gender);
   }
 
   @override
   Widget build(BuildContext context) {
     final local = S.of(context);
+    final signupProvider = context.read<SignupProvider>();
+
     return CustomScaffold(
       backgroundImage: AppImages.authBackground,
       enableBlur: true,
@@ -71,22 +83,21 @@ class _GenderScreenState extends State<GenderScreen> {
             Column(
               children: [
                 CustomGenderContainer(
-                  image: AppImages.maleIcon,
-                  text: "Male",
-                  selected: selectedGender == "Male",
-                  onTap: () => _onGenderSelected("Male"),
-                ),
+                    image: AppImages.maleIcon,
+                    text: "Male",
+                    selected: selectedGender == "Male",
+                    onTap: () => _onGenderSelected("Male")),
                 40.verticalSpace,
                 CustomGenderContainer(
-                  image: AppImages.femaleIcon,
-                  text: "Female",
-                  selected: selectedGender == "Female",
-                  onTap: () => _onGenderSelected("Female"),
-                ),
+                    image: AppImages.femaleIcon,
+                    text: "Female",
+                    selected: selectedGender == "Female",
+                    onTap: () => _onGenderSelected("Female")),
                 20.verticalSpace,
                 if (selectedGender != null)
                   CustomButton(
                     onPressed: () {
+                      signupProvider.saveData("firstName", selectedGender!);
                       Navigator.pushReplacementNamed(
                           context, PageRouteName.goalScreen);
                     },

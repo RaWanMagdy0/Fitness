@@ -39,8 +39,8 @@ class CustomRadioButton extends StatelessWidget {
     return GestureDetector(
       onTap: () => onChanged(value),
       child: Container(
-        width: 350.w,
-        height: 55.h,
+        width: double.infinity,
+        height: 45.h,
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
         decoration: BoxDecoration(
           color: isSelected
