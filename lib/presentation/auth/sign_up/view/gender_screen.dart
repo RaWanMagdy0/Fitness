@@ -2,9 +2,9 @@ import 'package:fitness_app/core/routes/page_route_name.dart';
 import 'package:fitness_app/core/styles/colors/app_colors.dart';
 import 'package:fitness_app/core/utils/widget/custom_button.dart';
 import 'package:fitness_app/presentation/auth/sign_up/view/widgets/custom_gender_container.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import '../../../../core/generated/l10n.dart';
 import '../../../../core/styles/fonts/app_fonts.dart';
 import '../../../../core/styles/images/app_images.dart';
@@ -86,7 +86,10 @@ class _GenderScreenState extends State<GenderScreen> {
                 20.verticalSpace,
                 if (selectedGender != null)
                   CustomButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pushReplacementNamed(
+                          context, PageRouteName.goalScreen);
+                    },
                     backgroundColor: AppColors.kOrange,
                     maxHeight: 10.h,
                     maxWidth: 10.w,

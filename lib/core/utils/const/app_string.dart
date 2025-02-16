@@ -99,6 +99,10 @@ class AppStrings {
   static const String currentPassword = 'Current password';
   static const String occasionAppBar = "Occasion";
   static const String occasionTitle = "Bloom with our exquisite best sellers";
+  static const String whatGoal = "WHAT IS YOUR GOAL ? ";
+  static const String next = "Next ";
+  static const String thisHelps = "This Helps Us Create Your Personalized Plan";
+  static const String yourRegular = "YOUR REGULAR PHYSICAL ACTIVITY LEVEL?";
 
   static RegExp emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
 }

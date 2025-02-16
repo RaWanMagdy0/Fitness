@@ -1,5 +1,6 @@
 import 'package:fitness_app/core/routes/page_route_name.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:fitness_app/presentation/actvity_screen.dart';
+import 'package:fitness_app/presentation/goal_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../presentation/auth/sign_up/view/gender_screen.dart';
@@ -10,8 +11,12 @@ class AppRoutes {
     switch (setting.name) {
       case PageRouteName.mainSignUp:
         return _handleMaterialPageRoute(widget: SignUpPage());
-        case PageRouteName.genderSignUp:
+      case PageRouteName.genderSignUp:
         return _handleMaterialPageRoute(widget: GenderScreen());
+      case PageRouteName.goalScreen:
+        return _handleMaterialPageRoute(widget: GoalScreen());
+      case PageRouteName.actvityScreen:
+        return _handleMaterialPageRoute(widget: ActvityScreen());
       default:
         return _handleMaterialPageRoute(widget: const Scaffold());
     }
