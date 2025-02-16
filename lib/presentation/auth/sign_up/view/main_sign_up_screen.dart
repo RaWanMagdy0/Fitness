@@ -1,8 +1,7 @@
-import 'package:fitness_app/core/routes/page_route_name.dart';
 import 'package:fitness_app/core/utils/widget/custom_button.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import '../../../../core/generated/l10n.dart';
 import '../../../../core/styles/fonts/app_fonts.dart';
 import '../../../../core/styles/images/app_images.dart';
@@ -80,20 +79,18 @@ class SignUpPage extends StatelessWidget {
                   SizedBox(
                     width: double.infinity,
                     child: CustomButton(
-                      onPressed: () {
-                        Navigator.pushReplacementNamed(context, PageRouteName.genderSignUp);
-                      },
                       child: Text("Next", style: AppFonts.font16WhiteWeight500),
                     ),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(local.alreadyHaveAccount, style: AppFonts.font14WhiteWeight400),
+                      Text(local.alreadyHaveAccount,
+                          style: AppFonts.font14WhiteWeight400),
                       TextButton(
-                        onPressed: () {
-                        },
-                        child: Text(local.loginTitle, style: AppFonts.font14LightOrangeWeight400),
+                        onPressed: () {},
+                        child: Text(local.loginTitle,
+                            style: AppFonts.font14LightOrangeWeight400),
                       ),
                     ],
                   ),

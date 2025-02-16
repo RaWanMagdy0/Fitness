@@ -24,14 +24,11 @@ extension GetItInjectableX on _i174.GetIt {
     String? environment,
     _i526.EnvironmentFilter? environmentFilter,
   }) {
-    final gh = _i526.GetItHelper(this, environment, environmentFilter);
     final dioModule = _$DioModule();
     gh.factory<_i763.DioFactory>(() => _i763.DioFactory());
     gh.singleton<_i240.AppProvider>(() => _i240.AppProvider());
     gh.lazySingleton<_i361.Dio>(() => dioModule.dio);
     gh.lazySingleton<_i515.AuthApiManager>(
-      () => _i515.AuthApiManager(gh<_i361.Dio>()),
-    );
     return this;
   }
 }
