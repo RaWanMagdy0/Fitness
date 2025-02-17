@@ -3,4 +3,5 @@ class PageRouteName {
   static const String genderSignUp = "genderSignUp";
   static const String goalScreen = "goalScreen";
   static const String actvityScreen = "actvityScreen";
+  static const String login = "login";
 }

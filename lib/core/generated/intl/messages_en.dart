@@ -127,7 +127,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "loadingText": MessageLookupByLibrary.simpleMessage("Loading.."),
         "locationError": MessageLookupByLibrary.simpleMessage("Location Error"),
         "logOut": MessageLookupByLibrary.simpleMessage("Logout"),
-        "loginTitle": MessageLookupByLibrary.simpleMessage("Login"),
+        "loginTitle": MessageLookupByLibrary.simpleMessage("login"),
         "logoutConfirmationMessage":
             MessageLookupByLibrary.simpleMessage("Confirm logout!!"),
         "logoutConfirmationTitle":

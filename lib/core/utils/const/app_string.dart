@@ -1,6 +1,6 @@
 class AppStrings {
   static const String passwordAppBarTitle = "Password";
-  static const String loginTitle = "Login";
+  static const String loginTitle = "login";
   static const String confirmTitle = "Confirm";
   static const String signUpTitle = "Sign up";
   static const String forgetPasswordText = 'Forget password?';

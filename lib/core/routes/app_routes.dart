@@ -1,6 +1,7 @@
 import 'package:fitness_app/core/routes/page_route_name.dart';
 import 'package:fitness_app/presentation/auth/sign_up/view/actvity_screen.dart';
 import 'package:flutter/material.dart';
+import '../../presentation/auth/login/view/login_screen.dart' show LoginScreen;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../presentation/auth/sign_up/view/gender_screen.dart';
 import '../../presentation/auth/sign_up/view/goal_screen.dart';
@@ -20,6 +21,8 @@ class AppRoutes {
         );
       case PageRouteName.genderSignUp:
         return _handleMaterialPageRoute(widget: GenderScreen());
+      case PageRouteName.login:
+        return _handleMaterialPageRoute(widget: LoginScreen());
       case PageRouteName.goalScreen:
         return _handleMaterialPageRoute(widget: GoalScreen());
       case PageRouteName.actvityScreen:
