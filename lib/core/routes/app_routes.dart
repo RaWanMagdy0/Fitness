@@ -4,6 +4,7 @@ import 'package:fitness_app/presentation/auth/sign_up/view/actvity_screen.dart';
 import 'package:fitness_app/presentation/auth/sign_up/view/age_screen.dart';
 import 'package:fitness_app/presentation/auth/sign_up/view/height_screen.dart';
 import 'package:flutter/material.dart';
+import '../../presentation/auth/home/view/home_screen.dart';
 import '../../presentation/auth/login/view/login_screen.dart' show LoginScreen;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../presentation/auth/sign_up/view/gender_screen.dart';
@@ -52,7 +53,8 @@ class AppRoutes {
             child: ActivityScreen(),
           ),
         );
-
+      case PageRouteName.homeScreen:
+        return _handleMaterialPageRoute(widget: HomeScreen());
       default:
         return _handleMaterialPageRoute(widget: const Scaffold());
     }

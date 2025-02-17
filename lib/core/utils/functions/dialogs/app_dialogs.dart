@@ -16,7 +16,7 @@ class AppDialogs {
         return PopScope(
           canPop: false,
           child: Lottie.asset(
-            AppImages.pinkLoadingAnimation,
+            AppImages.loadingAnimation,
             height: 50.h,
             width: 20.w,
           ),
@@ -33,27 +33,25 @@ class AppDialogs {
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: AppColors.kWhite,
-        icon: Lottie.asset(
-          AppImages.logoIcon,
-          height: 80.h,
-        ),        content: Text(
+        icon: Lottie.asset(AppImages.errorAnimation, height: 80.h),
+        content: Text(
           textAlign: TextAlign.center,
           errorMassage,
           style: AppFonts.font18BlackWeight500,
         ),
         /************
-                actions: [
-                TextButton(
-                onPressed: () {
-                Navigator.of(context).pop();
-                },
-                child: Text(
-                'Got it',
-                style: AppFonts.font20BlackWeight400,
-                ),
-                ),
-                ],
-             ************/
+            actions: [
+            TextButton(
+            onPressed: () {
+            Navigator.of(context).pop();
+            },
+            child: Text(
+            'Got it',
+            style: AppFonts.font20BlackWeight400,
+            ),
+            ),
+            ],
+         ************/
       ),
     );
   }
@@ -68,8 +66,22 @@ class AppDialogs {
       builder: (context) => AlertDialog(
         backgroundColor: AppColors.kWhite,
         icon: Lottie.asset(
-          AppImages.logoIcon,
+          AppImages.successAnimation,
           height: 80.h,
+          repeat: false,
+          onLoaded: (composition) {
+            Future.delayed(
+              composition.duration,
+                  () {
+                if (context.mounted) {
+                  Navigator.of(context).pop();
+                  if (whenAnimationFinished != null) {
+                    whenAnimationFinished();
+                  }
+                }
+              },
+            );
+          },
         ),
         content: Text(
           message,

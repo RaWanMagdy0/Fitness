@@ -31,8 +31,11 @@ class LoginScreen extends StatelessWidget {
           AppDialogs.showHideDialog(context);
           AppDialogs.showSuccessDialog(
             context: context,
-            message: state.message,
+            message: "Login Successfully",
           );
+          Future.delayed(Duration(seconds: 2), () {
+            Navigator.pushReplacementNamed(context, PageRouteName.homeScreen);
+          });
         } else if (state is LoginError) {
           AppDialogs.showHideDialog(context);
           AppDialogs.showErrorDialog(

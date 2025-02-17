@@ -8,4 +8,5 @@ class PageRouteName {
   static const String weightScreen = "weightScreen";
   static const String heightScreen = "heightScreen";
   static const String ageScreen = "ageScreen";
+  static const String homeScreen = "homeScreen";
 }

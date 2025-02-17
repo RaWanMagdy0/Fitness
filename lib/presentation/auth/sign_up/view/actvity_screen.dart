@@ -69,31 +69,16 @@ class _ActivityScreenState extends State<ActivityScreen> {
     return BlocListener<SignUpCubit, SignUpState>(
       listener: (context, state) {
         if (state is SignUpLoading) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text("Signing up..."),
-              duration: Duration(seconds: 2),
-            ),
-          );
+          AppDialogs.showLoading(context: context);
+
         } else if (state is SignUpSuccess) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(state.message ?? "Signup Successful!"),
-              duration: Duration(seconds: 2),
-              backgroundColor: Colors.green,
-            ),
-          );
+          AppDialogs.showSuccessDialog(context: context, message: "Create account successfully!! please login in");
           Future.delayed(Duration(seconds: 2), () {
             Navigator.pushReplacementNamed(context, PageRouteName.login);
           });
         } else if (state is SignUpFail) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(state.errorMassage ?? "Signup Failed!"),
-              duration: Duration(seconds: 3),
-              backgroundColor: Colors.red,
-            ),
-          );
+          AppDialogs.showErrorDialog(context: context, errorMassage: state.errorMassage!);
+
         }
       },
       child: CustomScaffold(
