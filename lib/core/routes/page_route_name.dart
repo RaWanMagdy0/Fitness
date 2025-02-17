@@ -4,4 +4,6 @@ class PageRouteName {
   static const String goalScreen = "goalScreen";
   static const String actvityScreen = "actvityScreen";
   static const String login = "login";
+  static const String splashscreen = "splashscreen";
+  static const String weightSelectorScreen = "weightSelectorScreen";
 }

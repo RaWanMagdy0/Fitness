@@ -1,0 +1,2 @@
+C:/Users/FreeComp/StudioProjects/Fitness/android/app/.cxx/Debug/4q3ny4k4/armeabi-v7a/CMakeFiles/edit_cache.dir
+C:/Users/FreeComp/StudioProjects/Fitness/android/app/.cxx/Debug/4q3ny4k4/armeabi-v7a/CMakeFiles/rebuild_cache.dir

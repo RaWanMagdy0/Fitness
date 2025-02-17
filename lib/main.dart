@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
@@ -12,12 +13,10 @@ import 'core/theme/app_theme.dart';
 import 'core/utils/bloc_observer/app_bloc_observer.dart';
 import 'core/utils/functions/providers/local_provider.dart';
 
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   configureDependencies();
 
-  configureDependencies(); // Initialize dependency injection
   Bloc.observer = AppBlocObserver();
 
   LocalProvider localProvider = LocalProvider();
@@ -26,18 +25,7 @@ void main() async {
   await localProvider.loadSavedLanguage();
   await signupProvider.loadUserData();
 
-  // Initialize local provider for language settings
-  LocalProvider provider = LocalProvider();
-  await provider.loadSavedLanguage();
-
-  // Check if user is already logged in (you can implement this logic)
-  // final token = await TokenManager.getToken();
-  // final initialRoute = token != null ? PageRouteName.home : PageRouteName.login;
-
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => provider,
-      child: const MyApp(),
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => localProvider),
@@ -47,7 +35,7 @@ void main() async {
     ),
   );}
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
   @override
@@ -74,7 +62,7 @@ class _MyAppState extends State<MyApp> {
           supportedLocales: S.delegate.supportedLocales,
           debugShowCheckedModeBanner: false,
           theme: AppTheme.appTheme,
-          initialRoute: PageRouteName.login, // Change initial route to login
+          initialRoute: PageRouteName.weightSelectorScreen,
           onGenerateRoute: AppRoutes.onGenerateRoute,
         );
       },
