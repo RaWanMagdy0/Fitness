@@ -23,35 +23,33 @@ class SignUpPage extends StatefulWidget {
 
 class _SignUpPageState extends State<SignUpPage> {
   late SignUpCubit signUpCubit;
-  bool isButtonEnabled = false;
 
   @override
   void initState() {
     super.initState();
     signUpCubit = context.read<SignUpCubit>();
     final signupProvider = context.read<SignupProvider>();
-
-    signUpCubit.firstNameController.text = signupProvider.getData("firstName") ?? "";
-    signUpCubit.lastNameController.text = signupProvider.getData("lastName") ?? "";
+    signUpCubit.firstNameController.text =
+        signupProvider.getData("firstName") ?? "";
+    signUpCubit.lastNameController.text =
+        signupProvider.getData("lastName") ?? "";
     signUpCubit.emailController.text = signupProvider.getData("email") ?? "";
-    signUpCubit.passwordController.text = signupProvider.getData("password") ?? "";
-    Future.microtask(() {
-      validateForm();
-    });
+    signUpCubit.passwordController.text =
+        signupProvider.getData("password") ?? "";
+    signUpCubit.rePasswordController.text =
+        signupProvider.getData("rePassword") ?? "";
   }
-
-
 
   void validateForm() {
     setState(() {
-      isButtonEnabled = signUpCubit.firstNameController.text.isNotEmpty &&
+       signUpCubit.firstNameController.text.isNotEmpty &&
           signUpCubit.lastNameController.text.isNotEmpty &&
           signUpCubit.emailController.text.isNotEmpty &&
           signUpCubit.passwordController.text.isNotEmpty &&
+          signUpCubit.rePasswordController.text.isNotEmpty &&
           (signUpCubit.formKey.currentState?.validate() ?? false);
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -62,10 +60,10 @@ class _SignUpPageState extends State<SignUpPage> {
       backgroundImage: AppImages.authBackground,
       enableBlur: true,
       blurStrength: 5.0,
-      blurHeight: 430.0,
-      blurWidth: 350.0,
-      borderRadius: 30.0,
-      blurStartPosition: MediaQuery.of(context).size.height * 0.31,
+      blurHeight: 480.0,
+      blurWidth: 370.0.w,
+      borderRadius: 50.0,
+      blurStartPosition: MediaQuery.of(context).size.height * 0.32,
       child: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -85,7 +83,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   Text("Register", style: AppFonts.font24WhiteWeight800),
                 ],
               ),
-              20.verticalSpace,
+              10.verticalSpace,
               Form(
                 key: signUpCubit.formKey,
                 child: Padding(
@@ -142,12 +140,29 @@ class _SignUpPageState extends State<SignUpPage> {
                             signupProvider.saveData("password", value);
                             validateForm();
                           }),
-                      32.verticalSpace,
+                      16.verticalSpace,
+                      CustomTextFormField(
+                          controller: signUpCubit.rePasswordController,
+                          prefixIcon:
+                              Icon(Icons.lock_outline, color: Colors.grey),
+                          backgroundColor: Colors.white.withOpacity(0.1),
+                          hintText: local.confirmPasswordHintText,
+                          isPassword: true,
+                          validator: (value) =>
+                              Validators.validatePasswordConfirmation(
+                                password: signUpCubit.passwordController.text,
+                                confirmPassword: value,
+                              ),
+                          keyBordType: TextInputType.text,
+                          onChanged: (value) {
+                            signupProvider.saveData("rePassword", value);
+                            validateForm();
+                          }),
+                      14.verticalSpace,
                       SizedBox(
                         width: double.infinity,
                         child: CustomButton(
-                          onPressed: isButtonEnabled
-                              ? () {
+                          onPressed: () {
                             signupProvider.saveData("firstName",
                                 signUpCubit.firstNameController.text);
                             signupProvider.saveData("lastName",
@@ -156,13 +171,13 @@ class _SignUpPageState extends State<SignUpPage> {
                                 "email", signUpCubit.emailController.text);
                             signupProvider.saveData("password",
                                 signUpCubit.passwordController.text);
+                            signupProvider.saveData("rePassword",
+                                signUpCubit.rePasswordController.text);
+
                             Navigator.pushNamed(
                                 context, PageRouteName.genderSignUp);
-                          }
-                              : null,
-                          color: isButtonEnabled
-                              ? AppColors.kOrange
-                              : Colors.grey,
+                          },
+                          color: AppColors.kOrange,
                           child: Text("Next",
                               style: AppFonts.font16WhiteWeight500),
                         ),
@@ -173,7 +188,9 @@ class _SignUpPageState extends State<SignUpPage> {
                           Text(local.alreadyHaveAccount,
                               style: AppFonts.font14WhiteWeight400),
                           TextButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.pushNamed(context, PageRouteName.login);
+                            },
                             child: Text(local.loginTitle,
                                 style: AppFonts.font14LightOrangeWeight400),
                           ),

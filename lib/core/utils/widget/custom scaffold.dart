@@ -23,7 +23,7 @@ class CustomScaffold extends StatelessWidget {
     this.blurStrength = 10.0,
     this.blurHeight = 400.0,
     this.blurWidth = double.infinity,
-    this.borderRadius = 20.0,
+    this.borderRadius = 50.0,
     this.blurStartPosition = 300.0,
   });
 

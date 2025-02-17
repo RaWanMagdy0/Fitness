@@ -18,6 +18,7 @@ class SignUpCubit extends BaseViewModel<SignUpState> {
   final TextEditingController lastNameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController rePasswordController = TextEditingController();
 
   void signUp(SignupRequestBody signupRequestBody) async {
     emit(SignUpLoading());

@@ -2,8 +2,10 @@ class PageRouteName {
   static const String mainSignUp = "signUp";
   static const String genderSignUp = "genderSignUp";
   static const String goalScreen = "goalScreen";
-  static const String actvityScreen = "actvityScreen";
+  static const String activityScreen = "activityScreen";
   static const String login = "login";
   static const String splashscreen = "splashscreen";
-  static const String weightSelectorScreen = "weightSelectorScreen";
+  static const String weightScreen = "weightScreen";
+  static const String heightScreen = "heightScreen";
+  static const String ageScreen = "ageScreen";
 }

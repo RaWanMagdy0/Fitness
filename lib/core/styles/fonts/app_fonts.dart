@@ -162,6 +162,11 @@ class AppFonts {
     color: AppColors.kBlack,
     fontWeight: FontWeight.w400,
   );
+  static TextStyle font12OrangeWeight400 = TextStyle(
+    fontSize: 12.sp,
+    color: AppColors.kOrange,
+    fontWeight: FontWeight.w400,
+  );
   static TextStyle font13GreyWeight500 = TextStyle(
     fontSize: 13.sp,
     color: AppColors.kGray,
@@ -176,9 +181,4 @@ class AppFonts {
     decorationColor: AppColors.kBlack,
   );
 
-  static var font18WhiteWeight500;
-
-  static var font14WhiteWeight500;
-
-  static var font18WhiteWeight800;
 }

@@ -22,6 +22,7 @@ import '../../data/repository/auth_repository/auth_repository_impl.dart'
     as _i313;
 import '../../domain/repository/auth_repository/auth_repository.dart' as _i1056;
 import '../../domain/use_case/auth/sign_up_use_case.dart' as _i322;
+import '../../presentation/auth/login/view_model/login_cubit.dart' as _i97;
 import '../../presentation/auth/sign_up/view_model/sign_up_cubit.dart' as _i140;
 import '../api/dio/dio_factory.dart' as _i763;
 import '../api/dio/dio_module.dart' as _i223;
@@ -51,6 +52,8 @@ extension GetItInjectableX on _i174.GetIt {
         authRemoteDataSource: gh<_i249.AuthRemoteDataSource>()));
     gh.factory<_i322.SignupUseCase>(
         () => _i322.SignupUseCase(gh<_i1056.AuthRepository>()));
+    gh.factory<_i97.LoginCubit>(
+        () => _i97.LoginCubit(gh<_i1056.AuthRepository>()));
     gh.factory<_i140.SignUpCubit>(
         () => _i140.SignUpCubit(gh<_i322.SignupUseCase>()));
     return this;

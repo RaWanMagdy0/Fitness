@@ -58,7 +58,6 @@ class CustomRadioButton extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            /// ✅ **النص (Label)**
             Expanded(
               child: Text(
                 label,
@@ -67,7 +66,6 @@ class CustomRadioButton extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
               ),
             ),
-
             Container(
               width: 24.w,
               height: 24.h,
@@ -87,7 +85,7 @@ class CustomRadioButton extends StatelessWidget {
                         height: 14.h,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: selectedDotColor ?? AppColors.kLighterGrey,
+                          color: selectedDotColor ?? AppColors.kOrange,
                         ),
                       ),
                     )

@@ -11,6 +11,7 @@ import '../../../../core/styles/fonts/app_fonts.dart';
 import '../../../../core/styles/images/app_images.dart';
 import '../../../../core/utils/widget/custom scaffold.dart';
 import '../widgets/custom_gender_container.dart';
+import '../widgets/custom_indecator.dart';
 
 class GenderScreen extends StatefulWidget {
   const GenderScreen({super.key});
@@ -21,7 +22,7 @@ class GenderScreen extends StatefulWidget {
 
 class _GenderScreenState extends State<GenderScreen> {
   String? selectedGender;
-  double blurHeight = 300.0;
+  double blurHeight = 350.0;
   @override
   void initState() {
     super.initState();
@@ -32,7 +33,6 @@ class _GenderScreenState extends State<GenderScreen> {
   void _onGenderSelected(String gender) {
     setState(() {
       selectedGender = gender;
-      blurHeight = 400.0;
     });
     final signupProvider = context.read<SignupProvider>();
     signupProvider.saveData("gender", gender);
@@ -48,15 +48,15 @@ class _GenderScreenState extends State<GenderScreen> {
       enableBlur: true,
       blurStrength: 5.0,
       blurHeight: blurHeight,
-      blurWidth: 350.0,
-      borderRadius: 30.0,
-      blurStartPosition: MediaQuery.of(context).size.height * 0.3,
+      blurWidth: 370.0.w,
+      borderRadius: 50.0,
+      blurStartPosition: MediaQuery.of(context).size.height * 0.36,
       child: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: 24.w),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            40.verticalSpace,
+            30.verticalSpace,
             Row(
               children: [
                 InkWell(
@@ -70,36 +70,38 @@ class _GenderScreenState extends State<GenderScreen> {
               ],
             ),
             40.verticalSpace,
+            Center(
+                child: ProgressIndicatorWidget(currentPage: 1, totalPages: 6)),
+            30.verticalSpace,
             Text(
               "TELL US ABOUT YOURSELF!",
               style: AppFonts.font20WhiteWeight800,
             ),
-            8.verticalSpace,
             Text(
               "We Need To Know Your Gender",
               style: AppFonts.font18WhiteWeight400,
             ),
-            50.verticalSpace,
+            30.verticalSpace,
             Column(
               children: [
                 CustomGenderContainer(
                     image: AppImages.maleIcon,
                     text: "Male",
-                    selected: selectedGender == "Male",
-                    onTap: () => _onGenderSelected("Male")),
+                    selected: selectedGender == "male",
+                    onTap: () => _onGenderSelected("male")),
                 40.verticalSpace,
                 CustomGenderContainer(
                     image: AppImages.femaleIcon,
                     text: "Female",
-                    selected: selectedGender == "Female",
-                    onTap: () => _onGenderSelected("Female")),
+                    selected: selectedGender == "female",
+                    onTap: () => _onGenderSelected("female")),
                 20.verticalSpace,
                 if (selectedGender != null)
                   CustomButton(
                     onPressed: () {
-                      signupProvider.saveData("firstName", selectedGender!);
+                      signupProvider.saveData("gender", selectedGender!);
                       Navigator.pushReplacementNamed(
-                          context, PageRouteName.goalScreen);
+                          context, PageRouteName.ageScreen);
                     },
                     backgroundColor: AppColors.kOrange,
                     maxHeight: 10.h,

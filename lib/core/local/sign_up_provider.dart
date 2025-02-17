@@ -6,6 +6,7 @@ class SignupProvider extends ChangeNotifier {
   String? lastName;
   String? email;
   String? password;
+  String? rePassword;
   String? gender;
   int? height;
   int? weight;
@@ -22,6 +23,7 @@ class SignupProvider extends ChangeNotifier {
     lastName = await SecureStorageHelper.getData('lastName');
     email = await SecureStorageHelper.getData('email');
     password = await SecureStorageHelper.getData('password');
+    rePassword = await SecureStorageHelper.getData('rePassword');
     gender = await SecureStorageHelper.getData('gender');
     height = _parseInt(await SecureStorageHelper.getData('height'));
     weight = _parseInt(await SecureStorageHelper.getData('weight'));
@@ -47,6 +49,9 @@ class SignupProvider extends ChangeNotifier {
         break;
       case 'password':
         password = value;
+        break;
+        case 'rePassword':
+          rePassword = value;
         break;
       case 'gender':
         gender = value;
@@ -81,6 +86,8 @@ class SignupProvider extends ChangeNotifier {
         return email;
       case 'password':
         return password;
+        case 'rePassword':
+        return rePassword;
       case 'gender':
         return gender;
       case 'height':
@@ -101,7 +108,7 @@ class SignupProvider extends ChangeNotifier {
   Future<void> clearUserData() async {
     await SecureStorageHelper.clearData();
     firstName =
-        lastName = email = password = gender = goal = activityLevel = null;
+        lastName = email = password =rePassword= gender = goal = activityLevel = null;
     height = weight = age = null;
 
     notifyListeners();

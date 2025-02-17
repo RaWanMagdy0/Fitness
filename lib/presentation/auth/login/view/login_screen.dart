@@ -23,7 +23,6 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final local = S.of(context);
-
     return BlocConsumer<LoginCubit, LoginState>(
       listener: (context, state) {
         if (state is LoginLoading) {
@@ -47,7 +46,7 @@ class LoginScreen extends StatelessWidget {
           backgroundImage: AppImages.authBackground,
           enableBlur: true,
           blurStrength: 5.0,
-          blurHeight: 400.0,
+          blurHeight: 350.0,
           blurWidth: 350.0,
           borderRadius: 30.0,
           blurStartPosition: MediaQuery.of(context).size.height * 0.3,
