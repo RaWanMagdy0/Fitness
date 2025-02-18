@@ -1,3 +1,4 @@
+import 'package:fitness_app/presentation/auth/login/view_model/login_cubit.dart' show LoginCubit;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -14,20 +15,25 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  configureDependencies(); // Initialize dependency injection
+
+  // Initialize dependencies first
+  await configureDependencies();
+
+  // Set up Bloc observer
   Bloc.observer = AppBlocObserver();
 
-  // Initialize local provider for language settings
+  // Initialize local provider
   LocalProvider provider = LocalProvider();
   await provider.loadSavedLanguage();
 
-  // Check if user is already logged in (you can implement this logic)
-  // final token = await TokenManager.getToken();
-  // final initialRoute = token != null ? PageRouteName.home : PageRouteName.login;
-
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => provider,
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => provider),
+        BlocProvider(
+          create: (context) => getIt<LoginCubit>(),
+        ),
+      ],
       child: const MyApp(),
     ),
   );
@@ -56,7 +62,7 @@ class MyApp extends StatelessWidget {
           supportedLocales: S.delegate.supportedLocales,
           debugShowCheckedModeBanner: false,
           theme: AppTheme.appTheme,
-          initialRoute: PageRouteName.login, // Change initial route to login
+          initialRoute: PageRouteName.login,
           onGenerateRoute: AppRoutes.onGenerateRoute,
         );
       },

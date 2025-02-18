@@ -7,14 +7,20 @@ import '../../presentation/auth/sign_up/view/main_sign_up_screen.dart';
 class AppRoutes {
   static Route<dynamic> onGenerateRoute(RouteSettings setting) {
     switch (setting.name) {
-      case PageRouteName.mainSignUp:
-        return _handleMaterialPageRoute(widget: SignUpPage());
-        case PageRouteName.genderSignUp:
-        return _handleMaterialPageRoute(widget: GenderScreen());
       case PageRouteName.login:
         return _handleMaterialPageRoute(widget: LoginScreen());
+      case PageRouteName.mainSignUp:
+        return _handleMaterialPageRoute(widget: SignUpPage());
+      case PageRouteName.genderSignUp:
+        return _handleMaterialPageRoute(widget: GenderScreen());
       default:
-        return _handleMaterialPageRoute(widget: const Scaffold());
+        return _handleMaterialPageRoute(
+          widget: const Scaffold(
+            body: Center(
+              child: Text('No route defined'),
+            ),
+          ),
+        );
     }
   }
 

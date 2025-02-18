@@ -24,7 +24,8 @@ import '../../domain/repository/auth_repository/auth_repository.dart' as _i1056;
 import '../../presentation/auth/login/view_model/login_cubit.dart' as _i97;
 import '../api/dio/dio_factory.dart' as _i763;
 import '../api/dio/dio_module.dart' as _i223;
-import '../utils/functions/providers/app_provider.dart' show AppProvider;
+import '../api/dio/token_interceptor.dart' as _i683;
+import '../utils/functions/providers/app_provider.dart' as _i240;
 
 extension GetItInjectableX on _i174.GetIt {
   // initializes the registration of main-scope dependencies inside of GetIt
@@ -35,8 +36,9 @@ extension GetItInjectableX on _i174.GetIt {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
     final dioModule = _$DioModule();
     gh.factory<_i763.DioFactory>(() => _i763.DioFactory());
-    gh.singleton<AppProvider>(() => AppProvider());
-    gh.lazySingleton<_i361.Dio>(() => dioModule.dio);
+    gh.factory<_i683.TokenInterceptor>(() => _i683.TokenInterceptor());
+    gh.singleton<_i240.AppProvider>(() => _i240.AppProvider());
+    gh.lazySingleton<_i361.Dio>(() => dioModule.dio(gh<_i763.DioFactory>()));
     gh.lazySingleton<_i515.AuthApiManager>(
       () => _i515.AuthApiManager(gh<_i361.Dio>()),
     );

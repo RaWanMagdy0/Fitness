@@ -5,6 +5,7 @@ import '../../../../core/api/api_result.dart' show Fail, Success;
 import '../../../../data/models/login/request/login_request_model.dart' show LoginRequestModel;
 import '../../../../domain/repository/auth_repository/auth_repository.dart' show AuthRepository;
 
+
 @injectable
 class LoginCubit extends Cubit<LoginState> {
   final AuthRepository _authRepository;

@@ -5,5 +5,5 @@ import '../../../data/models/login/request/login_request_model.dart' show LoginR
 
 abstract class AuthRepository{
   Future<Result<String?>>signUp(SignupRequestBody signupRequestBody);
-  Future<Result<String?>> login(LoginRequestModel loginRequestBody);
+  Future<Result<String?>> login(LoginRequestModel loginRequestModel);
 }

@@ -4,5 +4,5 @@ import '../../models/login/request/login_request_model.dart' show LoginRequestMo
 
 abstract class AuthRemoteDataSource{
   Future<Result<String?>> signUp(SignupRequestBody signupRequestBody);
-  Future<Result<String?>> login(LoginRequestModel loginRequestBody);
+  Future<Result<String?>> login(LoginRequestModel loginRequestModel);
 }

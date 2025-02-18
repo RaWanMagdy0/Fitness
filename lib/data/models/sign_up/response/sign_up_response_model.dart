@@ -3,8 +3,8 @@ import 'package:fitness_app/data/models/sign_up/response/user_model.dart';
 
 class SignUpResponseModel {
   SignUpResponseModel({
-      this.message, 
-      this.user, 
+      this.message,
+      this.user,
       this.token,});
 
   SignUpResponseModel.fromJson(dynamic json) {
@@ -20,7 +20,7 @@ class SignUpResponseModel {
     final map = <String, dynamic>{};
     map['message'] = message;
     if (user != null) {
-      map['user'] = user?.toJson();
+      map['user'] = user;
     }
     map['token'] = token;
     return map;

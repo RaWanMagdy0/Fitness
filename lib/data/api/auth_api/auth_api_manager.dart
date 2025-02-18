@@ -10,19 +10,19 @@ import '../../models/sign_up/request/sign_up_request_body.dart';
 part 'auth_api_manager.g.dart';
 
 @lazySingleton
-@RestApi(baseUrl: ApiConstants.baseUrl)
+@RestApi()
 abstract class AuthApiManager {
   @factoryMethod
   factory AuthApiManager(Dio dio) = _AuthApiManager;
 
+  @POST(ApiConstants.login)
+  Future<LoginResponseModel> login(@Body() LoginRequestModel loginRequestBody);
+
   @POST(ApiConstants.signUp)
   Future<SignUpResponseModel> signUp(
-    @Body() SignupRequestBody signupRequestBody,
-  );
-
-  @POST(ApiConstants.login)
-  Future<LoginResponseModel> login(
-      @Body() LoginRequestModel loginRequestBody,
+      @Body() SignupRequestBody signupRequestBody,
       );
 
 }
+
+
