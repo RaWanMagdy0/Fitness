@@ -97,7 +97,6 @@ class LoginScreen extends StatelessWidget {
                         validator:
                             (value) => Validators.validatePassword(value),
                       ),
-                      26.verticalSpace,
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
@@ -115,6 +114,8 @@ class LoginScreen extends StatelessWidget {
                           ),
                         ],
                       ),
+                      10.verticalSpace,
+
                       SizedBox(
                         width: double.infinity,
                         child: CustomButton(

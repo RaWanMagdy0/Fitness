@@ -1,33 +1,34 @@
 import 'dart:async';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import '../../../../core/api/api_result.dart' show Fail, Success;
+import '../../../../core/di/di.dart';
+import '../../../../core/utils/functions/providers/app_provider.dart';
 import '../../../../data/models/forgot_password/request/forgot_password_request_model.dart' show ForgotPasswordRequestModel;
 import '../../../../data/models/forgot_password/request/reset_password_request_model.dart' show ResetPasswordRequestModel;
 import '../../../../data/models/forgot_password/request/verify_code_request_model.dart' show VerifyCodeRequestModel;
 import '../../../../domain/repository/auth_repository/auth_repository.dart';
-
 part 'forgot_password_state.dart';
+
 
 @injectable
 class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
   final AuthRepository authRepository;
   Timer? _resendTimer;
   Timer? _otpExpiryTimer;
-  String? _email;
-
+  String? userEmail;
+  final appProvider = getIt.get<AppProvider>();
+  var emailController = TextEditingController();
+  var emailFormKey = GlobalKey<FormState>();
   ForgotPasswordCubit({required this.authRepository}) : super(ForgotPasswordInitial());
 
-  void setEmail(String email) {
-    _email = email;
-  }
 
-  String? get email => _email;
 
   Future<void> sendForgotPasswordEmail(String email) async {
+    userEmail = emailController.text;
+    appProvider.email = userEmail!;
     emit(ForgotPasswordLoading());
-    setEmail(email);
-
     final result = await authRepository.forgotPassword(
       ForgotPasswordRequestModel(email: email),
     );
@@ -60,20 +61,13 @@ class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
   }
 
   Future<void> resetPassword(String password) async {
-    if (_email == null) {
-      emit(ForgotPasswordError("Email not found"));
-      return;
-    }
-
     emit(ForgotPasswordLoading());
-
     final result = await authRepository.resetPassword(
       ResetPasswordRequestModel(
-        email: _email!,
+        email: appProvider.email,
         newPassword: password,
       ),
     );
-
     if (result is Success) {
       final _ = result as Success;
       emit(ForgotPasswordComplete());

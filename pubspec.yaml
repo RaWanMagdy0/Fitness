@@ -50,11 +50,20 @@ dependencies:
   flutter_native_splash: ^2.4.4
   google_fonts: ^6.2.1
 
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/logoIcon.png"
+  adaptive_icon_background: "#000000"
+  adaptive_icon_foreground: "assets/images/logoIcon.png"
+  remove_alpha_ios: true
 
 dev_dependencies:
-
   injectable_generator: ^2.6.2
   retrofit_generator: ^9.1.4
+  flutter_launcher_icons: ^0.13.1
+
+
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

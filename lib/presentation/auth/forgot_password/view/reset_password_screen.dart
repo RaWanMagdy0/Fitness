@@ -12,7 +12,7 @@ import '../../../../core/utils/functions/validators/validators.dart';
 import '../cubit/forgot_password_cubit.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
-  const ResetPasswordScreen({Key? key}) : super(key: key);
+  const ResetPasswordScreen({super.key});
 
   @override
   State<ResetPasswordScreen> createState() => _ResetPasswordScreenState();
@@ -33,6 +33,12 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
+      enableBlur: true,
+      blurStrength: 5.0,
+      blurHeight: 230.0,
+      blurWidth: 370.0.w,
+      borderRadius: 50.0,
+      blurStartPosition: MediaQuery.of(context).size.height * 0.32,
       backgroundImage: AppImages.authBackground,
       child: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: 24.w),
@@ -75,8 +81,10 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                     "Make Sure It's 8 Characters Or More",
                     style: AppFonts.font18WhiteWeight400,
                   ),
-                  32.verticalSpace,
+                  40.verticalSpace,
                   CustomTextFormField(
+                    backgroundColor: Colors.white.withOpacity(0.1),
+
                     controller: _passwordController,
                     hintText: "Enter new password",
                     isPassword: true,
@@ -85,6 +93,8 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   ),
                   16.verticalSpace,
                   CustomTextFormField(
+                    backgroundColor: Colors.white.withOpacity(0.1),
+
                     controller: _confirmPasswordController,
                     hintText: "Confirm new password",
                     isPassword: true,

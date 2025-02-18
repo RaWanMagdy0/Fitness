@@ -163,19 +163,14 @@ class _SignUpPageState extends State<SignUpPage> {
                         width: double.infinity,
                         child: CustomButton(
                           onPressed: () {
-                            signupProvider.saveData("firstName",
-                                signUpCubit.firstNameController.text);
-                            signupProvider.saveData("lastName",
-                                signUpCubit.lastNameController.text);
-                            signupProvider.saveData(
-                                "email", signUpCubit.emailController.text);
-                            signupProvider.saveData("password",
-                                signUpCubit.passwordController.text);
-                            signupProvider.saveData("rePassword",
-                                signUpCubit.rePasswordController.text);
-
-                            Navigator.pushNamed(
-                                context, PageRouteName.genderSignUp);
+                            if (signUpCubit.formKey.currentState?.validate() ?? false) {
+                              signupProvider.saveData("firstName", signUpCubit.firstNameController.text);
+                              signupProvider.saveData("lastName", signUpCubit.lastNameController.text);
+                              signupProvider.saveData("email", signUpCubit.emailController.text);
+                              signupProvider.saveData("password", signUpCubit.passwordController.text);
+                              signupProvider.saveData("rePassword", signUpCubit.rePasswordController.text);
+                              Navigator.pushNamed(context, PageRouteName.genderSignUp);
+                            }
                           },
                           color: AppColors.kOrange,
                           child: Text("Next",

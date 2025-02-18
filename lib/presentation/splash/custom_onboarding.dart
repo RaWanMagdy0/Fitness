@@ -1,35 +1,33 @@
-import 'package:fitness_app/core/styles/colors/app_colors.dart';
-import 'package:fitness_app/core/utils/widget/custom%20scaffold.dart';
-import 'package:fitness_app/core/utils/widget/custom_button.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../core/routes/page_route_name.dart';
+import '../../core/styles/colors/app_colors.dart';
 import '../../core/styles/fonts/app_fonts.dart';
 import '../../core/styles/images/app_images.dart';
+import '../../core/utils/widget/custom scaffold.dart';
+import '../../core/utils/widget/custom_button.dart';
 import 'dots_Indicator.dart';
 
 class CustomOnboarding extends StatelessWidget {
   final String iconPath;
   final String mainText;
   final String subText;
-  final VoidCallback next;
-  final VoidCallback? back;
-  final VoidCallback skip;
+  final VoidCallback onNext;
+  final VoidCallback? onBack;
   final bool showBack;
-  final int position;
+  final bool isLast;
 
   const CustomOnboarding({
-    Key? key,
+    super.key,
     required this.iconPath,
     required this.mainText,
     required this.subText,
-    required this.next,
-    this.back,
-    required this.skip,
+    required this.onNext,
+    this.onBack,
     this.showBack = true,
-    required this.position,
-  }) : super(key: key);
+    this.isLast = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -49,13 +47,10 @@ class CustomOnboarding extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                if (showBack && back != null)
-                  InkWell(
-                    onTap: back,
-                    child: const Icon(Icons.arrow_back, color: Colors.white),
-                  ),
+                if (showBack && onBack != null)
+
                 InkWell(
-                  onTap: skip,
+                  onTap: () => Navigator.pushReplacementNamed(context, PageRouteName.login),
                   child: Text("SKIP", style: AppFonts.font14GreyWeight400),
                 ),
               ],
@@ -75,37 +70,35 @@ class CustomOnboarding extends StatelessWidget {
             15.verticalSpace,
             DotsIndicator(
               dotsCount: 3,
-              currentPosition: position,
+              currentPosition: isLast ? 2 : (showBack ? 1 : 0),
             ),
             15.verticalSpace,
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 24.w),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  if (showBack && back != null)
-                    SizedBox(
-                      width: 100.w,
-                      child: CustomButton(
-                        onPressed: back,
-                        text: "Back",
-                        color: Colors.transparent,
-                        borderColor: AppColors.kOrange,
-                      ),
-                    ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                if (showBack && onBack != null)
                   SizedBox(
                     width: 100.w,
                     child: CustomButton(
-                      onPressed: next,
-                      text: "Next",
+                      onPressed: onBack,
+                      text: "Back",
+                      color: Colors.transparent,
+                      borderColor: AppColors.kOrange,
                     ),
                   ),
-                ],
-              ),
+                SizedBox(
+                  width: 100.w,
+                  child: CustomButton(
+                    onPressed: onNext,
+                    text: isLast ? "Do It" : "Next",
+                  ),
+                ),
+              ],
             ),
             24.verticalSpace,
           ],
         ),
       ),
     );
-  }}
+  }
+}

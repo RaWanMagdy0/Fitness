@@ -3,7 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/routes/page_route_name.dart' show PageRouteName;
 import '../../../../core/styles/fonts/app_fonts.dart';
-import '../../../../core/utils/functions/dialogs/app_dialogs.dart' show AppDialogs;
+import '../../../../core/utils/functions/dialogs/app_dialogs.dart'
+    show AppDialogs;
 import '../../../../core/utils/widget/custom scaffold.dart' show CustomScaffold;
 import '../../../../core/utils/widget/custom_button.dart';
 import '../../../../core/utils/widget/custom_otp_field.dart';
@@ -11,14 +12,15 @@ import '../../../../core/styles/images/app_images.dart';
 import '../cubit/forgot_password_cubit.dart';
 
 class VerifyCodeScreen extends StatefulWidget {
-  const VerifyCodeScreen({Key? key}) : super(key: key);
+  const VerifyCodeScreen({super.key});
 
   @override
   State<VerifyCodeScreen> createState() => _VerifyCodeScreenState();
 }
 
 class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
-  final List<TextEditingController> _controllers = List.generate(6, (_) => TextEditingController());
+  final List<TextEditingController> _controllers =
+      List.generate(6, (_) => TextEditingController());
   final List<FocusNode> _focusNodes = List.generate(6, (_) => FocusNode());
   String _code = '';
 
@@ -42,6 +44,12 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
+      enableBlur: true,
+      blurStrength: 5.0,
+      blurHeight: 200.0,
+      blurWidth: 370.0.w,
+      borderRadius: 50.0,
+      blurStartPosition: MediaQuery.of(context).size.height * 0.32,
       backgroundImage: AppImages.authBackground,
       child: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: 24.w),
@@ -53,6 +61,10 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
               AppDialogs.showErrorDialog(
                 context: context,
                 errorMassage: state.message,
+              );
+            } else if (state is ForgotPasswordLoading) {
+              AppDialogs.showLoading(
+                context: context,
               );
             }
           },
@@ -77,7 +89,8 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: List.generate(
                     6,
-                        (index) => CustomOTPField(
+                    (index) => CustomOTPField(
+
                       controller: _controllers[index],
                       focusNode: _focusNodes[index],
                       autoFocus: index == 0,
@@ -107,9 +120,11 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
                   Center(
                     child: TextButton(
                       onPressed: () {
-                        context.read<ForgotPasswordCubit>().sendForgotPasswordEmail(
-                          context.read<ForgotPasswordCubit>().email ?? "",
-                        );
+                        context
+                            .read<ForgotPasswordCubit>()
+                            .sendForgotPasswordEmail(
+                              context.read<ForgotPasswordCubit>().userEmail?? "",
+                            );
                       },
                       child: Text(
                         "Resend Code?",
@@ -118,13 +133,10 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
                     ),
                   ),
                 ],
-                if (state is ForgotPasswordLoading)
-                  const Center(child: CircularProgressIndicator())
-                else
-                  CustomButton(
-                    onPressed: _onCodeComplete,
-                    child: Text("Confirm", style: AppFonts.font16WhiteWeight500),
-                  ),
+                CustomButton(
+                  onPressed: _onCodeComplete,
+                  child: Text("Confirm", style: AppFonts.font16WhiteWeight500),
+                ),
               ],
             );
           },

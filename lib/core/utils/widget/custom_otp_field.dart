@@ -29,7 +29,7 @@ class CustomOTPField extends StatelessWidget {
         textAlign: TextAlign.center,
         keyboardType: TextInputType.number,
         maxLength: 1,
-        style: AppFonts.font20BlackWeight500,
+        style: AppFonts.font20OrangeWeight500,
         decoration: InputDecoration(
           counterText: "",
           fillColor: Colors.white.withOpacity(0.1),
