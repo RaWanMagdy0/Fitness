@@ -12,6 +12,9 @@ import '../../presentation/auth/sign_up/view/goal_screen.dart';
 import '../../presentation/auth/sign_up/view/main_sign_up_screen.dart';
 import '../../presentation/auth/sign_up/view/weight_screen.dart';
 import '../../presentation/auth/sign_up/view_model/sign_up_cubit.dart';
+import '../../presentation/splash/onboarding_1.dart';
+import '../../presentation/splash/onboarding_2.dart';
+import '../../presentation/splash/onboarding_3.dart';
 import '../../presentation/splash/splash_screen.dart';
 import '../di/di.dart';
 
@@ -46,6 +49,12 @@ class AppRoutes {
         return _handleMaterialPageRoute(widget: AgeScreen());
       case PageRouteName.goalScreen:
         return _handleMaterialPageRoute(widget: GoalScreen());
+        case PageRouteName.onBoarding1:
+        return _handleMaterialPageRoute(widget: Onboarding1());
+        case PageRouteName.onBoarding2:
+        return _handleMaterialPageRoute(widget: Onboarding2());
+        case PageRouteName.onBoarding3:
+        return _handleMaterialPageRoute(widget: Onboarding3());
       case PageRouteName.activityScreen:
         return MaterialPageRoute(
           builder: (context) => BlocProvider(

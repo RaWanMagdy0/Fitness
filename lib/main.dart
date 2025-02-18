@@ -57,7 +57,7 @@ class MyApp extends StatelessWidget {
           supportedLocales: S.delegate.supportedLocales,
           debugShowCheckedModeBanner: false,
           theme: AppTheme.appTheme,
-          initialRoute: PageRouteName.login,
+          initialRoute: PageRouteName.onBoarding1,
           onGenerateRoute: AppRoutes.onGenerateRoute,
         );
       },

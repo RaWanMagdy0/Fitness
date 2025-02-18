@@ -9,4 +9,7 @@ class PageRouteName {
   static const String heightScreen = "heightScreen";
   static const String ageScreen = "ageScreen";
   static const String homeScreen = "homeScreen";
+  static const String onBoarding1 = "onBoarding1";
+  static const String onBoarding2 = "onBoarding2";
+  static const String onBoarding3 = "onBoarding3";
 }

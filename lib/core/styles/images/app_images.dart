@@ -15,4 +15,8 @@ class AppImages {
   static const maleIcon = "assets/images/maleIcon.png";
   static const femaleIcon = "assets/images/femaleIcon.png";
   static const back = "assets/images/back.png";
+  static const splashBackG = "assets/images/splash_backG.png";
+  static const icon1png = "assets/images/icon1.png";
+  static const icon2png = "assets/images/icon2.png";
+  static const icon3png = "assets/images/icon3.png";
 }
