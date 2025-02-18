@@ -1,7 +1,6 @@
 import 'package:fitness_app/core/api/api_result.dart';
 import 'package:fitness_app/core/api/execute_api_call.dart';
 import 'package:fitness_app/data/api/auth_api/auth_api_manager.dart';
-import 'package:fitness_app/data/models/forgot_password/response/forgot_password_response_model.dart';
 import 'package:fitness_app/data/models/sign_up/request/sign_up_request_body.dart';
 import 'package:injectable/injectable.dart';
 import '../../../core/local/token_manger.dart' show TokenManager;
@@ -38,7 +37,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   @override
   Future<Result<String?>> forgotPassword(ForgotPasswordRequestModel requestModel) {
     return executeApiCall<String?>(() async {
-      final response = await authApiManager.forgotPassword(requestModel as ForgotPasswordRequestModel);
+      final response = await authApiManager.forgotPassword(requestModel);
       return response.message;
     });
   }
