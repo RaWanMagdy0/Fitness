@@ -1,3 +1,4 @@
+import 'package:fitness_app/presentation/auth/forgot_password/cubit/forgot_password_cubit.dart' show ForgotPasswordCubit;
 import 'package:fitness_app/presentation/auth/login/view_model/login_cubit.dart' show LoginCubit;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,13 +17,10 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Initialize dependencies first
   await configureDependencies();
 
-  // Set up Bloc observer
   Bloc.observer = AppBlocObserver();
 
-  // Initialize local provider
   LocalProvider provider = LocalProvider();
   await provider.loadSavedLanguage();
 
@@ -30,9 +28,8 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => provider),
-        BlocProvider(
-          create: (context) => getIt<LoginCubit>(),
-        ),
+        BlocProvider(create: (context) => getIt<LoginCubit>()),
+        BlocProvider(create: (context) => getIt<ForgotPasswordCubit>()),
       ],
       child: const MyApp(),
     ),

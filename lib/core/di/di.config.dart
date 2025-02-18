@@ -21,7 +21,9 @@ import '../../data/data_source/auth_data_source/auth_remote_data_source_impl.dar
 import '../../data/repository/auth_repository/auth_repository_impl.dart'
     as _i313;
 import '../../domain/repository/auth_repository/auth_repository.dart' as _i1056;
-import '../../presentation/auth/login/view_model/login_cubit.dart' as _i97;
+import '../../presentation/auth/forgot_password/cubit/forgot_password_cubit.dart'
+    as _i401;
+import '../../presentation/auth/login/view_model/login_cubit.dart' show LoginCubit;
 import '../api/dio/dio_factory.dart' as _i763;
 import '../api/dio/dio_module.dart' as _i223;
 import '../api/dio/token_interceptor.dart' as _i683;
@@ -52,8 +54,11 @@ extension GetItInjectableX on _i174.GetIt {
         authRemoteDataSource: gh<_i249.AuthRemoteDataSource>(),
       ),
     );
-    gh.factory<_i97.LoginCubit>(
-      () => _i97.LoginCubit(gh<_i1056.AuthRepository>()),
+    gh.factory<LoginCubit>(() => LoginCubit(gh<_i1056.AuthRepository>()));
+    gh.factory<_i401.ForgotPasswordCubit>(
+      () => _i401.ForgotPasswordCubit(
+        authRepository: gh<_i1056.AuthRepository>(),
+      ),
     );
     return this;
   }

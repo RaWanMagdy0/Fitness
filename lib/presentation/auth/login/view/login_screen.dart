@@ -17,7 +17,7 @@ import '../view_model/login_state.dart'
     show LoginError, LoginLoading, LoginState, LoginSuccess;
 
 class LoginScreen extends StatelessWidget {
-  LoginScreen({Key? key}) : super(key: key);
+  LoginScreen({super.key});
 
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
@@ -97,9 +97,15 @@ class LoginScreen extends StatelessWidget {
                       ),
                       26.verticalSpace,
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           TextButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.pushNamed(
+                                context,
+                                PageRouteName.forgotPassword,
+                              );
+                            },
                             child: Text(
                               'Forget Password ?',
                               style: TextStyle(color: AppColors.kOrange),
