@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/generated/l10n.dart';
 import '../../../../core/routes/page_route_name.dart' show PageRouteName;
+import '../../../../core/styles/colors/app_colors.dart' show AppColors;
 import '../../../../core/styles/fonts/app_fonts.dart';
 import '../../../../core/styles/images/app_images.dart';
 import '../../../../core/utils/functions/dialogs/app_dialogs.dart' show AppDialogs;
@@ -81,14 +82,14 @@ class LoginScreen extends StatelessWidget {
                       CustomTextFormField(
                         controller: _emailController,
                         hintText: local.emailHintText,
-                        prefixIcon: Icon(Icons.email_outlined, color: Colors.grey),
+                        prefixIcon: Icon(Icons.email_outlined, color: AppColors.kLighterGrey,),
                         backgroundColor: Colors.white.withOpacity(0.1),
                         validator: (value) => Validators.validateEmail(value),
                       ),
                       16.verticalSpace,
                       CustomTextFormField(
                         controller: _passwordController,
-                        prefixIcon: Icon(Icons.lock_outline, color: Colors.grey),
+                        prefixIcon: Icon(Icons.lock_outline, color: AppColors.kLighterGrey,),
                         backgroundColor: Colors.white.withOpacity(0.1),
                         hintText: local.passwordHintText,
                         isPassword: true,
