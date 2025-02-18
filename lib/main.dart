@@ -1,23 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
+import 'package:provider/provider.dart';
 import 'core/di/di.dart';
 import 'core/generated/l10n.dart';
-import 'core/local/sign_up_provider.dart';
 import 'core/routes/app_routes.dart';
 import 'core/routes/page_route_name.dart';
 import 'core/theme/app_theme.dart';
 import 'core/utils/bloc_observer/app_bloc_observer.dart';
 import 'core/utils/functions/providers/local_provider.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await configureDependencies();
+
   configureDependencies();
   Bloc.observer = AppBlocObserver();
 
+  LocalProvider provider = LocalProvider();
+  await provider.loadSavedLanguage();
   LocalProvider localProvider = LocalProvider();
   SignupProvider signupProvider = SignupProvider();
 
@@ -25,6 +29,12 @@ void main() async {
   await signupProvider.loadUserData();
 
   runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => provider),
+        BlocProvider(create: (context) => getIt<LoginCubit>()),
+        BlocProvider(create: (context) => getIt<ForgotPasswordCubit>()),
+      ],
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => localProvider),
@@ -57,6 +67,7 @@ class MyApp extends StatelessWidget {
           supportedLocales: S.delegate.supportedLocales,
           debugShowCheckedModeBanner: false,
           theme: AppTheme.appTheme,
+          initialRoute: PageRouteName.login,
           initialRoute: PageRouteName.onBoarding1,
           onGenerateRoute: AppRoutes.onGenerateRoute,
         );

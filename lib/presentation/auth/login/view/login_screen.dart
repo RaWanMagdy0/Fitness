@@ -3,18 +3,21 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/generated/l10n.dart';
 import '../../../../core/routes/page_route_name.dart' show PageRouteName;
+import '../../../../core/styles/colors/app_colors.dart' show AppColors;
 import '../../../../core/styles/fonts/app_fonts.dart';
 import '../../../../core/styles/images/app_images.dart';
-import '../../../../core/utils/functions/dialogs/app_dialogs.dart' show AppDialogs;
+import '../../../../core/utils/functions/dialogs/app_dialogs.dart'
+    show AppDialogs;
 import '../../../../core/utils/functions/validators/validators.dart';
 import '../../../../core/utils/widget/custom scaffold.dart' show CustomScaffold;
 import '../../../../core/utils/widget/custom_text_form_field.dart';
 import '../../../../core/utils/widget/custom_button.dart';
 import '../view_model/login_cubit.dart' show LoginCubit;
-import '../view_model/login_state.dart' show LoginError, LoginLoading, LoginState, LoginSuccess;
+import '../view_model/login_state.dart'
+    show LoginError, LoginLoading, LoginState, LoginSuccess;
 
 class LoginScreen extends StatelessWidget {
-  LoginScreen({Key? key}) : super(key: key);
+  LoginScreen({super.key});
 
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
@@ -61,20 +64,11 @@ class LoginScreen extends StatelessWidget {
                 40.verticalSpace,
                 Center(child: Image.asset(AppImages.logoIcon)),
                 40.verticalSpace,
-                Text(
-                  "Hey There",
-                  style: AppFonts.font18WhiteWeight400,
-                ),
+                Text("Hey There", style: AppFonts.font18WhiteWeight400),
                 8.verticalSpace,
-                Text(
-                  "WELCOME BACK",
-                  style: AppFonts.font20WhiteWeight800,
-                ),
+                Text("WELCOME BACK", style: AppFonts.font20WhiteWeight800),
                 20.verticalSpace,
-                Text(
-                  "Login",
-                  style: AppFonts.font24WhiteWeight800,
-                ),
+                Text("Login", style: AppFonts.font24WhiteWeight800),
                 20.verticalSpace,
                 Form(
                   key: _formKey,
@@ -83,20 +77,44 @@ class LoginScreen extends StatelessWidget {
                       CustomTextFormField(
                         controller: _emailController,
                         hintText: local.emailHintText,
-                        prefixIcon: Icon(Icons.email_outlined, color: Colors.grey),
+                        prefixIcon: Icon(
+                          Icons.email_outlined,
+                          color: AppColors.kLighterGrey,
+                        ),
                         backgroundColor: Colors.white.withOpacity(0.1),
                         validator: (value) => Validators.validateEmail(value),
                       ),
                       16.verticalSpace,
                       CustomTextFormField(
                         controller: _passwordController,
-                        prefixIcon: Icon(Icons.lock_outline, color: Colors.grey),
+                        prefixIcon: Icon(
+                          Icons.lock_outline,
+                          color: AppColors.kLighterGrey,
+                        ),
                         backgroundColor: Colors.white.withOpacity(0.1),
                         hintText: local.passwordHintText,
                         isPassword: true,
-                        validator: (value) => Validators.validatePassword(value),
+                        validator:
+                            (value) => Validators.validatePassword(value),
                       ),
-                      32.verticalSpace,
+                      26.verticalSpace,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pushNamed(
+                                context,
+                                PageRouteName.forgotPassword,
+                              );
+                            },
+                            child: Text(
+                              'Forget Password ?',
+                              style: TextStyle(color: AppColors.kOrange),
+                            ),
+                          ),
+                        ],
+                      ),
                       SizedBox(
                         width: double.infinity,
                         child: CustomButton(
@@ -124,7 +142,9 @@ class LoginScreen extends StatelessWidget {
                           TextButton(
                             onPressed: () {
                               Navigator.pushNamed(
-                                  context, PageRouteName.mainSignUp);
+                                context,
+                                PageRouteName.mainSignUp,
+                              );
                             },
                             child: Text(
                               local.signUpTitle,

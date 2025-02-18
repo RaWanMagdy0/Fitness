@@ -1,22 +1,8 @@
 import 'package:fitness_app/core/routes/page_route_name.dart';
-import 'package:fitness_app/presentation/auth/login/view_model/login_cubit.dart';
-import 'package:fitness_app/presentation/auth/sign_up/view/actvity_screen.dart';
-import 'package:fitness_app/presentation/auth/sign_up/view/age_screen.dart';
-import 'package:fitness_app/presentation/auth/sign_up/view/height_screen.dart';
 import 'package:flutter/material.dart';
-import '../../presentation/auth/home/view/home_screen.dart';
 import '../../presentation/auth/login/view/login_screen.dart' show LoginScreen;
-import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../presentation/auth/sign_up/view/gender_screen.dart';
-import '../../presentation/auth/sign_up/view/goal_screen.dart';
 import '../../presentation/auth/sign_up/view/main_sign_up_screen.dart';
-import '../../presentation/auth/sign_up/view/weight_screen.dart';
-import '../../presentation/auth/sign_up/view_model/sign_up_cubit.dart';
-import '../../presentation/splash/onboarding_1.dart';
-import '../../presentation/splash/onboarding_2.dart';
-import '../../presentation/splash/onboarding_3.dart';
-import '../../presentation/splash/splash_screen.dart';
-import '../di/di.dart';
 
 class AppRoutes {
   static Route<dynamic> onGenerateRoute(RouteSettings setting) {
@@ -31,7 +17,11 @@ class AppRoutes {
             child: LoginScreen(),
           ),
         );
+      case PageRouteName.login:
+        return _handleMaterialPageRoute(widget: LoginScreen());
       case PageRouteName.mainSignUp:
+        return _handleMaterialPageRoute(widget: SignUpPage());
+      case PageRouteName.genderSignUp:
         return MaterialPageRoute(
           builder: (context) => BlocProvider(
             create: (context) => getIt<SignUpCubit>(),
@@ -40,6 +30,17 @@ class AppRoutes {
         );
       case PageRouteName.genderSignUp:
         return _handleMaterialPageRoute(widget: GenderScreen());
+      case PageRouteName.forgotPassword:
+        return _handleMaterialPageRoute(
+          widget: BlocProvider(
+            create: (context) => getIt<ForgotPasswordCubit>(),
+            child: ForgotPasswordScreen(),
+          ),
+        );
+      case PageRouteName.verifyCode:
+        return _handleMaterialPageRoute(widget: VerifyCodeScreen());
+      case PageRouteName.resetPassword:
+        return _handleMaterialPageRoute(widget: ResetPasswordScreen());
 
       case PageRouteName.weightScreen:
         return _handleMaterialPageRoute(widget: WeightScreen());
@@ -65,7 +66,11 @@ class AppRoutes {
       case PageRouteName.homeScreen:
         return _handleMaterialPageRoute(widget: HomeScreen());
       default:
-        return _handleMaterialPageRoute(widget: const Scaffold());
+        return _handleMaterialPageRoute(
+          widget: const Scaffold(
+            body: Center(child: Text('No route defined')),
+          ),
+        );
     }
   }
 

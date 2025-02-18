@@ -191,6 +191,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
                   });
                 },
                 child: Icon(
+                  color: AppColors.kLighterGrey,
                   isTextObscured ? Icons.visibility_off : Icons.visibility,
                   color: Colors.grey,
                 ),
