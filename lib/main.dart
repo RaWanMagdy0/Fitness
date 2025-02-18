@@ -33,7 +33,8 @@ void main() async {
       ],
       child: MyApp(),
     ),
-  );}
+  );
+}
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
@@ -62,7 +63,7 @@ class _MyAppState extends State<MyApp> {
           supportedLocales: S.delegate.supportedLocales,
           debugShowCheckedModeBanner: false,
           theme: AppTheme.appTheme,
-          initialRoute: PageRouteName.mainSignUp,
+          initialRoute: PageRouteName.weightSelectorScreen,
           onGenerateRoute: AppRoutes.onGenerateRoute,
         );
       },

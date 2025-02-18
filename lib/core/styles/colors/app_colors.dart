@@ -13,4 +13,5 @@ class AppColors {
   static const kOrange = Color(0xFFFF4100);
   static const kBabyPink = Color(0xFFF9ECF0);
   static const kGreen = Color(0xFF0CB359);
+  static const splashColor = Color(0xFF1A1A1A);
 }

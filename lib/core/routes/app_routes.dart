@@ -5,7 +5,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../presentation/auth/sign_up/view/gender_screen.dart';
 import '../../presentation/auth/sign_up/view/goal_screen.dart';
 import '../../presentation/auth/sign_up/view/main_sign_up_screen.dart';
+import '../../presentation/auth/sign_up/view/weight_selector_screen.dart';
 import '../../presentation/auth/sign_up/view_model/sign_up_cubit.dart';
+import '../../presentation/splash/splash_screen.dart';
 import '../di/di.dart';
 
 class AppRoutes {
@@ -24,6 +26,13 @@ class AppRoutes {
         return _handleMaterialPageRoute(widget: GoalScreen());
       case PageRouteName.actvityScreen:
         return _handleMaterialPageRoute(widget: ActivityScreen());
+      case PageRouteName.splashscreen:
+        return _handleMaterialPageRoute(widget: SplashScreen());
+      case PageRouteName.weightSelectorScreen:
+        return _handleMaterialPageRoute(widget: WeightSelectionScreen());
+      // case PageRouteName.heightSelectorScreen:
+      //   return _handleMaterialPageRoute(widget: const HightSelectorScreen());
+
       default:
         return _handleMaterialPageRoute(widget: const Scaffold());
     }
