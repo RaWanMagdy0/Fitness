@@ -13,18 +13,20 @@ class CustomScaffold extends StatelessWidget {
   final double blurWidth;
   final double borderRadius;
   final double blurStartPosition;
+  final Color? color;
 
   const CustomScaffold({
     super.key,
     required this.child,
     required this.backgroundImage,
-    this.overlayOpacity = 0.6,
+    this.overlayOpacity = 0.5,
     this.enableBlur = false,
     this.blurStrength = 10.0,
     this.blurHeight = 400.0,
     this.blurWidth = double.infinity,
     this.borderRadius = 50.0,
     this.blurStartPosition = 300.0,
+    this.color,
   });
 
   @override
@@ -53,7 +55,7 @@ class CustomScaffold extends StatelessWidget {
                     width: blurWidth,
                     height: blurHeight,
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.1),
+                      color:color?? Colors.white.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(borderRadius),
                     ),
                   ),

@@ -94,8 +94,8 @@ class LoginScreen extends StatelessWidget {
                         backgroundColor: Colors.white.withOpacity(0.1),
                         hintText: local.passwordHintText,
                         isPassword: true,
-                        validator:
-                            (value) => Validators.validatePassword(value),
+                        validator: (value) =>
+                            Validators.validatePassword(value),
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
@@ -115,16 +115,15 @@ class LoginScreen extends StatelessWidget {
                         ],
                       ),
                       10.verticalSpace,
-
                       SizedBox(
                         width: double.infinity,
                         child: CustomButton(
                           onPressed: () {
                             if (_formKey.currentState!.validate()) {
                               context.read<LoginCubit>().login(
-                                email: _emailController.text,
-                                password: _passwordController.text,
-                              );
+                                    email: _emailController.text,
+                                    password: _passwordController.text,
+                                  );
                             }
                           },
                           child: Text(

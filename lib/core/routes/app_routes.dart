@@ -1,4 +1,5 @@
 import 'package:fitness_app/core/routes/page_route_name.dart';
+import 'package:fitness_app/presentation/profile/view/main_profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../presentation/auth/forgot_password/cubit/forgot_password_cubit.dart';
@@ -98,11 +99,12 @@ class AppRoutes {
             child: ActivityScreen(),
           ),
         );
-
       case PageRouteName.onBoarding:
         return _handleMaterialPageRoute(widget: OnboardingScreen());
       case PageRouteName.homeScreen:
         return _handleMaterialPageRoute(widget: HomeScreen());
+      case PageRouteName.mainProfileScreen:
+        return _handleMaterialPageRoute(widget: MainProfileScreen());
       default:
         return _handleMaterialPageRoute(
           widget: const Scaffold(

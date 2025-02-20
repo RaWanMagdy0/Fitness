@@ -115,6 +115,16 @@ class AppFonts {
     color: AppColors.kBlack,
     fontWeight: FontWeight.w600,
   );
+  static TextStyle font14WhiteWeight600 = TextStyle(
+    fontSize: 14.sp,
+    color: AppColors.kWhite,
+    fontWeight: FontWeight.w600,
+  );
+  static TextStyle font24WhiteWeight600 = TextStyle(
+    fontSize: 24.sp,
+    color: AppColors.kWhite,
+    fontWeight: FontWeight.w600,
+  );
   static TextStyle font14WhiteWeight800 = TextStyle(
     fontSize: 14.sp,
     color: AppColors.kWhite,

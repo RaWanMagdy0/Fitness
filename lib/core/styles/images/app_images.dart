@@ -19,4 +19,5 @@ class AppImages {
   static const icon1png = "assets/images/icon1.png";
   static const icon2png = "assets/images/icon2.png";
   static const icon3png = "assets/images/icon3.png";
+  static const person = "assets/images/person.png";
 }

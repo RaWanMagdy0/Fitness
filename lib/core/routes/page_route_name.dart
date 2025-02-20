@@ -16,4 +16,5 @@ class PageRouteName {
   static const String verifyCode = "verifyCode";
   static const String resetPassword = "resetPassword";
   static const String forgotPassword = "forgotPassword";
+  static const String mainProfileScreen = "mainProfileScreen";
 }

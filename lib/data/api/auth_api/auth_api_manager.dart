@@ -23,7 +23,13 @@ part 'auth_api_manager.g.dart';
 abstract class AuthApiManager {
   @factoryMethod
   factory AuthApiManager(Dio dio) = _AuthApiManager;
+  @POST(ApiConstants.login)
+  Future<LoginResponseModel> login(@Body() LoginRequestModel loginRequestBody);
 
+  @POST(ApiConstants.signUp)
+  Future<SignUpResponseModel> signUp(
+    @Body() SignupRequestBody signupRequestBody,
+  );
   @POST(ApiConstants.forgotPassword)
   Future<ForgotPasswordResponseModel> forgotPassword(
     @Body() ForgotPasswordRequestModel requestModel,
@@ -37,13 +43,5 @@ abstract class AuthApiManager {
   @PUT(ApiConstants.resetPassword)
   Future<ForgotPasswordResponseModel> resetPassword(
     @Body() ResetPasswordRequestModel requestModel,
-  );
-
-  @POST(ApiConstants.login)
-  Future<LoginResponseModel> login(@Body() LoginRequestModel loginRequestBody);
-
-  @POST(ApiConstants.signUp)
-  Future<SignUpResponseModel> signUp(
-    @Body() SignupRequestBody signupRequestBody,
   );
 }
