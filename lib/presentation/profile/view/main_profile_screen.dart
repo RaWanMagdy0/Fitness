@@ -2,11 +2,10 @@ import 'package:fitness_app/core/styles/colors/app_colors.dart';
 import 'package:fitness_app/core/styles/fonts/app_fonts.dart';
 import 'package:fitness_app/core/utils/widget/custom%20scaffold.dart';
 import 'package:fitness_app/presentation/profile/view/widgets/custom_profile_row.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-import '../../../core/styles/images/app_images.dart';
+import '../../../../../core/styles/images/app_images.dart';
+import '../../../core/routes/page_route_name.dart' show PageRouteName;
 
 class MainProfileScreen extends StatelessWidget {
   const MainProfileScreen({super.key});
@@ -50,7 +49,11 @@ class MainProfileScreen extends StatelessWidget {
               ],
             ),
             50.verticalSpace,
-            CustomProfileRow(icon: Icons.person, title: "edit profile"),
+            CustomProfileRow(
+              icon: Icons.person,
+              title: "edit profile",
+              onTap: () => Navigator.pushNamed(context, PageRouteName.editProfileScreen),
+            ),
             SizedBox(
               width: 350.0.w,
                 child: Divider(color: AppColors.kGray,)),
