@@ -17,4 +17,5 @@ class PageRouteName {
   static const String resetPassword = "resetPassword";
   static const String forgotPassword = "forgotPassword";
   static const String mainProfileScreen = "mainProfileScreen";
+  static const String layoutScreen = "layoutScreen";
 }
