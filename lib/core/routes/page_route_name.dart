@@ -18,4 +18,5 @@ class PageRouteName {
   static const String forgotPassword = "forgotPassword";
   static const String mainProfileScreen = "mainProfileScreen";
   static const String editProfileScreen = "editProfileScreen";
+  static const String layoutScreen = "layoutScreen";
 }
