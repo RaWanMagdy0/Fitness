@@ -2,7 +2,6 @@ import 'package:fitness_app/core/routes/page_route_name.dart';
 import 'package:fitness_app/core/styles/colors/app_colors.dart';
 import 'package:fitness_app/core/styles/fonts/app_fonts.dart';
 import 'package:fitness_app/core/styles/images/app_images.dart';
-import 'package:fitness_app/core/utils/const/app_string.dart';
 import 'package:fitness_app/core/utils/widget/custom_button.dart';
 import 'package:fitness_app/core/utils/widget/custom_radio.dart';
 import 'package:fitness_app/presentation/auth/sign_up/view_model/sign_up_cubit.dart';
@@ -113,7 +112,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                       ProgressIndicatorWidget(currentPage: 6, totalPages: 6)),
               25.verticalSpace,
               Text(
-                AppStrings.yourRegular,
+                "your regular physical activity level ?",
                 style: AppFonts.font20WhiteWeight800,
                 textAlign: TextAlign.start,
               ),
@@ -186,7 +185,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                           ? () => _onNextPressed(context)
                           : null,
                       child: Text(
-                        AppStrings.next,
+                        "Next",
                         style: AppFonts.font14LightWhiteWeight500,
                       ),
                     ),

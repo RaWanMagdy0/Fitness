@@ -59,7 +59,7 @@ class MyApp extends StatelessWidget {
           supportedLocales: S.delegate.supportedLocales,
           debugShowCheckedModeBanner: false,
           theme: AppTheme.appTheme,
-          initialRoute: PageRouteName.layoutScreen,
+          initialRoute: PageRouteName.onBoarding,
           onGenerateRoute: AppRoutes.onGenerateRoute,
         );
       },

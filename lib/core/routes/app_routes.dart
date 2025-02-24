@@ -1,5 +1,6 @@
 import 'package:fitness_app/core/routes/page_route_name.dart';
 import 'package:fitness_app/presentation/profile/view/main_profile_screen.dart';
+import 'package:fitness_app/presentation/profile/view_model/profile_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../presentation/auth/forgot_password/cubit/forgot_password_cubit.dart';
@@ -17,8 +18,10 @@ import '../../presentation/auth/sign_up/view/height_screen.dart';
 import '../../presentation/auth/sign_up/view/main_sign_up_screen.dart';
 import '../../presentation/auth/sign_up/view/weight_screen.dart';
 import '../../presentation/auth/sign_up/view_model/sign_up_cubit.dart';
-import '../../presentation/edit_profile/view/edit_profile_screen.dart' show EditProfileScreen;
+import '../../presentation/edit_profile/view/edit_profile_screen.dart'
+    show EditProfileScreen;
 import '../../presentation/layout/home_layout.dart';
+import '../../presentation/layout/main_page.dart';
 import '../../presentation/splash/onboarding.dart';
 import '../../presentation/splash/splash_screen.dart';
 import '../di/di.dart';
@@ -106,11 +109,15 @@ class AppRoutes {
       case PageRouteName.homeScreen:
         return _handleMaterialPageRoute(widget: HomeScreen());
       case PageRouteName.mainProfileScreen:
-        return _handleMaterialPageRoute(widget: MainProfileScreen());
+        return MaterialPageRoute(
+            builder: (context) => BlocProvider(
+                  create: (context) => getIt<ProfileCubit>(),
+                  child: MainProfileScreen(),
+                ));
       case PageRouteName.editProfileScreen: // Added this case
         return _handleMaterialPageRoute(widget: EditProfileScreen());
       case PageRouteName.layoutScreen:
-        return _handleMaterialPageRoute(widget: HomeLayout());
+        return _handleMaterialPageRoute(widget: const MainPage());
       default:
         return _handleMaterialPageRoute(
           widget: const Scaffold(

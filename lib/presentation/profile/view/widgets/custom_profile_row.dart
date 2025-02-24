@@ -5,13 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CustomProfileRow extends StatelessWidget {
-  final IconData icon;
+  final String imagePath;
   final String title;
   final VoidCallback? onTap;
 
   const CustomProfileRow({
     super.key,
-    required this.icon,
+    required this.imagePath,
     required this.title,
     this.onTap,
   });
@@ -27,7 +27,7 @@ class CustomProfileRow extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(icon, color: AppColors.kOrange),
+                Image.asset(imagePath,),
                 15.horizontalSpace,
                 Text(
                   title,

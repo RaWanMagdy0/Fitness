@@ -3,7 +3,6 @@ import 'package:fitness_app/core/routes/page_route_name.dart';
 import 'package:fitness_app/core/styles/colors/app_colors.dart';
 import 'package:fitness_app/core/styles/fonts/app_fonts.dart';
 import 'package:fitness_app/core/styles/images/app_images.dart';
-import 'package:fitness_app/core/utils/const/app_string.dart';
 import 'package:fitness_app/core/utils/widget/custom_button.dart';
 import 'package:fitness_app/core/utils/widget/custom_radio.dart';
 import 'package:flutter/material.dart';
@@ -69,20 +68,19 @@ class _GoalScreenState extends State<GoalScreen> {
             ),
             50.verticalSpace,
             Center(
-                child:
-                    ProgressIndicatorWidget(currentPage: 5, totalPages: 6)),
+                child: ProgressIndicatorWidget(currentPage: 5, totalPages: 6)),
             25.verticalSpace,
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  AppStrings.whatGoal,
+                  "what is your goal? ",
                   style: AppFonts.font20WhiteWeight800,
                   textAlign: TextAlign.start,
                 ),
                 5.verticalSpace,
                 Text(
-                  AppStrings.thisHelps,
+                  "this helps us create Your personalized plan",
                   style:
                       AppFonts.font18WhiteWeight400.copyWith(fontSize: 15.sp),
                   textAlign: TextAlign.start,
@@ -151,7 +149,6 @@ class _GoalScreenState extends State<GoalScreen> {
               },
             ),
             20.verticalSpace,
-
             ValueListenableBuilder<String?>(
               valueListenable: _selectedGoal,
               builder: (context, selectedValue, child) {
@@ -167,7 +164,7 @@ class _GoalScreenState extends State<GoalScreen> {
                           }
                         : null,
                     child: Text(
-                      AppStrings.next,
+                      "Next",
                       style: AppFonts.font14LightWhiteWeight500,
                     ),
                   ),

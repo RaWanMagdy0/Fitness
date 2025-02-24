@@ -25,7 +25,6 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final local = S.of(context);
     return BlocConsumer<LoginCubit, LoginState>(
       listener: (context, state) {
         if (state is LoginLoading) {
@@ -37,7 +36,7 @@ class LoginScreen extends StatelessWidget {
             message: "Login Successfully",
           );
           Future.delayed(Duration(seconds: 2), () {
-            Navigator.pushReplacementNamed(context, PageRouteName.homeScreen);
+            Navigator.pushReplacementNamed(context, PageRouteName.layoutScreen);
           });
         } else if (state is LoginError) {
           AppDialogs.showHideDialog(context);
@@ -76,7 +75,7 @@ class LoginScreen extends StatelessWidget {
                     children: [
                       CustomTextFormField(
                         controller: _emailController,
-                        hintText: local.emailHintText,
+                        hintText: "local.emailHintText",
                         prefixIcon: Icon(
                           Icons.email_outlined,
                           color: AppColors.kLighterGrey,
@@ -92,7 +91,7 @@ class LoginScreen extends StatelessWidget {
                           color: AppColors.kLighterGrey,
                         ),
                         backgroundColor: Colors.white.withOpacity(0.1),
-                        hintText: local.passwordHintText,
+                        hintText: "local.passwordHintText",
                         isPassword: true,
                         validator: (value) =>
                             Validators.validatePassword(value),
@@ -136,7 +135,7 @@ class LoginScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            local.donotHaveAccountText,
+                            'local.donotHaveAccountText',
                             style: AppFonts.font14WhiteWeight400,
                           ),
                           TextButton(
@@ -147,7 +146,7 @@ class LoginScreen extends StatelessWidget {
                               );
                             },
                             child: Text(
-                              local.signUpTitle,
+                              'local.signUpTitle',
                               style: AppFonts.font14LightOrangeWeight400,
                             ),
                           ),

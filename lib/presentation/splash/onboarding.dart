@@ -23,7 +23,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         curve: Curves.easeInOut,
       );
     } else {
-      // انتقل إلى صفحة تسجيل الدخول بعد آخر صفحة Onboarding
       Navigator.pushReplacementNamed(context, PageRouteName.login);
     }
   }

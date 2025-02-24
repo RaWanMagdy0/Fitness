@@ -7,13 +7,12 @@ import '../../../../core/utils/widget/custom_text_form_field.dart';
 import '../../../../core/utils/widget/custom scaffold.dart';
 import '../../../core/styles/images/app_images.dart' show AppImages;
 
+
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({super.key});
-
   @override
   State<EditProfileScreen> createState() => _EditProfileScreenState();
 }
-
 class _EditProfileScreenState extends State<EditProfileScreen> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _firstNameController = TextEditingController();
