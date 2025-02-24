@@ -18,6 +18,7 @@ import '../../presentation/auth/sign_up/view/main_sign_up_screen.dart';
 import '../../presentation/auth/sign_up/view/weight_screen.dart';
 import '../../presentation/auth/sign_up/view_model/sign_up_cubit.dart';
 import '../../presentation/edit_profile/view/edit_profile_screen.dart' show EditProfileScreen;
+import '../../presentation/edit_profile/view_model/edit_profile_cubit.dart' show EditProfileCubit;
 import '../../presentation/splash/onboarding.dart';
 import '../../presentation/splash/splash_screen.dart';
 import '../di/di.dart';
@@ -100,8 +101,13 @@ class AppRoutes {
         return _handleMaterialPageRoute(widget: HomeScreen());
       case PageRouteName.mainProfileScreen:
         return _handleMaterialPageRoute(widget: MainProfileScreen());
-      case PageRouteName.editProfileScreen: // Added this case
-        return _handleMaterialPageRoute(widget: EditProfileScreen());
+      case PageRouteName.editProfileScreen:
+        return MaterialPageRoute(
+          builder: (context) => BlocProvider(
+            create: (context) => getIt<EditProfileCubit>(),
+            child: EditProfileScreen(),
+          ),
+        );
       default:
         return _handleMaterialPageRoute(
           widget: const Scaffold(

@@ -21,11 +21,14 @@ import '../../data/data_source/auth_data_source/auth_remote_data_source_impl.dar
 import '../../data/repository/auth_repository/auth_repository_impl.dart'
     as _i313;
 import '../../domain/repository/auth_repository/auth_repository.dart' as _i1056;
+import '../../domain/use_case/auth/edit_profile_use_case.dart' as _i606;
 import '../../domain/use_case/auth/sign_up_use_case.dart' as _i322;
 import '../../presentation/auth/forgot_password/cubit/forgot_password_cubit.dart'
     as _i401;
 import '../../presentation/auth/login/view_model/login_cubit.dart' as _i97;
 import '../../presentation/auth/sign_up/view_model/sign_up_cubit.dart' as _i140;
+import '../../presentation/edit_profile/view_model/edit_profile_cubit.dart'
+    as _i236;
 import '../api/dio/dio_factory.dart' as _i763;
 import '../api/dio/dio_module.dart' as _i223;
 import '../api/dio/token_interceptor.dart' as _i683;
@@ -54,6 +57,8 @@ extension GetItInjectableX on _i174.GetIt {
             authApiManager: gh<_i515.AuthApiManager>()));
     gh.factory<_i1056.AuthRepository>(() => _i313.AuthRepositoryImpl(
         authRemoteDataSource: gh<_i249.AuthRemoteDataSource>()));
+    gh.factory<_i606.EditProfileUseCase>(
+        () => _i606.EditProfileUseCase(gh<_i1056.AuthRepository>()));
     gh.factory<_i322.SignupUseCase>(
         () => _i322.SignupUseCase(gh<_i1056.AuthRepository>()));
     gh.factory<_i97.LoginCubit>(
@@ -62,6 +67,8 @@ extension GetItInjectableX on _i174.GetIt {
         _i401.ForgotPasswordCubit(authRepository: gh<_i1056.AuthRepository>()));
     gh.factory<_i140.SignUpCubit>(
         () => _i140.SignUpCubit(gh<_i322.SignupUseCase>()));
+    gh.factory<_i236.EditProfileCubit>(
+        () => _i236.EditProfileCubit(gh<_i606.EditProfileUseCase>()));
     return this;
   }
 }
