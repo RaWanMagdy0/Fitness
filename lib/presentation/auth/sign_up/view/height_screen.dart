@@ -9,6 +9,7 @@ import '../../../../core/styles/fonts/app_fonts.dart';
 import '../../../../core/styles/images/app_images.dart';
 import '../../../../core/utils/widget/custom scaffold.dart';
 import '../../../../core/utils/widget/custom_button.dart';
+import '../../../../generated/l10n.dart';
 import '../widgets/custom_indecator.dart';
 
 class HeightScreen extends StatefulWidget {
@@ -32,8 +33,9 @@ class _HeightScreenState extends State<HeightScreen> {
   }
   @override
   Widget build(BuildContext context) {
-    final signupProvider = context.read<SignupProvider>();
+    final local=S.of(context);
 
+    final signupProvider = context.read<SignupProvider>();
     return CustomScaffold(
       backgroundImage: AppImages.authBackground,
       enableBlur: true,
@@ -65,11 +67,11 @@ class _HeightScreenState extends State<HeightScreen> {
                 child: ProgressIndicatorWidget(currentPage: 4, totalPages: 6)),
             30.verticalSpace,
             Text(
-              "what is your height?",
+              local.what_is_your_height,
               style: AppFonts.font14WhiteWeight800.copyWith(fontSize: 20),
             ),
             Text(
-              "this helps us create Your personalized plan",
+              local.this_helps_us_create_Your_personalized_plan,
               style: AppFonts.font18WhiteWeight400.copyWith(fontSize: 15),
             ),
             20.verticalSpace,
@@ -80,7 +82,7 @@ class _HeightScreenState extends State<HeightScreen> {
                   borderRadius: BorderRadius.circular(50.r),
                 ),
                 child: Text(
-                    "CM",
+                   local.cm,
                     style: AppFonts.font12OrangeWeight400
                 ),
               ),),
@@ -129,7 +131,7 @@ class _HeightScreenState extends State<HeightScreen> {
             ),
             40.verticalSpace,
             CustomButton(
-              text: "Next",
+              text: local.next,
               onPressed: () {
                 signupProvider.saveData("height", selectedHeight.toString());
 

@@ -11,6 +11,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../core/local/sign_up_provider.dart';
 import '../../../../core/utils/widget/custom scaffold.dart';
+import '../../../../generated/l10n.dart';
 import '../widgets/custom_indecator.dart';
 
 class GoalScreen extends StatefulWidget {
@@ -37,9 +38,8 @@ class _GoalScreenState extends State<GoalScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final local = S.of(context);
+   final local = S.of(context);
     final signupProvider = context.read<SignupProvider>();
-
     return CustomScaffold(
       backgroundImage: AppImages.authBackground,
       enableBlur: true,
@@ -74,13 +74,13 @@ class _GoalScreenState extends State<GoalScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "what is your goal? ",
+                  local.what_is_your_goal,
                   style: AppFonts.font20WhiteWeight800,
                   textAlign: TextAlign.start,
                 ),
                 5.verticalSpace,
                 Text(
-                  "this helps us create Your personalized plan",
+                 local.this_helps_us_create_Your_personalized_plan,
                   style:
                       AppFonts.font18WhiteWeight400.copyWith(fontSize: 15.sp),
                   textAlign: TextAlign.start,
@@ -95,7 +95,7 @@ class _GoalScreenState extends State<GoalScreen> {
                   child: Column(
                     children: [
                       CustomRadioButton(
-                        label: "Gain Weight",
+                        label: local.gain_weight,
                         value: "gain_weight",
                         groupValue: selectedValue,
                         onChanged: (value) {
@@ -105,7 +105,7 @@ class _GoalScreenState extends State<GoalScreen> {
                       ),
                       16.verticalSpace,
                       CustomRadioButton(
-                        label: "Lose Weight",
+                        label: local.lose_weight,
                         value: "lose_weight",
                         groupValue: selectedValue,
                         onChanged: (value) {
@@ -115,7 +115,7 @@ class _GoalScreenState extends State<GoalScreen> {
                       ),
                       16.verticalSpace,
                       CustomRadioButton(
-                        label: "Get Fitter",
+                        label: local.get_fitter,
                         value: "get_fitter",
                         groupValue: selectedValue,
                         onChanged: (value) {
@@ -125,7 +125,7 @@ class _GoalScreenState extends State<GoalScreen> {
                       ),
                       16.verticalSpace,
                       CustomRadioButton(
-                        label: "Gain More Flexible",
+                        label: local.gain_more_flexible,
                         value: "gain_flexible",
                         groupValue: selectedValue,
                         onChanged: (value) {
@@ -135,7 +135,7 @@ class _GoalScreenState extends State<GoalScreen> {
                       ),
                       16.verticalSpace,
                       CustomRadioButton(
-                        label: "Learn The Basic",
+                        label: local.learn_the_basics,
                         value: "learn_basic",
                         groupValue: selectedValue,
                         onChanged: (value) {
@@ -164,7 +164,7 @@ class _GoalScreenState extends State<GoalScreen> {
                           }
                         : null,
                     child: Text(
-                      "Next",
+                      local.next,
                       style: AppFonts.font14LightWhiteWeight500,
                     ),
                   ),

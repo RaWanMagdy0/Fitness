@@ -13,6 +13,7 @@ import '../../../../core/local/sign_up_provider.dart';
 import '../../../../core/utils/functions/dialogs/app_dialogs.dart';
 import '../../../../core/utils/widget/custom scaffold.dart';
 import '../../../../data/models/sign_up/request/sign_up_request_body.dart';
+import '../../../../generated/l10n.dart';
 import '../widgets/custom_indecator.dart';
 
 class ActivityScreen extends StatefulWidget {
@@ -64,6 +65,8 @@ class _ActivityScreenState extends State<ActivityScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final local = S.of(context);
+
     final signupProvider = context.read<SignupProvider>();
     return BlocListener<SignUpCubit, SignUpState>(
       listener: (context, state) {
@@ -112,7 +115,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                       ProgressIndicatorWidget(currentPage: 6, totalPages: 6)),
               25.verticalSpace,
               Text(
-                "your regular physical activity level ?",
+                local.your_regular_physical_activity_level,
                 style: AppFonts.font20WhiteWeight800,
                 textAlign: TextAlign.start,
               ),
@@ -123,7 +126,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                   return Column(
                     children: [
                       CustomRadioButton(
-                        label: "level1",
+                        label: local.level1,
                         value: "level1",
                         groupValue: selectedValue,
                         onChanged: (value) {
@@ -133,7 +136,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                       ),
                       16.verticalSpace,
                       CustomRadioButton(
-                        label: "level2",
+                        label: local.level2,
                         value: "level2",
                         groupValue: selectedValue,
                         onChanged: (value) {
@@ -143,7 +146,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                       ),
                       16.verticalSpace,
                       CustomRadioButton(
-                        label: "level3",
+                        label: local.level3,
                         value: "level3",
                         groupValue: selectedValue,
                         onChanged: (value) =>
@@ -151,7 +154,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                       ),
                       16.verticalSpace,
                       CustomRadioButton(
-                        label: "level4",
+                        label: local.level4,
                         value: "level4",
                         groupValue: selectedValue,
                         onChanged: (value) {
@@ -161,7 +164,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                       ),
                       16.verticalSpace,
                       CustomRadioButton(
-                        label: "level5",
+                        label: local.level5,
                         value: "level5",
                         groupValue: selectedValue,
                         onChanged: (value) {
@@ -185,7 +188,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                           ? () => _onNextPressed(context)
                           : null,
                       child: Text(
-                        "Next",
+                        local.next,
                         style: AppFonts.font14LightWhiteWeight500,
                       ),
                     ),

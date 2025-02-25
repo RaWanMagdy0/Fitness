@@ -6,10 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
+import 'package:provider/provider.dart';
 import '../../../core/di/di.dart';
-import '../../../core/generated/l10n.dart';
 import '../../../core/routes/page_route_name.dart';
 import '../../../core/styles/images/app_images.dart';
+import '../../../core/utils/functions/providers/local_provider.dart';
+import '../../../generated/l10n.dart';
 import '../view_model/profile_cubit.dart';
 import '../view_model/profile_state.dart';
 
@@ -32,6 +34,7 @@ class _MainProfileScreenState extends State<MainProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final local = S.of(context);
+    var provider = Provider.of<LocalProvider>(context);
     return BlocBuilder<ProfileCubit, ProfileState>(
         bloc: viewModel,
         builder: (context, state) {
@@ -64,7 +67,7 @@ class _MainProfileScreenState extends State<MainProfileScreen> {
                           100.horizontalSpace,
                           Center(
                               child: Text(
-                            "Profile",
+                            local.profile,
                             style: AppFonts.font24WhiteWeight600,
                           )),
                         ],
@@ -92,7 +95,10 @@ class _MainProfileScreenState extends State<MainProfileScreen> {
                     70.verticalSpace,
                     CustomProfileRow(
                       imagePath: AppImages.personIcon,
-                      title: "edit profile",
+                      title: Text(
+                        local.edit_profile,
+                        style: AppFonts.font14WhiteWeight600,
+                      ),
                       onTap: () => Navigator.pushNamed(
                           context, PageRouteName.editProfileScreen),
                     ),
@@ -103,7 +109,10 @@ class _MainProfileScreenState extends State<MainProfileScreen> {
                         )),
                     CustomProfileRow(
                         imagePath: AppImages.changeIcon,
-                        title: "change password"),
+                        title: Text(
+                          local.change_password,
+                          style: AppFonts.font14WhiteWeight600,
+                        )),
                     SizedBox(
                         width: 350.0.w,
                         child: Divider(
@@ -111,14 +120,37 @@ class _MainProfileScreenState extends State<MainProfileScreen> {
                         )),
                     CustomProfileRow(
                         imagePath: AppImages.languageIcon,
-                        title: "select language"),
+                        title: Row(
+                          children: [
+                            Text(
+                              local.select_language,
+                              style: AppFonts.font14WhiteWeight600,
+                            ),
+                            110.horizontalSpace,
+                            InkWell(
+                                onTap: () {
+                                  provider.changeLanguage(
+                                      provider.locale == "en" ? "ar" : "en");
+                                },
+                                child: Text(
+                                  provider.locale == "en"
+                                      ? "(Arabic)"
+                                      : "(English)",
+                                  style: AppFonts.font15OrangeWeight500,
+                                ))
+                          ],
+                        )),
                     SizedBox(
                         width: 350.0.w,
                         child: Divider(
                           color: AppColors.kGray,
                         )),
                     CustomProfileRow(
-                        imagePath: AppImages.securityIcon, title: "Security"),
+                        imagePath: AppImages.securityIcon,
+                        title: Text(
+                          local.security,
+                          style: AppFonts.font14WhiteWeight600,
+                        )),
                     SizedBox(
                         width: 350.0.w,
                         child: Divider(
@@ -126,21 +158,32 @@ class _MainProfileScreenState extends State<MainProfileScreen> {
                         )),
                     CustomProfileRow(
                         imagePath: AppImages.privacyIcon,
-                        title: "Privacy Policy"),
+                        title: Text(
+                          local.privacy_policy,
+                          style: AppFonts.font14WhiteWeight600,
+                        )),
                     SizedBox(
                         width: 350.0.w,
                         child: Divider(
                           color: AppColors.kGray,
                         )),
                     CustomProfileRow(
-                        imagePath: AppImages.helpIcon, title: "Help"),
+                        imagePath: AppImages.helpIcon,
+                        title: Text(
+                          local.help,
+                          style: AppFonts.font14WhiteWeight600,
+                        )),
                     SizedBox(
                         width: 350.0.w,
                         child: Divider(
                           color: AppColors.kGray,
                         )),
                     CustomProfileRow(
-                        imagePath: AppImages.logoutIcon, title: "Logout"),
+                        imagePath: AppImages.logoutIcon,
+                        title: Text(
+                          local.logout,
+                          style: AppFonts.font14WhiteWeight600,
+                        )),
                     SizedBox(
                         width: 350.0.w,
                         child: Divider(

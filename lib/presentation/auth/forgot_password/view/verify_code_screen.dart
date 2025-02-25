@@ -9,6 +9,7 @@ import '../../../../core/utils/widget/custom scaffold.dart' show CustomScaffold;
 import '../../../../core/utils/widget/custom_button.dart';
 import '../../../../core/utils/widget/custom_otp_field.dart';
 import '../../../../core/styles/images/app_images.dart';
+import '../../../../generated/l10n.dart';
 import '../cubit/forgot_password_cubit.dart';
 
 class VerifyCodeScreen extends StatefulWidget {
@@ -43,6 +44,8 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final local = S.of(context);
+
     return CustomScaffold(
       enableBlur: true,
       blurStrength: 5.0,
@@ -76,12 +79,12 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
                 Center(child: Image.asset(AppImages.logoIcon)),
                 40.verticalSpace,
                 Text(
-                  "OTP CODE",
+                  local.otp_code,
                   style: AppFonts.font24WhiteWeight800,
                 ),
                 8.verticalSpace,
                 Text(
-                  "Enter Your OTP Check Your Email",
+                  local.enter_your_otp_check_your_email,
                   style: AppFonts.font18WhiteWeight400,
                 ),
                 50.verticalSpace,
@@ -127,7 +130,7 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
                             );
                       },
                       child: Text(
-                        "Resend Code?",
+                        local.resend_code,
                         style: AppFonts.font14LightOrangeWeight400,
                       ),
                     ),
@@ -135,7 +138,7 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
                 ],
                 CustomButton(
                   onPressed: _onCodeComplete,
-                  child: Text("Confirm", style: AppFonts.font16WhiteWeight500),
+                  child: Text(local.confirm, style: AppFonts.font16WhiteWeight500),
                 ),
               ],
             );

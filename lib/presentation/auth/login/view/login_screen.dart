@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../../core/generated/l10n.dart';
 import '../../../../core/routes/page_route_name.dart' show PageRouteName;
 import '../../../../core/styles/colors/app_colors.dart' show AppColors;
 import '../../../../core/styles/fonts/app_fonts.dart';
@@ -12,6 +11,7 @@ import '../../../../core/utils/functions/validators/validators.dart';
 import '../../../../core/utils/widget/custom scaffold.dart' show CustomScaffold;
 import '../../../../core/utils/widget/custom_text_form_field.dart';
 import '../../../../core/utils/widget/custom_button.dart';
+import '../../../../generated/l10n.dart';
 import '../view_model/login_cubit.dart' show LoginCubit;
 import '../view_model/login_state.dart'
     show LoginError, LoginLoading, LoginState, LoginSuccess;
@@ -25,6 +25,8 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final local=S.of(context);
+
     return BlocConsumer<LoginCubit, LoginState>(
       listener: (context, state) {
         if (state is LoginLoading) {
@@ -63,11 +65,11 @@ class LoginScreen extends StatelessWidget {
                 40.verticalSpace,
                 Center(child: Image.asset(AppImages.logoIcon)),
                 40.verticalSpace,
-                Text("Hey There", style: AppFonts.font18WhiteWeight400),
+                Text(local.hey_there, style: AppFonts.font18WhiteWeight400),
                 8.verticalSpace,
-                Text("WELCOME BACK", style: AppFonts.font20WhiteWeight800),
+                Text(local.welcome_back, style: AppFonts.font20WhiteWeight800),
                 20.verticalSpace,
-                Text("Login", style: AppFonts.font24WhiteWeight800),
+                Text(local.login, style: AppFonts.font24WhiteWeight800),
                 20.verticalSpace,
                 Form(
                   key: _formKey,
@@ -75,7 +77,7 @@ class LoginScreen extends StatelessWidget {
                     children: [
                       CustomTextFormField(
                         controller: _emailController,
-                        hintText: "local.emailHintText",
+                        hintText: local.email_text,
                         prefixIcon: Icon(
                           Icons.email_outlined,
                           color: AppColors.kLighterGrey,
@@ -91,7 +93,7 @@ class LoginScreen extends StatelessWidget {
                           color: AppColors.kLighterGrey,
                         ),
                         backgroundColor: Colors.white.withOpacity(0.1),
-                        hintText: "local.passwordHintText",
+                        hintText: local.password,
                         isPassword: true,
                         validator: (value) =>
                             Validators.validatePassword(value),
@@ -107,7 +109,7 @@ class LoginScreen extends StatelessWidget {
                               );
                             },
                             child: Text(
-                              'Forget Password ?',
+                              local.forget_password,
                               style: TextStyle(color: AppColors.kOrange),
                             ),
                           ),
@@ -126,7 +128,7 @@ class LoginScreen extends StatelessWidget {
                             }
                           },
                           child: Text(
-                            "Login",
+                            local.login,
                             style: AppFonts.font16WhiteWeight500,
                           ),
                         ),
@@ -135,7 +137,7 @@ class LoginScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            'local.donotHaveAccountText',
+                            local.dont_have_an_account_yet,
                             style: AppFonts.font14WhiteWeight400,
                           ),
                           TextButton(
@@ -146,7 +148,7 @@ class LoginScreen extends StatelessWidget {
                               );
                             },
                             child: Text(
-                              'local.signUpTitle',
+                              local.register,
                               style: AppFonts.font14LightOrangeWeight400,
                             ),
                           ),

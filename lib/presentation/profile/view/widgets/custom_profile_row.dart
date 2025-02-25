@@ -6,7 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CustomProfileRow extends StatelessWidget {
   final String imagePath;
-  final String title;
+  final Widget title;
   final VoidCallback? onTap;
 
   const CustomProfileRow({
@@ -29,9 +29,7 @@ class CustomProfileRow extends StatelessWidget {
               children: [
                 Image.asset(imagePath,),
                 15.horizontalSpace,
-                Text(
-                  title,
-                  style: AppFonts.font14WhiteWeight600,)
+                title
               ],
             ),
             const Icon(Icons.arrow_forward_ios,

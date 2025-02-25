@@ -21,8 +21,11 @@ import '../../presentation/edit_profile/view/edit_profile_screen.dart'
     show EditProfileScreen;
 import '../../presentation/layout/home_layout.dart';
 import '../../presentation/layout/main_page.dart';
-import '../../presentation/edit_profile/view/edit_profile_screen.dart' show EditProfileScreen;
-import '../../presentation/edit_profile/view_model/edit_profile_cubit.dart' show EditProfileCubit;
+import '../../presentation/edit_profile/view/edit_profile_screen.dart'
+    show EditProfileScreen;
+import '../../presentation/edit_profile/view_model/edit_profile_cubit.dart'
+    show EditProfileCubit;
+import '../../presentation/profile/view_model/profile_cubit.dart';
 import '../../presentation/splash/onboarding.dart';
 import '../../presentation/splash/splash_screen.dart';
 import '../di/di.dart';
@@ -104,7 +107,11 @@ class AppRoutes {
       case PageRouteName.homeScreen:
         return _handleMaterialPageRoute(widget: HomeScreen());
       case PageRouteName.mainProfileScreen:
-        return _handleMaterialPageRoute(widget: MainProfileScreen());
+        return MaterialPageRoute(
+            builder: (context) => BlocProvider(
+                  create: (context) => getIt<ProfileCubit>(),
+                  child: MainProfileScreen(),
+                ));
       case PageRouteName.editProfileScreen:
         return MaterialPageRoute(
           builder: (context) => BlocProvider(
@@ -112,13 +119,7 @@ class AppRoutes {
             child: EditProfileScreen(),
           ),
         );
-        return MaterialPageRoute(
-            builder: (context) => BlocProvider(
-                  create: (context) => getIt<ProfileCubit>(),
-                  child: MainProfileScreen(),
-                ));
-      case PageRouteName.editProfileScreen: // Added this case
-        return _handleMaterialPageRoute(widget: EditProfileScreen());
+
       case PageRouteName.layoutScreen:
         return _handleMaterialPageRoute(widget: const MainPage());
       default:

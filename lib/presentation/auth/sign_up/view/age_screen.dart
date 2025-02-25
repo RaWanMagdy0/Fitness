@@ -9,6 +9,7 @@ import '../../../../core/styles/fonts/app_fonts.dart';
 import '../../../../core/styles/images/app_images.dart';
 import '../../../../core/utils/widget/custom scaffold.dart';
 import '../../../../core/utils/widget/custom_button.dart';
+import '../../../../generated/l10n.dart';
 import '../widgets/custom_indecator.dart';
 
 class AgeScreen extends StatefulWidget {
@@ -29,8 +30,11 @@ class _AgeScreenState extends State<AgeScreen> {
     final signupProvider = context.read<SignupProvider>();
     selectedAge = int.tryParse(signupProvider.getData("age") ?? '') ?? 90;
   }
+
   @override
   Widget build(BuildContext context) {
+    final local = S.of(context);
+
     final signupProvider = context.read<SignupProvider>();
 
     return CustomScaffold(
@@ -64,11 +68,11 @@ class _AgeScreenState extends State<AgeScreen> {
                 child: ProgressIndicatorWidget(currentPage: 2, totalPages: 6)),
             30.verticalSpace,
             Text(
-              "How Old Are you ?",
+              local.how_old_are_you,
               style: AppFonts.font14WhiteWeight800.copyWith(fontSize: 20),
             ),
             Text(
-              "this helps us create Your personalized plan",
+              local.tell_us_about_yourself,
               style: AppFonts.font18WhiteWeight400.copyWith(fontSize: 15),
             ),
             20.verticalSpace,
@@ -78,11 +82,9 @@ class _AgeScreenState extends State<AgeScreen> {
                   color: Colors.transparent,
                   borderRadius: BorderRadius.circular(50.r),
                 ),
-                child: Text(
-                    "Year",
-                    style: AppFonts.font12OrangeWeight400
-                ),
-              ),),
+                child: Text(local.year, style: AppFonts.font12OrangeWeight400),
+              ),
+            ),
             15.verticalSpace,
             Stack(
               alignment: Alignment.center,
@@ -122,13 +124,13 @@ class _AgeScreenState extends State<AgeScreen> {
                 Positioned(
                   bottom: -10,
                   child: Icon(Icons.arrow_drop_up,
-                      color:  AppColors.kOrange, size: 24),
+                      color: AppColors.kOrange, size: 24),
                 ),
               ],
             ),
             40.verticalSpace,
             CustomButton(
-              text: "Next",
+              text: local.next,
               onPressed: () {
                 signupProvider.saveData("age", selectedAge.toString());
 
