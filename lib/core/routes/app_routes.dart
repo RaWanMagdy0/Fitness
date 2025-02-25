@@ -1,6 +1,5 @@
 import 'package:fitness_app/core/routes/page_route_name.dart';
 import 'package:fitness_app/presentation/profile/view/main_profile_screen.dart';
-import 'package:fitness_app/presentation/profile/view_model/profile_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../presentation/auth/forgot_password/cubit/forgot_password_cubit.dart';
@@ -22,6 +21,8 @@ import '../../presentation/edit_profile/view/edit_profile_screen.dart'
     show EditProfileScreen;
 import '../../presentation/layout/home_layout.dart';
 import '../../presentation/layout/main_page.dart';
+import '../../presentation/edit_profile/view/edit_profile_screen.dart' show EditProfileScreen;
+import '../../presentation/edit_profile/view_model/edit_profile_cubit.dart' show EditProfileCubit;
 import '../../presentation/splash/onboarding.dart';
 import '../../presentation/splash/splash_screen.dart';
 import '../di/di.dart';
@@ -38,7 +39,6 @@ class AppRoutes {
             child: LoginScreen(),
           ),
         );
-
       case PageRouteName.genderSignUp:
         return MaterialPageRoute(
           builder: (context) => BlocProvider(
@@ -53,7 +53,6 @@ class AppRoutes {
             child: SignUpPage(),
           ),
         );
-
       case PageRouteName.forgotPassword:
         return _handleMaterialPageRoute(
           widget: BlocProvider(
@@ -72,7 +71,6 @@ class AppRoutes {
             child: WeightScreen(),
           ),
         );
-
       case PageRouteName.heightScreen:
         return MaterialPageRoute(
           builder: (context) => BlocProvider(
@@ -80,7 +78,6 @@ class AppRoutes {
             child: HeightScreen(),
           ),
         );
-
       case PageRouteName.ageScreen:
         return MaterialPageRoute(
           builder: (context) => BlocProvider(
@@ -88,7 +85,6 @@ class AppRoutes {
             child: AgeScreen(),
           ),
         );
-
       case PageRouteName.goalScreen:
         return MaterialPageRoute(
           builder: (context) => BlocProvider(
@@ -96,7 +92,6 @@ class AppRoutes {
             child: GoalScreen(),
           ),
         );
-
       case PageRouteName.activityScreen:
         return MaterialPageRoute(
           builder: (context) => BlocProvider(
@@ -109,6 +104,14 @@ class AppRoutes {
       case PageRouteName.homeScreen:
         return _handleMaterialPageRoute(widget: HomeScreen());
       case PageRouteName.mainProfileScreen:
+        return _handleMaterialPageRoute(widget: MainProfileScreen());
+      case PageRouteName.editProfileScreen:
+        return MaterialPageRoute(
+          builder: (context) => BlocProvider(
+            create: (context) => getIt<EditProfileCubit>(),
+            child: EditProfileScreen(),
+          ),
+        );
         return MaterialPageRoute(
             builder: (context) => BlocProvider(
                   create: (context) => getIt<ProfileCubit>(),
