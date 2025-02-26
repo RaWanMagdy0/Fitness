@@ -2,6 +2,7 @@ import 'package:fitness_app/presentation/profile/view/main_profile_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../online_coach/coach_screen.dart';
 import 'home_layout.dart';
 
 class MainPage extends StatefulWidget {
@@ -16,7 +17,7 @@ class _MainPageState extends State<MainPage> {
 
   final List<Widget> _screens = [
     Scaffold(),
-    Scaffold(),
+    CoachScreen(),
     Scaffold(),
     MainProfileScreen(),
   ];

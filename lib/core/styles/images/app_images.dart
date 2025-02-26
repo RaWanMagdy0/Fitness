@@ -28,4 +28,8 @@ class AppImages {
   static const logoutIcon = "assets/images/logoutIcon.png";
   static const securityIcon = "assets/images/securityIcon.png";
   static const homeBackground = "assets/images/home_background.png";
+  static const backgroundRobot = "assets/images/background_robot.jpg";
+  static const robot = "assets/images/robot.png";
+  static const backArrow = "assets/images/back_arrow.png";
+  static const menuIcon = "assets/images/menu_icon.png";
 }

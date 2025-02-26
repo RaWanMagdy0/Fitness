@@ -79,12 +79,12 @@ extension GetItInjectableX on _i174.GetIt {
         authRemoteDataSource: gh<_i249.AuthRemoteDataSource>()));
     gh.factory<_i821.ProfileCubit>(
         () => _i821.ProfileCubit(gh<_i679.ProfileUseCase>()));
+    gh.factory<_i606.EditProfileUseCase>(
+        () => _i606.EditProfileUseCase(gh<_i1056.AuthRepository>()));
     gh.factory<_i322.SignupUseCase>(
         () => _i322.SignupUseCase(gh<_i1056.AuthRepository>()));
     gh.factory<_i97.LoginCubit>(
         () => _i97.LoginCubit(gh<_i1056.AuthRepository>()));
-    gh.factory<_i606.EditProfileUseCase>(
-        () => _i606.EditProfileUseCase(gh<_i1056.AuthRepository>()));
     gh.factory<_i401.ForgotPasswordCubit>(() =>
         _i401.ForgotPasswordCubit(authRepository: gh<_i1056.AuthRepository>()));
     gh.factory<_i140.SignUpCubit>(

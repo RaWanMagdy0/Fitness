@@ -53,6 +53,8 @@ dependencies:
   google_fonts: ^6.2.1
   easy_localization: ^3.0.7+1
   intl_utils: ^2.8.10
+  mockito: ^5.4.5
+  mocktail: ^1.0.4
 
 flutter_icons:
   android: true
@@ -63,6 +65,8 @@ flutter_icons:
   remove_alpha_ios: true
 
 dev_dependencies:
+  flutter_test:
+    sdk: flutter
   injectable_generator: ^2.6.2
   retrofit_generator: ^9.1.4
   flutter_launcher_icons: ^0.13.1
@@ -76,7 +80,7 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^5.0.0
-  build_runner: ^2.4.14
+  build_runner: ^2.4.15
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
