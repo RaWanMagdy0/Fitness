@@ -3,12 +3,12 @@ import 'package:fitness_app/core/utils/widget/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import '../../../../core/local/sign_up_provider.dart';
 import '../../../../core/routes/page_route_name.dart';
 import '../../../../core/styles/colors/app_colors.dart';
 import '../../../../core/styles/fonts/app_fonts.dart';
 import '../../../../core/styles/images/app_images.dart';
+import '../../../../generated/l10n.dart';
 import '../widgets/custom_indecator.dart';
 
 class WeightScreen extends StatefulWidget {
@@ -32,6 +32,7 @@ class _WeightScreenState extends State<WeightScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final local=S.of(context);
     final signupProvider = context.read<SignupProvider>();
 
     return CustomScaffold(
@@ -65,11 +66,11 @@ class _WeightScreenState extends State<WeightScreen> {
                 child: ProgressIndicatorWidget(currentPage: 3, totalPages: 6)),
             30.verticalSpace,
             Text(
-              "WHAT IS YOUR WEIGHT ?",
+              local.what_is_your_weight,
               style: AppFonts.font14WhiteWeight800.copyWith(fontSize: 20),
             ),
             Text(
-              "This Helps Us Create Your Personalized Plan",
+              local.this_helps_us_create_Your_personalized_plan,
               style: AppFonts.font18WhiteWeight400.copyWith(fontSize: 15),
             ),
             20.verticalSpace,
@@ -80,7 +81,7 @@ class _WeightScreenState extends State<WeightScreen> {
                   borderRadius: BorderRadius.circular(50.r),
                 ),
                 child: Text(
-                  "Kg",
+                  local.kg,
                   style: AppFonts.font12OrangeWeight400
               ),
             ),),
@@ -129,7 +130,7 @@ class _WeightScreenState extends State<WeightScreen> {
             ),
             40.verticalSpace,
             CustomButton(
-              text: "Next",
+              text: local.next,
               onPressed: () {
                 signupProvider.saveData("weight", selectedWeight.toString());
 

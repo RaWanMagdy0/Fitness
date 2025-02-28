@@ -20,5 +20,12 @@ class AppImages {
   static const icon2png = "assets/images/icon2.png";
   static const icon3png = "assets/images/icon3.png";
   static const person = "assets/images/person.png";
+  static const personIcon = "assets/images/personIcon.png";
+  static const changeIcon = "assets/images/changeIcon.png";
+  static const helpIcon = "assets/images/helpIcon.png";
+  static const languageIcon = "assets/images/languageIcon.png";
+  static const privacyIcon = "assets/images/privacyIcon.png";
+  static const logoutIcon = "assets/images/logoutIcon.png";
+  static const securityIcon = "assets/images/securityIcon.png";
   static const homeBackground = "assets/images/home_background.png";
 }

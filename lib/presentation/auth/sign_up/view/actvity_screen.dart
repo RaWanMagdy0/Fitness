@@ -2,7 +2,6 @@ import 'package:fitness_app/core/routes/page_route_name.dart';
 import 'package:fitness_app/core/styles/colors/app_colors.dart';
 import 'package:fitness_app/core/styles/fonts/app_fonts.dart';
 import 'package:fitness_app/core/styles/images/app_images.dart';
-import 'package:fitness_app/core/utils/const/app_string.dart';
 import 'package:fitness_app/core/utils/widget/custom_button.dart';
 import 'package:fitness_app/core/utils/widget/custom_radio.dart';
 import 'package:fitness_app/presentation/auth/sign_up/view_model/sign_up_cubit.dart';
@@ -14,6 +13,7 @@ import '../../../../core/local/sign_up_provider.dart';
 import '../../../../core/utils/functions/dialogs/app_dialogs.dart';
 import '../../../../core/utils/widget/custom scaffold.dart';
 import '../../../../data/models/sign_up/request/sign_up_request_body.dart';
+import '../../../../generated/l10n.dart';
 import '../widgets/custom_indecator.dart';
 
 class ActivityScreen extends StatefulWidget {
@@ -65,6 +65,8 @@ class _ActivityScreenState extends State<ActivityScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final local = S.of(context);
+
     final signupProvider = context.read<SignupProvider>();
     return BlocListener<SignUpCubit, SignUpState>(
       listener: (context, state) {
@@ -113,7 +115,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                       ProgressIndicatorWidget(currentPage: 6, totalPages: 6)),
               25.verticalSpace,
               Text(
-                AppStrings.yourRegular,
+                local.your_regular_physical_activity_level,
                 style: AppFonts.font20WhiteWeight800,
                 textAlign: TextAlign.start,
               ),
@@ -124,7 +126,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                   return Column(
                     children: [
                       CustomRadioButton(
-                        label: "level1",
+                        label: local.level1,
                         value: "level1",
                         groupValue: selectedValue,
                         onChanged: (value) {
@@ -134,7 +136,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                       ),
                       16.verticalSpace,
                       CustomRadioButton(
-                        label: "level2",
+                        label: local.level2,
                         value: "level2",
                         groupValue: selectedValue,
                         onChanged: (value) {
@@ -144,7 +146,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                       ),
                       16.verticalSpace,
                       CustomRadioButton(
-                        label: "level3",
+                        label: local.level3,
                         value: "level3",
                         groupValue: selectedValue,
                         onChanged: (value) =>
@@ -152,7 +154,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                       ),
                       16.verticalSpace,
                       CustomRadioButton(
-                        label: "level4",
+                        label: local.level4,
                         value: "level4",
                         groupValue: selectedValue,
                         onChanged: (value) {
@@ -162,7 +164,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                       ),
                       16.verticalSpace,
                       CustomRadioButton(
-                        label: "level5",
+                        label: local.level5,
                         value: "level5",
                         groupValue: selectedValue,
                         onChanged: (value) {
@@ -186,7 +188,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                           ? () => _onNextPressed(context)
                           : null,
                       child: Text(
-                        AppStrings.next,
+                        local.next,
                         style: AppFonts.font14LightWhiteWeight500,
                       ),
                     ),

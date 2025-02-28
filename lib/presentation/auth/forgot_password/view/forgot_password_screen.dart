@@ -11,6 +11,7 @@ import '../../../../core/utils/widget/custom scaffold.dart' show CustomScaffold;
 import '../../../../core/utils/widget/custom_button.dart';
 import '../../../../core/utils/widget/custom_text_form_field.dart';
 import '../../../../core/utils/functions/validators/validators.dart';
+import '../../../../generated/l10n.dart';
 import '../cubit/forgot_password_cubit.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
@@ -27,10 +28,11 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   void initState() {
     super.initState();
     viewModel = context.read<ForgotPasswordCubit>();
-
   }
+
   @override
   Widget build(BuildContext context) {
+    final local = S.of(context);
     return CustomScaffold(
       enableBlur: true,
       blurStrength: 5.0,
@@ -66,19 +68,19 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   Center(child: Image.asset(AppImages.logoIcon)),
                   40.verticalSpace,
                   Text(
-                    "Forget Password",
+                    local.forget_password,
                     style: AppFonts.font24WhiteWeight800,
                   ),
                   10.verticalSpace,
                   Text(
-                    "Enter Your Email",
+                    local.enter_your_email,
                     style: AppFonts.font18WhiteWeight400,
                   ),
                   50.verticalSpace,
                   CustomTextFormField(
-                    controller:viewModel.emailController,
+                    controller: viewModel.emailController,
                     backgroundColor: Colors.white.withOpacity(0.1),
-                    hintText: "Enter your email",
+                    hintText: local.enter_your_email,
                     prefixIcon: Icon(Icons.email_outlined, color: Colors.grey),
                     validator: Validators.validateEmail,
                   ),
@@ -94,7 +96,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       }
                     },
                     child:
-                        Text("Send OTP", style: AppFonts.font16WhiteWeight500),
+                        Text(local.sent_otp, style: AppFonts.font16WhiteWeight500),
                   ),
                 ],
               ),

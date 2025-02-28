@@ -3,7 +3,6 @@ import 'package:fitness_app/core/routes/page_route_name.dart';
 import 'package:fitness_app/core/styles/colors/app_colors.dart';
 import 'package:fitness_app/core/styles/fonts/app_fonts.dart';
 import 'package:fitness_app/core/styles/images/app_images.dart';
-import 'package:fitness_app/core/utils/const/app_string.dart';
 import 'package:fitness_app/core/utils/widget/custom_button.dart';
 import 'package:fitness_app/core/utils/widget/custom_radio.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +11,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../core/local/sign_up_provider.dart';
 import '../../../../core/utils/widget/custom scaffold.dart';
+import '../../../../generated/l10n.dart';
 import '../widgets/custom_indecator.dart';
 
 class GoalScreen extends StatefulWidget {
@@ -38,9 +38,8 @@ class _GoalScreenState extends State<GoalScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final local = S.of(context);
+   final local = S.of(context);
     final signupProvider = context.read<SignupProvider>();
-
     return CustomScaffold(
       backgroundImage: AppImages.authBackground,
       enableBlur: true,
@@ -69,20 +68,19 @@ class _GoalScreenState extends State<GoalScreen> {
             ),
             50.verticalSpace,
             Center(
-                child:
-                    ProgressIndicatorWidget(currentPage: 5, totalPages: 6)),
+                child: ProgressIndicatorWidget(currentPage: 5, totalPages: 6)),
             25.verticalSpace,
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  AppStrings.whatGoal,
+                  local.what_is_your_goal,
                   style: AppFonts.font20WhiteWeight800,
                   textAlign: TextAlign.start,
                 ),
                 5.verticalSpace,
                 Text(
-                  AppStrings.thisHelps,
+                 local.this_helps_us_create_Your_personalized_plan,
                   style:
                       AppFonts.font18WhiteWeight400.copyWith(fontSize: 15.sp),
                   textAlign: TextAlign.start,
@@ -97,7 +95,7 @@ class _GoalScreenState extends State<GoalScreen> {
                   child: Column(
                     children: [
                       CustomRadioButton(
-                        label: "Gain Weight",
+                        label: local.gain_weight,
                         value: "gain_weight",
                         groupValue: selectedValue,
                         onChanged: (value) {
@@ -107,7 +105,7 @@ class _GoalScreenState extends State<GoalScreen> {
                       ),
                       16.verticalSpace,
                       CustomRadioButton(
-                        label: "Lose Weight",
+                        label: local.lose_weight,
                         value: "lose_weight",
                         groupValue: selectedValue,
                         onChanged: (value) {
@@ -117,7 +115,7 @@ class _GoalScreenState extends State<GoalScreen> {
                       ),
                       16.verticalSpace,
                       CustomRadioButton(
-                        label: "Get Fitter",
+                        label: local.get_fitter,
                         value: "get_fitter",
                         groupValue: selectedValue,
                         onChanged: (value) {
@@ -127,7 +125,7 @@ class _GoalScreenState extends State<GoalScreen> {
                       ),
                       16.verticalSpace,
                       CustomRadioButton(
-                        label: "Gain More Flexible",
+                        label: local.gain_more_flexible,
                         value: "gain_flexible",
                         groupValue: selectedValue,
                         onChanged: (value) {
@@ -137,7 +135,7 @@ class _GoalScreenState extends State<GoalScreen> {
                       ),
                       16.verticalSpace,
                       CustomRadioButton(
-                        label: "Learn The Basic",
+                        label: local.learn_the_basics,
                         value: "learn_basic",
                         groupValue: selectedValue,
                         onChanged: (value) {
@@ -151,7 +149,6 @@ class _GoalScreenState extends State<GoalScreen> {
               },
             ),
             20.verticalSpace,
-
             ValueListenableBuilder<String?>(
               valueListenable: _selectedGoal,
               builder: (context, selectedValue, child) {
@@ -167,7 +164,7 @@ class _GoalScreenState extends State<GoalScreen> {
                           }
                         : null,
                     child: Text(
-                      AppStrings.next,
+                      local.next,
                       style: AppFonts.font14LightWhiteWeight500,
                     ),
                   ),

@@ -9,6 +9,7 @@ import '../../../../core/utils/widget/custom_button.dart';
 import '../../../../core/utils/widget/custom_text_form_field.dart';
 import '../../../../core/styles/images/app_images.dart';
 import '../../../../core/utils/functions/validators/validators.dart';
+import '../../../../generated/l10n.dart';
 import '../cubit/forgot_password_cubit.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
@@ -32,6 +33,8 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final local = S.of(context);
+
     return CustomScaffold(
       enableBlur: true,
       blurStrength: 5.0,
@@ -73,12 +76,12 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   Center(child: Image.asset(AppImages.logoIcon)),
                   40.verticalSpace,
                   Text(
-                    "Create New Password",
+                    local.create_new_password,
                     style: AppFonts.font24WhiteWeight800,
                   ),
                   8.verticalSpace,
                   Text(
-                    "Make Sure It's 8 Characters Or More",
+                    local.make_sure_its_char_or_more,
                     style: AppFonts.font18WhiteWeight400,
                   ),
                   40.verticalSpace,
@@ -86,7 +89,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                     backgroundColor: Colors.white.withOpacity(0.1),
 
                     controller: _passwordController,
-                    hintText: "Enter new password",
+                    hintText: local.enter_your_password,
                     isPassword: true,
                     prefixIcon: Icon(Icons.lock_outline, color: Colors.grey),
                     validator: Validators.validatePassword,
@@ -96,7 +99,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                     backgroundColor: Colors.white.withOpacity(0.1),
 
                     controller: _confirmPasswordController,
-                    hintText: "Confirm new password",
+                    hintText: local.confirm_password,
                     isPassword: true,
                     prefixIcon: Icon(Icons.lock_outline, color: Colors.grey),
                     validator: (value) => Validators.validatePasswordConfirmation(
@@ -116,7 +119,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                           );
                         }
                       },
-                      child: Text("Done", style: AppFonts.font16WhiteWeight500),
+                      child: Text(local.done, style: AppFonts.font16WhiteWeight500),
                     ),
                 ],
               ),

@@ -10,6 +10,7 @@ import '../../../../core/local/sign_up_provider.dart';
 import '../../../../core/styles/fonts/app_fonts.dart';
 import '../../../../core/styles/images/app_images.dart';
 import '../../../../core/utils/widget/custom scaffold.dart';
+import '../../../../generated/l10n.dart';
 import '../widgets/custom_gender_container.dart';
 import '../widgets/custom_indecator.dart';
 
@@ -74,11 +75,11 @@ class _GenderScreenState extends State<GenderScreen> {
                 child: ProgressIndicatorWidget(currentPage: 1, totalPages: 6)),
             30.verticalSpace,
             Text(
-              "TELL US ABOUT YOURSELF!",
+              local.tell_us_about_yourself,
               style: AppFonts.font20WhiteWeight800,
             ),
             Text(
-              "We Need To Know Your Gender",
+              local.we_need_to_know_your_gender,
               style: AppFonts.font18WhiteWeight400,
             ),
             30.verticalSpace,
@@ -86,13 +87,13 @@ class _GenderScreenState extends State<GenderScreen> {
               children: [
                 CustomGenderContainer(
                     image: AppImages.maleIcon,
-                    text: "Male",
+                    text: local.male,
                     selected: selectedGender == "male",
                     onTap: () => _onGenderSelected("male")),
                 40.verticalSpace,
                 CustomGenderContainer(
                     image: AppImages.femaleIcon,
-                    text: "Female",
+                    text: local.female,
                     selected: selectedGender == "female",
                     onTap: () => _onGenderSelected("female")),
                 20.verticalSpace,
@@ -106,7 +107,8 @@ class _GenderScreenState extends State<GenderScreen> {
                     backgroundColor: AppColors.kOrange,
                     maxHeight: 10.h,
                     maxWidth: 10.w,
-                    child: Text("Next", style: AppFonts.font14WhiteWeight800),
+                    child:
+                        Text(local.next, style: AppFonts.font14WhiteWeight800),
                   ),
               ],
             ),

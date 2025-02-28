@@ -12,6 +12,7 @@ import '../../../../core/styles/images/app_images.dart';
 import '../../../../core/utils/functions/validators/validators.dart';
 import '../../../../core/utils/widget/custom scaffold.dart';
 import '../../../../core/utils/widget/custom_text_form_field.dart';
+import '../../../../generated/l10n.dart';
 import '../view_model/sign_up_cubit.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -73,14 +74,14 @@ class _SignUpPageState extends State<SignUpPage> {
               40.verticalSpace,
               Center(child: Image.asset(AppImages.logoIcon)),
               40.verticalSpace,
-              Text("Hey There", style: AppFonts.font18WhiteWeight400),
+              Text(local.hey_there, style: AppFonts.font18WhiteWeight400),
               8.verticalSpace,
-              Text("CREATE AN ACCOUNT", style: AppFonts.font20WhiteWeight800),
+              Text(local.create_an_account, style: AppFonts.font20WhiteWeight800),
               30.verticalSpace,
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("Register", style: AppFonts.font24WhiteWeight800),
+                  Text(local.register, style: AppFonts.font24WhiteWeight800),
                 ],
               ),
               10.verticalSpace,
@@ -92,7 +93,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     children: [
                       CustomTextFormField(
                           controller: signUpCubit.firstNameController,
-                          hintText: local.firstNameHintText,
+                          hintText: local.first_name,
                           prefixIcon:
                               Icon(Icons.person_outline, color: Colors.grey),
                           backgroundColor: Colors.white.withOpacity(0.1),
@@ -104,7 +105,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       16.verticalSpace,
                       CustomTextFormField(
                           controller: signUpCubit.lastNameController,
-                          hintText: local.lastNameHintText,
+                          hintText: local.last_name,
                           prefixIcon:
                               Icon(Icons.person_outline, color: Colors.grey),
                           backgroundColor: Colors.white.withOpacity(0.1),
@@ -116,7 +117,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       16.verticalSpace,
                       CustomTextFormField(
                           controller: signUpCubit.emailController,
-                          hintText: local.emailHintText,
+                          hintText: local.email_text,
                           prefixIcon:
                               Icon(Icons.email_outlined, color: Colors.grey),
                           backgroundColor: Colors.white.withOpacity(0.1),
@@ -131,7 +132,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           prefixIcon:
                               Icon(Icons.lock_outline, color: Colors.grey),
                           backgroundColor: Colors.white.withOpacity(0.1),
-                          hintText: local.signupPasswordHintText,
+                          hintText: local.password,
                           isPassword: true,
                           validator: (value) =>
                               Validators.validatePassword(value),
@@ -146,7 +147,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           prefixIcon:
                               Icon(Icons.lock_outline, color: Colors.grey),
                           backgroundColor: Colors.white.withOpacity(0.1),
-                          hintText: local.confirmPasswordHintText,
+                          hintText: local.confirm_password,
                           isPassword: true,
                           validator: (value) =>
                               Validators.validatePasswordConfirmation(
@@ -173,20 +174,20 @@ class _SignUpPageState extends State<SignUpPage> {
                             }
                           },
                           color: AppColors.kOrange,
-                          child: Text("Next",
+                          child: Text(local.next,
                               style: AppFonts.font16WhiteWeight500),
                         ),
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(local.alreadyHaveAccount,
+                          Text(local.already_have_an_account,
                               style: AppFonts.font14WhiteWeight400),
                           TextButton(
                             onPressed: () {
                               Navigator.pushNamed(context, PageRouteName.login);
                             },
-                            child: Text(local.loginTitle,
+                            child: Text(local.login,
                                 style: AppFonts.font14LightOrangeWeight400),
                           ),
                         ],
