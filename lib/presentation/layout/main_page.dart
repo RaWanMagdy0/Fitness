@@ -34,7 +34,7 @@ class _MainPageState extends State<MainPage> {
         children: [
           _screens[_currentIndex],
           Positioned(
-            bottom: 24.h,
+            bottom: 15.h,
             right: 30.w,
             left: 30.w,
             child: HomeLayout(
