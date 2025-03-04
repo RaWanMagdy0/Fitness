@@ -24,15 +24,12 @@ class LoginCubit extends Cubit<LoginState> {
     final result = await _authRepository.login(loginRequest);
 
     if (result is Success) {
-      final successResult = result as Success;
-      // The response is a LoginResponseModel which should have token directly
-      if (successResult.data != null && successResult.data.token != null) {
-        await TokenManager.setToken(token: successResult.data.token);
-      }
-      emit(LoginSuccess(successResult.data?.message ?? "Login successful"));
+      // Just emit success with the message
+      final successMessage = (result as Success).data ?? "Login successful";
+      emit(LoginSuccess(successMessage));
+
     } else if (result is Fail) {
       final failResult = result as Fail;
       emit(LoginError(failResult.exception?.toString() ?? "Login failed"));
     }
-  }
-}
+  }}

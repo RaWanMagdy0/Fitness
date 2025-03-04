@@ -81,10 +81,6 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i659.UploadPhotoUseCase(gh<_i265.ProfileRepository>()));
     gh.factory<_i1056.AuthRepository>(() => _i313.AuthRepositoryImpl(
         authRemoteDataSource: gh<_i249.AuthRemoteDataSource>()));
-    gh.factory<_i821.ProfileCubit>(
-        () => _i821.ProfileCubit(gh<_i679.ProfileUseCase>()));
-    gh.factory<_i606.EditProfileUseCase>(
-        () => _i606.EditProfileUseCase(gh<_i1056.AuthRepository>()));
     gh.factory<_i606.EditProfileUseCase>(
         () => _i606.EditProfileUseCase(gh<_i1056.AuthRepository>()));
     gh.factory<_i322.SignupUseCase>(
