@@ -2,6 +2,7 @@ import 'package:fitness_app/presentation/auth/login/view_model/login_state.dart'
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import '../../../../core/api/api_result.dart' show Fail, Success;
+import '../../../../core/local/token_manger.dart';
 import '../../../../data/models/login/request/login_request_model.dart' show LoginRequestModel;
 import '../../../../domain/repository/auth_repository/auth_repository.dart' show AuthRepository;
 
@@ -24,7 +25,11 @@ class LoginCubit extends Cubit<LoginState> {
 
     if (result is Success) {
       final successResult = result as Success;
-      emit(LoginSuccess(successResult.data ?? "Login successful"));
+      // The response is a LoginResponseModel which should have token directly
+      if (successResult.data != null && successResult.data.token != null) {
+        await TokenManager.setToken(token: successResult.data.token);
+      }
+      emit(LoginSuccess(successResult.data?.message ?? "Login successful"));
     } else if (result is Fail) {
       final failResult = result as Fail;
       emit(LoginError(failResult.exception?.toString() ?? "Login failed"));

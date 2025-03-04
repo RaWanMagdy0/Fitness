@@ -15,6 +15,8 @@ class ProfileCubit extends BaseViewModel<ProfileState> {
     this.profileUseCase,
   ) : super(ProfileInitialState());
 
+  get uploadPhotoUseCase => null;
+
   Future<void> getUserData() async {
     emit(GetUserDataLoadingState());
     var result = await profileUseCase.invoke();
@@ -25,6 +27,24 @@ class ProfileCubit extends BaseViewModel<ProfileState> {
       case Fail<User?>():
         emit(GetUserDataErrorState(
             errorMessage: getErrorMassageFromException(result.exception)));
+    }
+  }
+
+  Future<void> uploadPhoto(File photo) async {
+    emit(UploadPhotoLoadingState());
+    try {
+      final result = await uploadPhotoUseCase.invoke(photo);
+      if (result is Success<User?>) {
+        emit(UploadPhotoSuccessState(user: result.data));
+        // Refresh user data after successful upload
+        getUserData();
+      } else if (result is Fail<User?>) {
+        emit(UploadPhotoErrorState(
+            errorMessage: getErrorMassageFromException(result.exception)));
+      }
+    } catch (e) {
+      emit(UploadPhotoErrorState(
+          errorMessage: 'An unexpected error occurred: $e'));
     }
   }
 }

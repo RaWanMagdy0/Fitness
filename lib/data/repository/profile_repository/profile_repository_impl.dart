@@ -1,3 +1,5 @@
+import 'dart:io' show File;
+
 import 'package:fitness_app/data/data_source/profile_data_source/profile_remote_data_source.dart';
 import 'package:injectable/injectable.dart';
 import '../../../core/api/api_result.dart';
@@ -18,6 +20,19 @@ class ProfileRepositoryImpl implements ProfileRepository {
       case Fail():
         return Fail(exception: response.exception);
     }
-  }}
+  }
+
+  @override
+  Future<Result<User?>> uploadPhoto(File photo) async {
+    final response = await profileRemoteDataSource.uploadPhoto(photo);
+    switch (response) {
+      case Success():
+        return Success(data: response.data?.toEntity());
+      case Fail():
+        return Fail(exception: response.exception);
+    }
+  }
+}
+
 
 
