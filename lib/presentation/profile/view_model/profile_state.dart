@@ -1,4 +1,3 @@
-
 import '../../../domain/entity/profile/user.dart';
 
 sealed class ProfileState {}
@@ -20,3 +19,15 @@ class GetUserDataErrorState extends ProfileState {
   GetUserDataErrorState({this.errorMessage});
 }
 
+//LogoutStates
+class LogoutSuccessState extends ProfileState {
+  String? message;
+
+  LogoutSuccessState(this.message);
+}
+
+class LogoutErrorState extends ProfileState {
+  String? message;
+
+  LogoutErrorState(this.message);
+}
