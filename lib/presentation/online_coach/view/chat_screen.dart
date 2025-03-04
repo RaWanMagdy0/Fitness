@@ -200,7 +200,7 @@ late GeminiCubit viewModel;
                             _controller.clear();
                             updateChatTitles();
                             setState(() {});
-                          },
+                          }
                         ),
                       ],
                     ),
