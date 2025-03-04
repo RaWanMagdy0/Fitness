@@ -147,7 +147,7 @@ class GeminiCubit extends BaseViewModel<GeminiState> {
           emit(GeminiRecordingState(
               isListening: true, recordedText: recordedText));
         },
-        localeId: "en_US",
+        localeId: "en_US"
       );
     } else {
       print("Speech recognition not available!");
