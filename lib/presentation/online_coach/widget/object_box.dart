@@ -49,10 +49,10 @@ class ObjectBox {
   List<Message> getChatByTitle(String title) {
     var chat = getChatHistoryByTitle(title);
     if (chat == null) {
-      print("⚠️ No chat history found for: $title");
+      print(" No chat history found for: $title");
       return [];
     }
-    print("✅ Chat found: ${chat.title}, Messages: ${chat.messages.length}");
+    print("${chat.title}, Messages: ${chat.messages.length}");
     return chat.messages.toList();
   }
 

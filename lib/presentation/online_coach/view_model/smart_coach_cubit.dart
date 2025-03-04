@@ -26,7 +26,7 @@ class GeminiCubit extends BaseViewModel<GeminiState> {
   Future<void> _initObjectBox() async {
     objectBox ??= await ObjectBox.create();
     _isObjectBoxReady = objectBox != null;
-    print("✅ ObjectBox Initialized: $_isObjectBoxReady");
+    print(" ObjectBox Initialized: $_isObjectBoxReady");
   }
 
 
@@ -39,7 +39,7 @@ class GeminiCubit extends BaseViewModel<GeminiState> {
     if (_isObjectBoxReady) {
       var userMsg = Message(sender: "user", text: userMessage);
       objectBox!.saveMessage(userMsg);
-      print("✅ Message saved in ObjectBox: $userMessage");
+      print(" Message saved in ObjectBox: $userMessage");
     }
 
     var result = await profileRepository.smartCoach({
@@ -60,11 +60,11 @@ class GeminiCubit extends BaseViewModel<GeminiState> {
         if (_isObjectBoxReady) {
           var botMsg = Message(sender: "gemini", text: responseMessage);
           objectBox!.saveMessage(botMsg);
-          print("✅ Gemini response saved: $responseMessage");
+          print("Gemini response saved: $responseMessage");
         }
 
         messages.add({"sender": "gemini", "text": responseMessage});
-        print("📝 Saving chat to history...");
+        print(" Saving chat to history...");
         saveChatToHistory();
         emit(GeminiSuccessState(messages: List.from(messages)));
 
@@ -81,11 +81,11 @@ class GeminiCubit extends BaseViewModel<GeminiState> {
   void loadChatByTitle(String title) {
     if (!_isObjectBoxReady) return;
 
-    print("🔍 Loading chat for title: $title");
+    print(" Loading chat for title: $title");
 
     List<Message> chatMessages = objectBox!.getChatByTitle(title);
     if (chatMessages.isEmpty) {
-      print("⚠️ No messages found for: $title");
+      print(" No messages found for: $title");
       return;
     }
 
@@ -95,7 +95,7 @@ class GeminiCubit extends BaseViewModel<GeminiState> {
       "text": msg.text,
     }));
 
-    print("✅ Messages Loaded: ${messages.length}");
+    print(" Messages Loaded: ${messages.length}");
 
     emit(GeminiSuccessState(messages: List.from(messages)));
   }  void saveChatToHistory() async {
@@ -111,9 +111,9 @@ class GeminiCubit extends BaseViewModel<GeminiState> {
     if (existingChat == null) {
       existingChat = ChatHistory(title: chatTitle);
       objectBox!.saveChatHistory(existingChat);
-      print("✅ New chat history created: $chatTitle");
+      print(" New chat history created: $chatTitle");
     } else {
-      print("ℹ️ Chat history already exists: $chatTitle");
+      print(" Chat history already exists: $chatTitle");
     }
 
     for (var msg in messages) {
@@ -122,7 +122,7 @@ class GeminiCubit extends BaseViewModel<GeminiState> {
       objectBox!.saveMessage(newMessage);
     }
 
-    print("✅ Chat history updated with messages.");
+    print(" Chat history updated with messages.");
   }
 
   String? extractTextFromGeminiResponse(String? jsonResponse) {

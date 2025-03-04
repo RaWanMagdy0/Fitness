@@ -1,4 +1,3 @@
-import 'package:fitness_app/core/di/di.dart';
 import 'package:fitness_app/core/styles/colors/app_colors.dart';
 import 'package:fitness_app/core/utils/widget/custom%20scaffold.dart';
 import 'package:flutter/material.dart';
