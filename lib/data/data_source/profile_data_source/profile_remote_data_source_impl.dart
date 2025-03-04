@@ -30,4 +30,12 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
     }
     return 'Bearer $token';
   }
+
+  @override
+  Future<Result<String?>> smartCoach(Map<String, dynamic> message) {
+    return executeApiCall<String?>(() async {
+      final response = await profileApiManager.smartCoach( message);
+      return response;
+    });
+  }
 }

@@ -19,12 +19,11 @@ import '../../presentation/auth/sign_up/view/weight_screen.dart';
 import '../../presentation/auth/sign_up/view_model/sign_up_cubit.dart';
 import '../../presentation/edit_profile/view/edit_profile_screen.dart'
     show EditProfileScreen;
-import '../../presentation/layout/home_layout.dart';
 import '../../presentation/layout/main_page.dart';
-import '../../presentation/edit_profile/view/edit_profile_screen.dart'
-    show EditProfileScreen;
 import '../../presentation/edit_profile/view_model/edit_profile_cubit.dart'
     show EditProfileCubit;
+import '../../presentation/online_coach/view/chat_screen.dart';
+import '../../presentation/online_coach/view_model/smart_coach_cubit.dart';
 import '../../presentation/profile/view_model/profile_cubit.dart';
 import '../../presentation/splash/onboarding.dart';
 import '../../presentation/splash/splash_screen.dart';
@@ -67,6 +66,14 @@ class AppRoutes {
         return _handleMaterialPageRoute(widget: VerifyCodeScreen());
       case PageRouteName.resetPassword:
         return _handleMaterialPageRoute(widget: ResetPasswordScreen());
+      case PageRouteName.chatScreen:
+        return MaterialPageRoute(
+          builder: (context) => BlocProvider(
+            create: (context) => getIt<GeminiCubit>(),
+            child: ChatScreen(),
+          ),
+        );
+
       case PageRouteName.weightScreen:
         return MaterialPageRoute(
           builder: (context) => BlocProvider(

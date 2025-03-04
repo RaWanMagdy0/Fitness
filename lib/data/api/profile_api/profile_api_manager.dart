@@ -15,4 +15,8 @@ abstract class ProfileApiManager {
   Future<ProfileResponseModel> getUserData(
     @Header('Authorization') String token,
   );
+  @POST("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyAnk5HA9qvIe-bh_Faczk-lRTebDg5n6q0")
+  Future<String> smartCoach(
+    @Body() Map<String, dynamic> message,
+  );
 }

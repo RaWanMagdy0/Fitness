@@ -39,6 +39,8 @@ import '../../presentation/auth/login/view_model/login_cubit.dart' as _i97;
 import '../../presentation/auth/sign_up/view_model/sign_up_cubit.dart' as _i140;
 import '../../presentation/edit_profile/view_model/edit_profile_cubit.dart'
     as _i236;
+import '../../presentation/online_coach/view_model/smart_coach_cubit.dart'
+    as _i721;
 import '../../presentation/profile/view_model/profile_cubit.dart' as _i821;
 import '../api/dio/dio_factory.dart' as _i763;
 import '../api/dio/dio_module.dart' as _i223;
@@ -73,6 +75,8 @@ extension GetItInjectableX on _i174.GetIt {
             authApiManager: gh<_i515.AuthApiManager>()));
     gh.factory<_i265.ProfileRepository>(() => _i677.ProfileRepositoryImpl(
         profileRemoteDataSource: gh<_i2.ProfileRemoteDataSource>()));
+    gh.factory<_i721.GeminiCubit>(
+        () => _i721.GeminiCubit(gh<_i265.ProfileRepository>()));
     gh.factory<_i679.ProfileUseCase>(
         () => _i679.ProfileUseCase(gh<_i265.ProfileRepository>()));
     gh.factory<_i1056.AuthRepository>(() => _i313.AuthRepositoryImpl(

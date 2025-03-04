@@ -19,4 +19,5 @@ class PageRouteName {
   static const String mainProfileScreen = "mainProfileScreen";
   static const String editProfileScreen = "editProfileScreen";
   static const String layoutScreen = "layoutScreen";
+  static const String chatScreen = "chatScreen";
 }

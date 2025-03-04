@@ -1,15 +1,14 @@
-import 'package:fitness_app/core/styles/colors/app_colors.dart';
+import 'package:fitness_app/core/routes/page_route_name.dart';
 import 'package:fitness_app/core/styles/fonts/app_fonts.dart';
 import 'package:fitness_app/core/styles/images/app_images.dart';
 import 'package:fitness_app/core/utils/widget/custom%20scaffold.dart';
 import 'package:fitness_app/core/utils/widget/custom_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../../core/utils/widget/custom_arrow.dart';
 
-import '../../core/utils/widget/custom_arrow.dart';
-
-class CoachScreen extends StatelessWidget {
-  const CoachScreen({super.key});
+class RobotScreen extends StatelessWidget {
+  const RobotScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +59,9 @@ class CoachScreen extends StatelessWidget {
             ),
             CustomButton(
               width: 300.w,
-              onPressed: (){},
+              onPressed: (){
+                Navigator.pushReplacementNamed(context, PageRouteName.chatScreen);
+              },
               text: "Get Started",
               textStyle: AppFonts.font14WhiteWeight800,
             )

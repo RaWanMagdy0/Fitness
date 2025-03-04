@@ -1,5 +1,7 @@
 import 'package:fitness_app/presentation/auth/forgot_password/cubit/forgot_password_cubit.dart';
 import 'package:fitness_app/presentation/auth/login/view_model/login_cubit.dart';
+import 'package:fitness_app/presentation/online_coach/view_model/smart_coach_cubit.dart';
+import 'package:fitness_app/presentation/online_coach/widget/object_box.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -14,15 +16,16 @@ import 'core/utils/functions/providers/local_provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'generated/l10n.dart';
 
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
   configureDependencies();
   Bloc.observer = AppBlocObserver();
   LocalProvider localProvider = LocalProvider();
   SignupProvider signupProvider = SignupProvider();
   await localProvider.loadSavedLanguage();
   await signupProvider.loadUserData();
+  final objectBox = await ObjectBox.create();
   runApp(
     MultiProvider(
       providers: [
@@ -30,6 +33,7 @@ void main() async {
         BlocProvider(create: (context) => getIt<ForgotPasswordCubit>()),
         ChangeNotifierProvider(create: (context) => localProvider),
         ChangeNotifierProvider(create: (context) => signupProvider),
+        Provider<ObjectBox>.value(value: objectBox),
       ],
       child: const MyApp(),
     ),
@@ -58,7 +62,7 @@ class MyApp extends StatelessWidget {
           supportedLocales: S.delegate.supportedLocales,
           debugShowCheckedModeBanner: false,
           theme: AppTheme.appTheme,
-          initialRoute: PageRouteName.onBoarding,
+          initialRoute: PageRouteName.layoutScreen,
           onGenerateRoute: AppRoutes.onGenerateRoute,
         );
       },

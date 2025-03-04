@@ -18,6 +18,17 @@ class ProfileRepositoryImpl implements ProfileRepository {
       case Fail():
         return Fail(exception: response.exception);
     }
+  }
+
+  @override
+  Future<Result<String?>> smartCoach(Map<String, dynamic> message)async {
+    final response = await profileRemoteDataSource.smartCoach(message);
+    switch (response) {
+      case Success():
+        return Success(data: response.data);
+      case Fail():
+        return Fail(exception: response.exception);
+    }
   }}
 
 
