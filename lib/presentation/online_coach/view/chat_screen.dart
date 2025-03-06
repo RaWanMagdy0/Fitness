@@ -1,3 +1,4 @@
+import 'package:fitness_app/core/routes/page_route_name.dart';
 import 'package:fitness_app/core/styles/colors/app_colors.dart';
 import 'package:fitness_app/core/utils/widget/custom%20scaffold.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +21,8 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   final TextEditingController _controller = TextEditingController();
   List<String> previousConversations = [];
-late GeminiCubit viewModel;
+  late GeminiCubit viewModel;
+
   @override
   void initState() {
     super.initState();
@@ -71,19 +73,15 @@ late GeminiCubit viewModel;
                       separatorBuilder: (context, index) => Divider(color: Colors.white24, thickness: 1),
                       itemBuilder: (context, index) {
                         return ListTile(
-                          leading: Icon(Icons.arrow_back_ios, color: AppColors.kOrange),
-                          title: Text(
-                            previousConversations[index],
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          onTap: () {
-                            Navigator.pop(context);
-                            viewModel.loadChatByTitle(previousConversations[index]);
-                            Future.delayed(Duration(milliseconds: 100), () {
-                              setState(() {});
-                            });
-                          },
-
+                            leading: Icon(Icons.arrow_back_ios, color: AppColors.kOrange),
+                            title: Text(
+                              previousConversations[index],
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            onTap: () {
+                              Navigator.pop(context);
+                              viewModel.loadChatByTitle(previousConversations[index]);
+                            }
                         );
                       },
                     ),
@@ -96,7 +94,6 @@ late GeminiCubit viewModel;
       },
     );
   }
-
   @override
   Widget build(BuildContext context) {
     return BlocProvider.value(
@@ -115,7 +112,11 @@ late GeminiCubit viewModel;
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      CustomArrow(),
+                      InkWell(
+                        onTap: (){
+                          Navigator.pushReplacementNamed(context, PageRouteName.robotScreen);
+                        },
+                          child: CustomArrow()),
                       Text(
                         "Search Coach",
                         style: AppFonts.font16WhiteWeight500.copyWith(fontSize: 18),
@@ -126,6 +127,7 @@ late GeminiCubit viewModel;
                       ),
                     ],
                   ),
+                  25.verticalSpace,
                   Expanded(
                     child: ListView.builder(
                       itemCount: chatMessages.length,
@@ -138,9 +140,19 @@ late GeminiCubit viewModel;
                             mainAxisAlignment: isSender ? MainAxisAlignment.end : MainAxisAlignment.start,
                             children: [
                               if (!isSender)
-                                const CircleAvatar(
-                                  backgroundImage: AssetImage(AppImages.geminiImage),
+                                CircleAvatar(
+                                  radius: 24.r,
+                                  backgroundColor: Colors.transparent,
+                                  child: ClipOval(
+                                    child: Image.asset(
+                                      AppImages.geminiImage,
+                                      fit: BoxFit.cover,
+                                      width: 48.w,
+                                      height: 48.h,
+                                    ),
+                                  ),
                                 ),
+
                               8.horizontalSpace,
                               Flexible(
                                 child: Container(
@@ -158,8 +170,17 @@ late GeminiCubit viewModel;
                               ),
                               8.horizontalSpace,
                               if (isSender)
-                                const CircleAvatar(
-                                  backgroundImage: AssetImage(AppImages.person),
+                                CircleAvatar(
+                                  radius: 24,
+                                  backgroundColor: Colors.transparent,
+                                  child: ClipOval(
+                                    child: Image.asset(
+                                      AppImages.person,
+                                      fit: BoxFit.cover,
+                                      width: 48,
+                                      height: 48,
+                                    ),
+                                  ),
                                 ),
                             ],
                           ),
@@ -198,7 +219,6 @@ late GeminiCubit viewModel;
                             cubit.sendMessage(_controller.text);
                             _controller.clear();
                             updateChatTitles();
-                            setState(() {});
                           }
                         ),
                       ],

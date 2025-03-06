@@ -77,18 +77,49 @@ class GeminiCubit extends BaseViewModel<GeminiState> {
     if (!_isObjectBoxReady) return [];
     return objectBox!.getChatTitles();
   }
+  void saveChatToHistory() async {
+    if (!_isObjectBoxReady || messages.isEmpty) return;
 
+    String fullText = messages.first['text']!;
+    int titleLength = min(30, fullText.length);
+    String chatTitle = fullText.substring(0, titleLength).trim();
+
+    ChatHistory? existingChat = objectBox!.getChatHistoryByTitle(chatTitle);
+
+    if (existingChat == null) {
+      existingChat = ChatHistory(title: chatTitle);
+    } else {
+      existingChat.messages.clear();
+    }
+
+    for (var msg in messages) {
+      Message newMessage = Message(
+          sender: msg['sender']!,
+          text: msg['text']!
+      );
+      newMessage.chatHistory.target = existingChat;
+      existingChat.messages.add(newMessage);
+      objectBox!.saveMessage(newMessage);
+    }
+
+    objectBox!.saveChatHistory(existingChat);
+  }
   void loadChatByTitle(String title) {
     if (!_isObjectBoxReady) return;
 
     print(" Loading chat for title: $title");
+    ChatHistory? chatHistory = objectBox!.getChatHistoryByTitle(title);
 
-    List<Message> chatMessages = objectBox!.getChatByTitle(title);
-    if (chatMessages.isEmpty) {
-      print(" No messages found for: $title");
+    if (chatHistory == null) {
+      print(" No chat history found for: $title");
       return;
     }
+    List<Message> chatMessages = chatHistory.messages.toList();
 
+    if (chatMessages.isEmpty) {
+      print(" No messages found for chat history: $title");
+      return;
+    }
     messages.clear();
     messages.addAll(chatMessages.map((msg) => {
       "sender": msg.sender,
@@ -98,31 +129,12 @@ class GeminiCubit extends BaseViewModel<GeminiState> {
     print(" Messages Loaded: ${messages.length}");
 
     emit(GeminiSuccessState(messages: List.from(messages)));
-  }  void saveChatToHistory() async {
-    if (!_isObjectBoxReady || messages.isEmpty) return;
+  }
 
-    String fullText = messages.first['text']!;
-    int titleLength = min(30, fullText.length);
-
-    String chatTitle = fullText.substring(0, titleLength);
-
-    ChatHistory? existingChat = objectBox!.getChatHistoryByTitle(chatTitle);
-
-    if (existingChat == null) {
-      existingChat = ChatHistory(title: chatTitle);
-      objectBox!.saveChatHistory(existingChat);
-      print(" New chat history created: $chatTitle");
-    } else {
-      print(" Chat history already exists: $chatTitle");
+  void endConversation() {
+    if (messages.isNotEmpty) {
+      saveChatToHistory();
     }
-
-    for (var msg in messages) {
-      Message newMessage = Message(sender: msg['sender']!, text: msg['text']!);
-      newMessage.chatHistory.target = existingChat;
-      objectBox!.saveMessage(newMessage);
-    }
-
-    print(" Chat history updated with messages.");
   }
 
   String? extractTextFromGeminiResponse(String? jsonResponse) {

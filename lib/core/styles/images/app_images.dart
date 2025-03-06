@@ -32,5 +32,7 @@ class AppImages {
   static const robot = "assets/images/robot.png";
   static const backArrow = "assets/images/back_arrow.png";
   static const menuIcon = "assets/images/menu_icon.png";
-  static const geminiImage = "assets/images/gemini_image.png";
+  static const geminiImage = "assets/images/gemini_icon.png";
+  static const chestExerciseImage = "assets/images/chest_exercise_image.jpg";
+  static const videoImage = "assets/images/video_image.png";
 }

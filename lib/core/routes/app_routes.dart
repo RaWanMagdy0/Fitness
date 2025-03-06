@@ -19,10 +19,12 @@ import '../../presentation/auth/sign_up/view/weight_screen.dart';
 import '../../presentation/auth/sign_up/view_model/sign_up_cubit.dart';
 import '../../presentation/edit_profile/view/edit_profile_screen.dart'
     show EditProfileScreen;
+import '../../presentation/exercise/view/exercise_screen.dart';
 import '../../presentation/layout/main_page.dart';
 import '../../presentation/edit_profile/view_model/edit_profile_cubit.dart'
     show EditProfileCubit;
 import '../../presentation/online_coach/view/chat_screen.dart';
+import '../../presentation/online_coach/view/robot_screen.dart';
 import '../../presentation/online_coach/view_model/smart_coach_cubit.dart';
 import '../../presentation/profile/view_model/profile_cubit.dart';
 import '../../presentation/splash/onboarding.dart';
@@ -113,6 +115,10 @@ class AppRoutes {
         return _handleMaterialPageRoute(widget: OnboardingScreen());
       case PageRouteName.homeScreen:
         return _handleMaterialPageRoute(widget: HomeScreen());
+        case PageRouteName.robotScreen:
+        return _handleMaterialPageRoute(widget: RobotScreen());
+        case PageRouteName.exerciseScreen:
+        return _handleMaterialPageRoute(widget: ExerciseScreen());
       case PageRouteName.mainProfileScreen:
         return MaterialPageRoute(
             builder: (context) => BlocProvider(
