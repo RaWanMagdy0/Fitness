@@ -61,6 +61,8 @@ dependencies:
   objectbox: ^4.1.0
   objectbox_flutter_libs: ^4.1.0
   source_gen: ^1.0.0
+  permission_handler: ^11.0.1
+
 
 
 
@@ -110,6 +112,7 @@ flutter:
   assets:
     - assets/images/
     - assets/animations/
+    - assets/icon/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 
