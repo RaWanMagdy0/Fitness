@@ -2,7 +2,6 @@ import 'package:fitness_app/core/styles/colors/app_colors.dart';
 import 'package:fitness_app/core/styles/fonts/app_fonts.dart';
 import 'package:fitness_app/core/styles/images/app_images.dart';
 import 'package:fitness_app/core/utils/widget/custom%20scaffold.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../core/utils/widget/custom_arrow.dart';
@@ -14,7 +13,7 @@ class ExerciseScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      backgroundImage: AppImages.splashBackG,
+      backgroundImage:AppImages.homeBackG,
       child: Column(
         children: [
           Stack(

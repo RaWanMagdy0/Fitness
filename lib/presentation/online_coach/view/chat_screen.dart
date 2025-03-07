@@ -210,9 +210,20 @@ class _ChatScreenState extends State<ChatScreen> {
                         ),
                         8.horizontalSpace,
                         IconButton(
-                          icon: Icon(Icons.mic, color: AppColors.kWhite, size: 28),
-                          onPressed: cubit.startListening,
+                          icon: Icon(
+                            cubit.isListening ? Icons.stop_circle : Icons.mic,
+                            color: cubit.isListening ? Colors.red : AppColors.kWhite,
+                            size: 28,
+                          ),
+                          onPressed: () {
+                            if (!cubit.isListening) {
+                              cubit.startListening();
+                            } else {
+                              cubit.stopListening();
+                            }
+                          },
                         ),
+
                         IconButton(
                           icon: Icon(Icons.send, color: AppColors.kWhite),
                           onPressed: () {

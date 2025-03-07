@@ -6,7 +6,6 @@ import '../../presentation/auth/forgot_password/cubit/forgot_password_cubit.dart
 import '../../presentation/auth/forgot_password/view/forgot_password_screen.dart';
 import '../../presentation/auth/forgot_password/view/reset_password_screen.dart';
 import '../../presentation/auth/forgot_password/view/verify_code_screen.dart';
-import '../../presentation/auth/home/view/home_screen.dart';
 import '../../presentation/auth/login/view/login_screen.dart' show LoginScreen;
 import '../../presentation/auth/login/view_model/login_cubit.dart';
 import '../../presentation/auth/sign_up/view/actvity_screen.dart';
@@ -20,6 +19,7 @@ import '../../presentation/auth/sign_up/view_model/sign_up_cubit.dart';
 import '../../presentation/edit_profile/view/edit_profile_screen.dart'
     show EditProfileScreen;
 import '../../presentation/exercise/view/exercise_screen.dart';
+import '../../presentation/home/view/home_screen.dart';
 import '../../presentation/layout/main_page.dart';
 import '../../presentation/edit_profile/view_model/edit_profile_cubit.dart'
     show EditProfileCubit;

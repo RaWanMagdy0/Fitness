@@ -1,6 +1,7 @@
 import 'package:fitness_app/presentation/profile/view/main_profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../home/view/home_screen.dart';
 import '../online_coach/view/robot_screen.dart';
 import 'home_layout.dart';
 
@@ -15,7 +16,7 @@ class _MainPageState extends State<MainPage> {
   int _currentIndex = 0;
 
   final List<Widget> _screens = [
-    Scaffold(),
+    HomeScreen(),
     RobotScreen(),
     Scaffold(),
     MainProfileScreen(),

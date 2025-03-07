@@ -16,5 +16,6 @@ class AppColors {
   static const kGreen = Color(0xFF0CB359);
   static const splashColor = Color(0xFF1A1A1A);
   static const bottomNavColor = Color(0xFF242424);
+  static const kBlackBG = Color(0xFF2D2D2D);
   static const brownColor = Color(0xFFFF6A00);
 }

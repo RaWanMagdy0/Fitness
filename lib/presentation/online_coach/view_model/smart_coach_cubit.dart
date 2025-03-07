@@ -8,6 +8,7 @@ import '../../../core/base/base_view_model.dart';
 import '../../../domain/online_coach_enity.dart';
 import '../../../domain/repository/profile_repository/profile_repository.dart';
 import '../widget/object_box.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 @injectable
 class GeminiCubit extends BaseViewModel<GeminiState> {
@@ -148,21 +149,46 @@ class GeminiCubit extends BaseViewModel<GeminiState> {
     }
   }
 
+
   Future<void> startListening() async {
-    bool available = await _speech.initialize();
-    if (available) {
-      isListening = true;
-      emit(GeminiRecordingState(isListening: true));
-      _speech.listen(
-        onResult: (result) {
-          recordedText = result.recognizedWords;
-          emit(GeminiRecordingState(
-              isListening: true, recordedText: recordedText));
-        },
-        localeId: "en_US"
-      );
+    var status = await Permission.microphone.request();
+    if (status.isGranted) {
+      bool available = await _speech.initialize();
+      if (available) {
+        isListening = true;
+        recordedText = "";
+        emit(GeminiRecordingState(isListening: true));
+
+        _speech.listen(
+          onResult: (result) {
+            recordedText = result.recognizedWords;
+            emit(GeminiRecordingState(isListening: true, recordedText: recordedText));
+
+            if (result.finalResult) {
+              isListening = false;
+              _speech.stop();
+              emit(GeminiRecordingState(isListening: false, recordedText: recordedText));
+
+              if (recordedText.isNotEmpty) {
+                sendMessage(recordedText);
+              }
+            }
+          },
+          localeId: "en_US",
+          listenMode: stt.ListenMode.confirmation,
+        );
+      } else {
+        print("Speech recognition not available!");
+      }
     } else {
-      print("Speech recognition not available!");
+      print("Microphone permission denied!");
     }
   }
+
+  void stopListening() {
+    isListening = false;
+    _speech.stop();
+    emit(GeminiRecordingState(isListening: false, recordedText: recordedText));
+  }
+
 }

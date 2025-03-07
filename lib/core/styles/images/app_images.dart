@@ -35,4 +35,11 @@ class AppImages {
   static const geminiImage = "assets/images/gemini_icon.png";
   static const chestExerciseImage = "assets/images/chest_exercise_image.jpg";
   static const videoImage = "assets/images/video_image.png";
+  static const homeBackG = "assets/images/homeBackG.png";
+  static const aerobicsIcon = "assets/icon/aerobicsIcon.png";
+  static const fitnessIcon = "assets/icon/fitnessIcon.png";
+  static const gymIcon = "assets/icon/gymIcon.png";
+  static const trainerIcon = "assets/icon/trainerIcon.png";
+  static const yogaIcon = "assets/icon/yogaIcon.png";
+  static const runningImage = "assets/images/runningImage.jpg";
 }
