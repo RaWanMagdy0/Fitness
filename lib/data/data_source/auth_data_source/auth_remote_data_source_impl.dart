@@ -42,16 +42,15 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       return response.message;
     });
   }
-
   @override
   Future<Result<EditProfileResponseModel>> editProfile(
       EditProfileRequestModel requestModel) {
     return executeApiCall<EditProfileResponseModel>(() async {
-      final response = await authApiManager.editProfile(requestModel);
+      var token = await _getToken();
+      final response = await authApiManager.editProfile(requestModel, token);
       return response;
     });
   }
-
   @override
   Future<Result<String?>> forgotPassword(
       ForgotPasswordRequestModel requestModel) {
@@ -89,5 +88,12 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       String? message = await authApiManager.logout(token);
       return message;
     });
+  }
+  Future<String> _getToken() async {
+    var token = await TokenManager.getToken();
+    if (token == null || token.isEmpty) {
+      throw Exception("Token is missing. Please login again.");
+    }
+    return 'Bearer $token';
   }
 }

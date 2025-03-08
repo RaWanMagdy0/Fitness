@@ -1,5 +1,3 @@
-import 'package:fitness_app/presentation/auth/forgot_password/cubit/forgot_password_cubit.dart';
-import 'package:fitness_app/presentation/auth/login/view_model/login_cubit.dart';
 import 'package:fitness_app/presentation/online_coach/widget/object_box.dart';
 import 'package:fitness_app/presentation/profile/view_model/profile_cubit.dart';
 import 'package:flutter/material.dart';
@@ -61,7 +59,7 @@ class MyApp extends StatelessWidget {
           supportedLocales: S.delegate.supportedLocales,
           debugShowCheckedModeBanner: false,
           theme: AppTheme.appTheme,
-          initialRoute: PageRouteName.layoutScreen,
+          initialRoute: PageRouteName.onBoarding,
           onGenerateRoute: AppRoutes.onGenerateRoute,
         );
       },
