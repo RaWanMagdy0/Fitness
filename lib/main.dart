@@ -1,6 +1,7 @@
 import 'package:fitness_app/presentation/auth/forgot_password/cubit/forgot_password_cubit.dart';
 import 'package:fitness_app/presentation/auth/login/view_model/login_cubit.dart';
 import 'package:fitness_app/presentation/online_coach/widget/object_box.dart';
+import 'package:fitness_app/presentation/profile/view_model/profile_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -28,6 +29,7 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
+        BlocProvider(create: (context) => getIt<ProfileCubit>()),
         ChangeNotifierProvider(create: (context) => localProvider),
         ChangeNotifierProvider(create: (context) => signupProvider),
         Provider<ObjectBox>.value(value: objectBox),

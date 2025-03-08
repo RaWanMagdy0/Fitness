@@ -1,12 +1,14 @@
 import 'package:fitness_app/core/routes/page_route_name.dart';
 import 'package:fitness_app/core/styles/colors/app_colors.dart';
 import 'package:fitness_app/core/utils/widget/custom%20scaffold.dart';
+import 'package:fitness_app/presentation/profile/view_model/profile_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../core/styles/fonts/app_fonts.dart';
 import '../../../core/styles/images/app_images.dart';
 import '../../../core/utils/widget/custom_arrow.dart';
+import '../../profile/view_model/profile_state.dart';
 import '../view_model/smart_coach_cubit.dart';
 import '../view_model/smart_coach_state.dart';
 import '../widget/object_box.dart';
@@ -28,6 +30,10 @@ class _ChatScreenState extends State<ChatScreen> {
     super.initState();
     viewModel = context.read<GeminiCubit>();
 
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      context.read<ProfileCubit>().getUserData();
+      updateChatTitles();
+    });
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       updateChatTitles();
     });
@@ -170,18 +176,40 @@ class _ChatScreenState extends State<ChatScreen> {
                               ),
                               8.horizontalSpace,
                               if (isSender)
-                                CircleAvatar(
-                                  radius: 24,
-                                  backgroundColor: Colors.transparent,
-                                  child: ClipOval(
-                                    child: Image.asset(
-                                      AppImages.person,
-                                      fit: BoxFit.cover,
-                                      width: 48,
-                                      height: 48,
-                                    ),
-                                  ),
+                                BlocBuilder<ProfileCubit, ProfileState>(
+                                  builder: (context, state) {
+                                    final userImage = context.watch<ProfileCubit>().userImage;
+                                    print("Current user image: $userImage");
+                                    return CircleAvatar(
+                                      radius: 24,
+                                      backgroundColor: Colors.transparent,
+                                      child: ClipOval(
+                                        child: userImage != null && userImage.isNotEmpty
+                                            ? Image.network(
+                                          userImage,
+                                          fit: BoxFit.cover,
+                                          width: 48,
+                                          height: 48,
+                                          errorBuilder: (context, error, stackTrace) {
+                                            return Image.asset(
+                                              AppImages.person,
+                                              fit: BoxFit.cover,
+                                              width: 48,
+                                              height: 48,
+                                            );
+                                          },
+                                        )
+                                            : Image.asset(
+                                          AppImages.person,
+                                          fit: BoxFit.cover,
+                                          width: 48,
+                                          height: 48,
+                                        ),
+                                      ),
+                                    );
+                                  },
                                 ),
+
                             ],
                           ),
                         );

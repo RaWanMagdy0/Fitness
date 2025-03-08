@@ -80,7 +80,13 @@ class AppRoutes {
             child: ChatScreen(),
           ),
         );
-
+      case PageRouteName.robotScreen:
+        return MaterialPageRoute(
+          builder: (context) => BlocProvider(
+            create: (context) => getIt<ForgotPasswordCubit>(),
+            child: RobotScreen(),
+          ),
+        );
       case PageRouteName.weightScreen:
         return MaterialPageRoute(
           builder: (context) => BlocProvider(
@@ -120,8 +126,6 @@ class AppRoutes {
         return _handleMaterialPageRoute(widget: OnboardingScreen());
       case PageRouteName.homeScreen:
         return _handleMaterialPageRoute(widget: HomeScreen());
-        case PageRouteName.robotScreen:
-        return _handleMaterialPageRoute(widget: RobotScreen());
         case PageRouteName.exerciseScreen:
         return _handleMaterialPageRoute(widget: ExerciseScreen());
       case PageRouteName.mainProfileScreen:

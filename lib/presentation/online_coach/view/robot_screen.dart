@@ -4,8 +4,11 @@ import 'package:fitness_app/core/styles/images/app_images.dart';
 import 'package:fitness_app/core/utils/widget/custom%20scaffold.dart';
 import 'package:fitness_app/core/utils/widget/custom_button.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../core/utils/widget/custom_arrow.dart';
+import '../../profile/view_model/profile_cubit.dart';
+import '../../profile/view_model/profile_state.dart';
 
 class RobotScreen extends StatelessWidget {
   const RobotScreen({super.key});
@@ -31,14 +34,22 @@ class RobotScreen extends StatelessWidget {
                 CustomArrow(),
                 Column(
                   children: [
-                    Row(
-                      children: [
-                        Text(
-                          "Hi",
-                          style: AppFonts.font16WhiteWeight500,
-                        ),
-                        Text("  Rawan,", style: AppFonts.font16WhiteWeight500)
-                      ],
+                    BlocBuilder<ProfileCubit, ProfileState>(
+                      builder: (context, state) {
+                        final cubit = context.watch<ProfileCubit>();
+                        if (state is ProfileInitialState) {
+                          cubit.getUserData();
+                        }
+                        final userName = cubit.userName;
+                        return Row(
+                          children: [
+                            Text("Hi", style: AppFonts.font16WhiteWeight500),
+                            2.horizontalSpace,
+                            Text( userName ?? "Rowan", style: AppFonts.font16WhiteWeight500),
+                            Text(",", style: AppFonts.font16WhiteWeight500),
+                          ],
+                        );
+                      },
                     ),
                     Text("I Am Your Smart Coach",
                         style: AppFonts.font16WhiteWeight500
