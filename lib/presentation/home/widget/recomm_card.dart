@@ -42,8 +42,8 @@ class RecommCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(20.r),
             child: Image.asset(
               imagePath,
-              width: 104.w,
-              height: 115.h,
+              width: 110.w,
+              height: 110.h,
               fit: BoxFit.cover,
             ),
           ),

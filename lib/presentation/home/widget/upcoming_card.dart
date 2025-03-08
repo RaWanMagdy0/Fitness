@@ -9,7 +9,7 @@ class UpcomingCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return  SizedBox(
-      height: 140.h,
+      height: 110.h,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         itemCount: 4,
@@ -39,8 +39,8 @@ buildCardWidget(String title, String imagePath) {
           borderRadius: BorderRadius.circular(20.r),
           child: Image.asset(
             imagePath,
-            width: 104.w,
-            height: 115.h,
+            width: 90.w,
+            height: 90.h,
             fit: BoxFit.cover,
           ),
         ),

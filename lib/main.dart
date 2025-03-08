@@ -28,8 +28,6 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
-        BlocProvider(create: (context) => getIt<LoginCubit>()),
-        BlocProvider(create: (context) => getIt<ForgotPasswordCubit>()),
         ChangeNotifierProvider(create: (context) => localProvider),
         ChangeNotifierProvider(create: (context) => signupProvider),
         Provider<ObjectBox>.value(value: objectBox),

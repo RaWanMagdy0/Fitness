@@ -58,16 +58,21 @@ class AppRoutes {
           ),
         );
       case PageRouteName.forgotPassword:
-        return _handleMaterialPageRoute(
-          widget: BlocProvider(
+        return MaterialPageRoute(
+          builder: (context)=> BlocProvider(
             create: (context) => getIt<ForgotPasswordCubit>(),
             child: ForgotPasswordScreen(),
           ),
         );
+      case PageRouteName.resetPassword:
+        return MaterialPageRoute(
+          builder: (context)=> BlocProvider(
+            create: (context) => getIt<ForgotPasswordCubit>(),
+            child: ResetPasswordScreen(),
+          ),
+        );
       case PageRouteName.verifyCode:
         return _handleMaterialPageRoute(widget: VerifyCodeScreen());
-      case PageRouteName.resetPassword:
-        return _handleMaterialPageRoute(widget: ResetPasswordScreen());
       case PageRouteName.chatScreen:
         return MaterialPageRoute(
           builder: (context) => BlocProvider(
