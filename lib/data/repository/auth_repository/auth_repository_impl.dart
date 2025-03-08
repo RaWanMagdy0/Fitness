@@ -4,13 +4,20 @@ import 'package:fitness_app/data/data_source/auth_data_source/auth_remote_data_s
 import 'package:injectable/injectable.dart';
 
 import '../../../domain/repository/auth_repository/auth_repository.dart';
-import '../../models/edit_profile/edit_profile_request_model.dart' show EditProfileRequestModel;
-import '../../models/edit_profile/edit_profile_response_model.dart' show EditProfileResponseModel;
-import '../../models/forgot_password/request/forgot_password_request_model.dart' show ForgotPasswordRequestModel;
-import '../../models/forgot_password/request/reset_password_request_model.dart' show ResetPasswordRequestModel;
-import '../../models/forgot_password/request/verify_code_request_model.dart' show VerifyCodeRequestModel;
-import '../../models/login/request/login_request_model.dart' show LoginRequestModel;
-import '../../models/sign_up/request/sign_up_request_body.dart' show SignupRequestBody;
+import '../../models/edit_profile/edit_profile_request_model.dart'
+    show EditProfileRequestModel;
+import '../../models/edit_profile/edit_profile_response_model.dart'
+    show EditProfileResponseModel;
+import '../../models/forgot_password/request/forgot_password_request_model.dart'
+    show ForgotPasswordRequestModel;
+import '../../models/forgot_password/request/reset_password_request_model.dart'
+    show ResetPasswordRequestModel;
+import '../../models/forgot_password/request/verify_code_request_model.dart'
+    show VerifyCodeRequestModel;
+import '../../models/login/request/login_request_model.dart'
+    show LoginRequestModel;
+import '../../models/sign_up/request/sign_up_request_body.dart'
+    show SignupRequestBody;
 
 @Injectable(as: AuthRepository)
 class AuthRepositoryImpl implements AuthRepository {
@@ -22,18 +29,21 @@ class AuthRepositoryImpl implements AuthRepository {
     final response = authRemoteDataSource.signUp(signupRequestBody);
     return response;
   }
+
   @override
   Future<Result<String?>> login(LoginRequestModel loginRequestModel) {
     return authRemoteDataSource.login(loginRequestModel);
   }
 
   @override
-  Future<Result<EditProfileResponseModel>> editProfile(EditProfileRequestModel requestModel) {
+  Future<Result<EditProfileResponseModel>> editProfile(
+      EditProfileRequestModel requestModel) {
     return authRemoteDataSource.editProfile(requestModel);
   }
 
   @override
-  Future<Result<String?>> forgotPassword(ForgotPasswordRequestModel requestModel) {
+  Future<Result<String?>> forgotPassword(
+      ForgotPasswordRequestModel requestModel) {
     return authRemoteDataSource.forgotPassword(requestModel);
   }
 
@@ -43,7 +53,13 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<Result<String?>> resetPassword(ResetPasswordRequestModel requestModel) {
+  Future<Result<String?>> resetPassword(
+      ResetPasswordRequestModel requestModel) {
     return authRemoteDataSource.resetPassword(requestModel);
+  }
+
+  @override
+  Future<Result<String?>> logout() async {
+    return await authRemoteDataSource.logout();
   }
 }

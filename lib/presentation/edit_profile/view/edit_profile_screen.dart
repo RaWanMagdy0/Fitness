@@ -1,32 +1,182 @@
+import 'dart:io';
+
 import 'package:fitness_app/presentation/edit_profile/view/widgets/custom_profile_field.dart' show CustomProfileField;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:image_picker/image_picker.dart';
 import '../../../../core/styles/fonts/app_fonts.dart';
 import '../../../../core/utils/widget/custom_button.dart';
 import '../../../../core/utils/widget/custom_text_form_field.dart';
 import '../../../../core/utils/widget/custom scaffold.dart';
+import '../../../core/styles/colors/app_colors.dart';
 import '../../../core/styles/images/app_images.dart' show AppImages;
 import 'package:fitness_app/presentation/edit_profile/view/widgets/custom_profile_field.dart';
 import 'package:fitness_app/presentation/edit_profile/view_model/edit_profile_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/styles/images/app_images.dart';
 import '../../../core/utils/functions/dialogs/app_dialogs.dart' show AppDialogs;
+import 'package:fitness_app/presentation/profile/view_model/profile_cubit.dart';
+import 'package:fitness_app/presentation/profile/view_model/profile_state.dart';
+import '../../../../core/di/di.dart';
+import '../../../../domain/entity/profile/user.dart';
 
+import 'dart:io';
+
+import 'package:fitness_app/presentation/edit_profile/view/widgets/custom_profile_field.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import '../../../../core/di/di.dart';
+import '../../../../core/styles/colors/app_colors.dart';
+import '../../../../core/styles/fonts/app_fonts.dart';
+import '../../../../core/styles/images/app_images.dart';
+import '../../../../core/utils/functions/dialogs/app_dialogs.dart';
+import '../../../../core/utils/widget/custom_button.dart';
+import '../../../../core/utils/widget/custom_text_form_field.dart';
+import '../../../../core/utils/widget/custom scaffold.dart';
+import '../../../../domain/entity/profile/user.dart';
+import '../view_model/edit_profile_cubit.dart';
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({super.key});
+
   @override
   State<EditProfileScreen> createState() => _EditProfileScreenState();
 }
+
 class _EditProfileScreenState extends State<EditProfileScreen> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
+  final ImagePicker _picker = ImagePicker();  // Add this
+  File? _imageFile;  // Add this
 
   String _weight = '90 KG';
   String _goal = 'Gain Weight';
-  String _activityLevel = 'Rookie';
+  String _activityLevel = 'level1';
+  late ProfileCubit _profileCubit;
+  User? _userData;
+
+  @override
+  void initState() {
+    super.initState();
+    _profileCubit = getIt<ProfileCubit>();
+    _loadUserData();
+  }
+
+  void _loadUserData() {
+    if (_profileCubit.state is GetUserDataSuccessState) {
+      final userState = _profileCubit.state as GetUserDataSuccessState;
+      _userData = userState.user;
+      _populateFormFields();
+    } else {
+      _profileCubit.getUserData().then((_) {
+        if (_profileCubit.state is GetUserDataSuccessState) {
+          setState(() {
+            final userState = _profileCubit.state as GetUserDataSuccessState;
+            _userData = userState.user;
+            _populateFormFields();
+          });
+        }
+      });
+    }
+  }
+
+  void _populateFormFields() {
+    if (_userData != null) {
+      _firstNameController.text = _userData!.firstName ?? '';
+      _lastNameController.text = _userData!.lastName ?? '';
+      _emailController.text = _userData!.email ?? '';
+      setState(() {
+        _weight = _userData!.weight != null ? '${_userData!.weight} KG' : '90 KG';
+        _goal = _userData!.goal ?? 'Gain Weight';
+        _activityLevel = _userData!.activityLevel ?? 'level1';
+      });
+    }
+  }
+
+  void _showImagePickerOptions() {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => SafeArea(
+        child: Wrap(
+          children: [
+            ListTile(
+              leading: Icon(Icons.photo_library),
+              title: Text('Gallery'),
+              onTap: () {
+                Navigator.pop(context);
+                _pickImage(ImageSource.gallery);
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.photo_camera),
+              title: Text('Camera'),
+              onTap: () {
+                Navigator.pop(context);
+                _pickImage(ImageSource.camera);
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> _pickImage(ImageSource source) async {
+    try {
+      final pickedFile = await _picker.pickImage(
+        source: source,
+        imageQuality: 50, // Compress image to reduce size
+      );
+
+      if (pickedFile != null) {
+        setState(() {
+          _imageFile = File(pickedFile.path);
+        });
+
+        // Upload image immediately after picking
+        await _uploadImage();
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to pick image: $e')),
+      );
+    }
+  }
+
+  // Add this method
+  Future<void> _uploadImage() async {
+    if (_imageFile == null) return;
+
+    AppDialogs.showLoading(context: context);
+
+    try {
+      await _profileCubit.uploadPhoto(_imageFile!);
+
+      if (_profileCubit.state is UploadPhotoSuccessState) {
+        AppDialogs.showHideDialog(context);
+        AppDialogs.showSuccessDialog(
+          context: context,
+          message: "Profile picture updated successfully",
+        );
+      } else if (_profileCubit.state is UploadPhotoErrorState) {
+        final errorState = _profileCubit.state as UploadPhotoErrorState;
+        AppDialogs.showHideDialog(context);
+        AppDialogs.showErrorDialog(
+          context: context,
+          errorMassage: errorState.errorMessage ?? "Failed to upload photo",
+        );
+      }
+    } catch (e) {
+      AppDialogs.showHideDialog(context);
+      AppDialogs.showErrorDialog(
+        context: context,
+        errorMassage: "An error occurred: $e",
+      );
+    }
+  }
 
   @override
   void dispose() {
@@ -48,6 +198,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             context: context,
             message: state.message,
             whenAnimationFinished: () {
+              // Refresh user data after successful update
+              _profileCubit.getUserData();
               Navigator.pop(context);
             },
           );
@@ -84,16 +236,84 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     ],
                   ),
                   SizedBox(height: 30.h),
-                  Center(
-                    child: Column(
-                      children: [
-                        ClipOval(child: Image.asset(AppImages.person)),
-                        Text(
-                          "User Name",
-                          style: AppFonts.font20WhiteWeight800,
-                        )
-                      ],
-                    ),
+                  Stack(
+                    children: [
+                      // Profile Image
+                      Container(
+                        width: 100.w,
+                        height: 100.h,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.2),
+                              spreadRadius: 1,
+                              blurRadius: 5,
+                              offset: Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                        child: ClipOval(
+                          child: _imageFile != null
+                              ? Image.file(
+                            _imageFile!,
+                            width: 100.w,
+                            height: 100.h,
+                            fit: BoxFit.cover,
+                          )
+                              : (_userData?.photo != null && _userData!.photo!.isNotEmpty
+                              ? Image.network(
+                            _userData!.photo!,
+                            width: 100.w,
+                            height: 100.h,
+                            fit: BoxFit.cover,
+                            errorBuilder: (_, __, ___) => Image.asset(
+                                AppImages.person,
+                                width: 100.w,
+                                height: 100.h,
+                                fit: BoxFit.cover),
+                          )
+                              : Image.asset(
+                            AppImages.person,
+                            width: 100.w,
+                            height: 100.h,
+                            fit: BoxFit.cover,
+                          )),
+                        ),
+                      ),
+                      // Edit button
+                      Positioned(
+                        bottom: 0,
+                        right: 0,
+                        child: GestureDetector(
+                          onTap: _showImagePickerOptions,
+                          child: Container(
+                            padding: EdgeInsets.all(8.r),
+                            decoration: BoxDecoration(
+                              color: AppColors.kOrange,
+                              shape: BoxShape.circle,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.3),
+                                  spreadRadius: 1,
+                                  blurRadius: 3,
+                                  offset: Offset(0, 2),
+                                ),
+                              ],
+                            ),
+                            child: Icon(
+                              Icons.camera_alt,
+                              color: Colors.white,
+                              size: 20.sp,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Text(
+                    "${_userData?.firstName ?? ''} ${_userData?.lastName ?? ''}",
+                    style: AppFonts.font20WhiteWeight800,
                   ),
                   SizedBox(height: 30.h),
                   Form(
@@ -128,7 +348,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             _showWeightDialog(context);
                           },
                         ),
-                        SizedBox(height: 8.h),
                         CustomProfileField(
                           title: 'Your Goal',
                           value: _goal,
@@ -136,7 +355,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             _showGoalDialog(context);
                           },
                         ),
-                        SizedBox(height: 8.h),
                         CustomProfileField(
                           title: 'Your activity level',
                           value: _activityLevel,
@@ -179,7 +397,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       email: email.isNotEmpty ? email : null,
       weight: weightValue,
       goal: _goal != 'Gain Weight' ? _goal : null,
-      activityLevel: _activityLevel != 'Rookie' ? _activityLevel : null,
+      activityLevel: _activityLevel,
     );
   }
 
@@ -244,7 +462,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   void _showActivityLevelDialog(BuildContext context) {
-    final activityLevels = ['Rookie', 'Beginner', 'Intermediate', 'Advanced', 'Expert'];
+    final activityLevels = ['level1', 'level2', 'level3', 'level4', 'level5'];
 
     showDialog(
       context: context,

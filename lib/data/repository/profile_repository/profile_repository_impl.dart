@@ -21,6 +21,20 @@ class ProfileRepositoryImpl implements ProfileRepository {
   }
 
   @override
+  Future<Result<User?>> uploadPhoto(File photo) async {
+    final response = await profileRemoteDataSource.uploadPhoto(photo);
+    switch (response) {
+      case Success():
+        return Success(data: response.data?.toEntity());
+      case Fail():
+        return Fail(exception: response.exception);
+    }
+  }
+}
+
+  }
+
+  @override
   Future<Result<String?>> smartCoach(Map<String, dynamic> message)async {
     final response = await profileRemoteDataSource.smartCoach(message);
     switch (response) {

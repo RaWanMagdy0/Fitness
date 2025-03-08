@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import '../../../core/di/di.dart';
 import '../../../core/routes/page_route_name.dart';
 import '../../../core/styles/images/app_images.dart';
+import '../../../core/utils/functions/dialogs/app_dialogs.dart';
 import '../../../core/utils/functions/providers/local_provider.dart';
 import '../../../generated/l10n.dart';
 import '../view_model/profile_cubit.dart';
@@ -17,6 +18,7 @@ import '../view_model/profile_state.dart';
 
 class MainProfileScreen extends StatefulWidget {
   const MainProfileScreen({super.key});
+
   @override
   State<MainProfileScreen> createState() => _MainProfileScreenState();
 }
@@ -178,12 +180,18 @@ class _MainProfileScreenState extends State<MainProfileScreen> {
                         child: Divider(
                           color: AppColors.kGray,
                         )),
-                    CustomProfileRow(
-                        imagePath: AppImages.logoutIcon,
-                        title: Text(
-                          local.logout,
-                          style: AppFonts.font14WhiteWeight600,
-                        )),
+                    InkWell(
+                      onTap: () {
+                        AppDialogs.logoutDialog(
+                            context: context, profileCubit: viewModel);
+                      },
+                      child: CustomProfileRow(
+                          imagePath: AppImages.logoutIcon,
+                          title: Text(
+                            local.logout,
+                            style: AppFonts.font14WhiteWeight600,
+                          )),
+                    ),
                     SizedBox(
                         width: 350.0.w,
                         child: Divider(

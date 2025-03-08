@@ -19,4 +19,10 @@ abstract class ProfileApiManager {
   Future<String> smartCoach(
     @Body() Map<String, dynamic> message,
   );
+
+  @MultiPart()
+  @PUT(ApiConstants.uploadPhoto)
+  Future<EditProfileResponseModel> uploadPhoto(
+      @Part(name: 'photo') File photo,
+      );
 }
