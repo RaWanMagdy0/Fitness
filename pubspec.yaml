@@ -62,6 +62,8 @@ dependencies:
   objectbox_flutter_libs: ^4.1.0
   source_gen: ^1.0.0
   permission_handler: ^11.0.1
+  share_plus: ^10.1.4
+  url_launcher: ^6.3.1
 
 
 

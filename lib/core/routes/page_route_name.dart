@@ -22,4 +22,5 @@ class PageRouteName {
   static const String chatScreen = "chatScreen";
   static const String robotScreen = "robotScreen";
   static const String exerciseScreen = "exerciseScreen";
+  static const String mealDetailsScreen = "mealDetailsScreen";
 }

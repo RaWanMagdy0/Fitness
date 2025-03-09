@@ -23,6 +23,8 @@ import '../../presentation/home/view/home_screen.dart';
 import '../../presentation/layout/main_page.dart';
 import '../../presentation/edit_profile/view_model/edit_profile_cubit.dart'
     show EditProfileCubit;
+import '../../presentation/meal/view/meal_details_screen.dart' show MealDetailsScreen;
+import '../../presentation/meal/view_model/meal_details_cubit.dart' show MealDetailsCubit;
 import '../../presentation/online_coach/view/chat_screen.dart';
 import '../../presentation/online_coach/view/robot_screen.dart';
 import '../../presentation/online_coach/view_model/smart_coach_cubit.dart';
@@ -109,6 +111,15 @@ class AppRoutes {
           builder: (context) => BlocProvider(
             create: (context) => getIt<SignUpCubit>(),
             child: ActivityScreen(),
+          ),
+        );
+      case PageRouteName.mealDetailsScreen:
+        final args = setting.arguments as Map<String, dynamic>;
+        final String mealId = args['mealId'];
+        return MaterialPageRoute(
+          builder: (context) => BlocProvider(
+            create: (context) => getIt<MealDetailsCubit>(),
+            child: MealDetailsScreen(mealId: mealId),
           ),
         );
       case PageRouteName.onBoarding:
