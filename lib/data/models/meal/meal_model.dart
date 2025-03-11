@@ -56,7 +56,6 @@ class Meal {
       strSource: json['strSource'],
     );
 
-    // Process ingredients and measurements
     for (int i = 1; i <= 20; i++) {
       String ingredientKey = 'strIngredient$i';
       String measureKey = 'strMeasure$i';
@@ -86,7 +85,7 @@ class Meal {
       'strSource': strSource,
     };
 
-    // Add ingredients and measurements
+
     ingredients.forEach((key, value) {
       json[key] = value;
     });
@@ -98,7 +97,6 @@ class Meal {
     return json;
   }
 
-  // Helper method to get all ingredients with their measures
   List<IngredientWithMeasure> getIngredientsWithMeasures() {
     List<IngredientWithMeasure> result = [];
 
@@ -119,9 +117,8 @@ class Meal {
     return result;
   }
 
-  // Helper method to get nutritional information (mock data for now)
   NutritionalInfo getNutritionalInfo() {
-    // In a real app, this would be fetched from the API or calculated
+
     return NutritionalInfo(
       energy: 100,
       protein: 15,

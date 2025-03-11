@@ -9,6 +9,7 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:dio/dio.dart' as _i361;
+import 'package:fitness_app/domain/repository/meal_repository/meal_repository.dart' as _i888 show MealRepository;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 
@@ -31,6 +32,8 @@ import '../../data/repository/auth_repository/auth_repository_impl.dart'
     as _i313;
 import '../../data/repository/meal_repository/meal_repository_impl.dart'
     as _i888;
+import '../../data/repository/meal_repository/meal_repository_impl.dart';
+import '../../data/repository/meal_repository/meal_repository_impl.dart' as _i427 show MealRepositoryImpl;
 import '../../data/repository/profile_repository/profile_repository_impl.dart'
     as _i677;
 import '../../domain/repository/auth_repository/auth_repository.dart' as _i1056;
