@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:fitness_app/domain/use_case/profile/profile_use_case.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:injectable/injectable.dart';
 import '../../../../../../core/api/api_result.dart';
 import '../../../../../../core/base/base_view_model.dart';

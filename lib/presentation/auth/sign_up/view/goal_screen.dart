@@ -1,4 +1,3 @@
-import 'package:fitness_app/core/generated/l10n.dart';
 import 'package:fitness_app/core/routes/page_route_name.dart';
 import 'package:fitness_app/core/styles/colors/app_colors.dart';
 import 'package:fitness_app/core/styles/fonts/app_fonts.dart';

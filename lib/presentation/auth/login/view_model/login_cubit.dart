@@ -2,7 +2,6 @@ import 'package:fitness_app/presentation/auth/login/view_model/login_state.dart'
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import '../../../../core/api/api_result.dart' show Fail, Success;
-import '../../../../core/local/token_manger.dart';
 import '../../../../data/models/login/request/login_request_model.dart' show LoginRequestModel;
 import '../../../../domain/repository/auth_repository/auth_repository.dart' show AuthRepository;
 

@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:fitness_app/data/data_source/profile_data_source/profile_remote_data_source.dart';
-import 'package:fitness_app/data/repository/profile_repository/profile_repository_impl.dart' as profileRemoteDataSource;
 import 'package:injectable/injectable.dart';
 import '../../../core/api/api_result.dart';
 import '../../../domain/entity/profile/user.dart';

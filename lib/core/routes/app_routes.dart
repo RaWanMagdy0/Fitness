@@ -1,4 +1,5 @@
 import 'package:fitness_app/core/routes/page_route_name.dart';
+import 'package:fitness_app/presentation/home/exercise_screen/view_model/exercise_view_model.dart';
 import 'package:fitness_app/presentation/profile/view/main_profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,8 +19,8 @@ import '../../presentation/auth/sign_up/view/weight_screen.dart';
 import '../../presentation/auth/sign_up/view_model/sign_up_cubit.dart';
 import '../../presentation/edit_profile/view/edit_profile_screen.dart'
     show EditProfileScreen;
-import '../../presentation/exercise/view/exercise_screen.dart';
-import '../../presentation/home/view/home_screen.dart';
+import '../../presentation/home/exercise_screen/view/exercise_screen.dart';
+import '../../presentation/home/home_screen/view/home_screen.dart';
 import '../../presentation/layout/main_page.dart';
 import '../../presentation/edit_profile/view_model/edit_profile_cubit.dart'
     show EditProfileCubit;
@@ -71,8 +72,13 @@ class AppRoutes {
             child: ResetPasswordScreen(),
           ),
         );
-      case PageRouteName.verifyCode:
-        return _handleMaterialPageRoute(widget: VerifyCodeScreen());
+        case PageRouteName.verifyCode:
+        return MaterialPageRoute(
+          builder: (context)=> BlocProvider(
+            create: (context) => getIt<ForgotPasswordCubit>(),
+            child: VerifyCodeScreen(),
+          ),
+        );
       case PageRouteName.chatScreen:
         return MaterialPageRoute(
           builder: (context) => BlocProvider(
@@ -122,12 +128,17 @@ class AppRoutes {
             child: ActivityScreen(),
           ),
         );
+      case PageRouteName.exerciseScreen:
+        return MaterialPageRoute(
+          builder: (context) => BlocProvider(
+            create: (context) => getIt<ExerciseViewModel>(),
+            child: ExerciseScreen(),
+          ),
+        );
       case PageRouteName.onBoarding:
         return _handleMaterialPageRoute(widget: OnboardingScreen());
       case PageRouteName.homeScreen:
         return _handleMaterialPageRoute(widget: HomeScreen());
-        case PageRouteName.exerciseScreen:
-        return _handleMaterialPageRoute(widget: ExerciseScreen());
       case PageRouteName.mainProfileScreen:
         return MaterialPageRoute(
             builder: (context) => BlocProvider(

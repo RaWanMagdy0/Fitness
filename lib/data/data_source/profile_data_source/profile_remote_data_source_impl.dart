@@ -27,6 +27,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
   Future<Result<UserModel?>> uploadPhoto(File photo) {
     return executeApiCall<UserModel?>(() async {
       final response = await profileApiManager.uploadPhoto(photo);
+      return null;
     });
   }
 

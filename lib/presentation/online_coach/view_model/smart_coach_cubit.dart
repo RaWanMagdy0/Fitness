@@ -2,13 +2,13 @@ import 'dart:convert';
 import 'dart:math';
 import 'package:fitness_app/presentation/online_coach/view_model/smart_coach_state.dart';
 import 'package:injectable/injectable.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import '../../../core/api/api_result.dart';
 import '../../../core/base/base_view_model.dart';
 import '../../../domain/online_coach_enity.dart';
 import '../../../domain/repository/profile_repository/profile_repository.dart';
 import '../widget/object_box.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 @injectable
 class GeminiCubit extends BaseViewModel<GeminiState> {
@@ -29,7 +29,6 @@ class GeminiCubit extends BaseViewModel<GeminiState> {
     _isObjectBoxReady = objectBox != null;
     print(" ObjectBox Initialized: $_isObjectBoxReady");
   }
-
 
   Future<void> sendMessage(String userMessage) async {
     if (userMessage.isEmpty) return;
@@ -78,6 +77,7 @@ class GeminiCubit extends BaseViewModel<GeminiState> {
     if (!_isObjectBoxReady) return [];
     return objectBox!.getChatTitles();
   }
+
   void saveChatToHistory() async {
     if (!_isObjectBoxReady || messages.isEmpty) return;
 
@@ -105,6 +105,7 @@ class GeminiCubit extends BaseViewModel<GeminiState> {
 
     objectBox!.saveChatHistory(existingChat);
   }
+
   void loadChatByTitle(String title) {
     if (!_isObjectBoxReady) return;
 
@@ -149,7 +150,6 @@ class GeminiCubit extends BaseViewModel<GeminiState> {
     }
   }
 
-
   Future<void> startListening() async {
     var status = await Permission.microphone.request();
     if (status.isGranted) {
@@ -158,7 +158,6 @@ class GeminiCubit extends BaseViewModel<GeminiState> {
         isListening = true;
         recordedText = "";
         emit(GeminiRecordingState(isListening: true));
-
         _speech.listen(
           onResult: (result) {
             recordedText = result.recognizedWords;
@@ -190,5 +189,4 @@ class GeminiCubit extends BaseViewModel<GeminiState> {
     _speech.stop();
     emit(GeminiRecordingState(isListening: false, recordedText: recordedText));
   }
-
 }

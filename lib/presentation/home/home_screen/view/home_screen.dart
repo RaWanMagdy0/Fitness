@@ -1,10 +1,9 @@
 import 'package:fitness_app/core/styles/fonts/app_fonts.dart';
 import 'package:fitness_app/core/utils/widget/custom%20scaffold.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../core/styles/colors/app_colors.dart';
-import '../../../core/styles/images/app_images.dart';
+import '../../../../core/styles/colors/app_colors.dart';
+import '../../../../core/styles/images/app_images.dart';
 import '../widget/category_section.dart';
 import '../widget/popular_card.dart';
 import '../widget/recomm_card.dart';

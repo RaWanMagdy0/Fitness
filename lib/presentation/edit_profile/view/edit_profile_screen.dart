@@ -20,22 +20,9 @@ import 'package:fitness_app/presentation/profile/view_model/profile_state.dart';
 import '../../../../core/di/di.dart';
 import '../../../../domain/entity/profile/user.dart';
 
-import 'dart:io';
 
-import 'package:fitness_app/presentation/edit_profile/view/widgets/custom_profile_field.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../../core/di/di.dart';
-import '../../../../core/styles/colors/app_colors.dart';
-import '../../../../core/styles/fonts/app_fonts.dart';
-import '../../../../core/styles/images/app_images.dart';
 import '../../../../core/utils/functions/dialogs/app_dialogs.dart';
-import '../../../../core/utils/widget/custom_button.dart';
-import '../../../../core/utils/widget/custom_text_form_field.dart';
-import '../../../../core/utils/widget/custom scaffold.dart';
-import '../../../../domain/entity/profile/user.dart';
-import '../view_model/edit_profile_cubit.dart';
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({super.key});
@@ -439,7 +426,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       context: context,
       builder: (context) => AlertDialog(
         title: Text('Select Goal', style: AppFonts.font18BlackWeight500),
-        content: Container(
+        content: SizedBox(
           width: double.maxFinite,
           child: ListView.builder(
             shrinkWrap: true,
@@ -468,7 +455,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       context: context,
       builder: (context) => AlertDialog(
         title: Text('Select Activity Level', style: AppFonts.font18BlackWeight500),
-        content: Container(
+        content: SizedBox(
           width: double.maxFinite,
           child: ListView.builder(
             shrinkWrap: true,

@@ -30,15 +30,16 @@ class _ChatScreenState extends State<ChatScreen> {
     super.initState();
     viewModel = context.read<GeminiCubit>();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      context.read<ProfileCubit>().getUserData();
-      updateChatTitles();
-    });
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final args = ModalRoute.of(context)?.settings.arguments;
+      if (args != null && args is String) {
+        print("🔄 Loading chat for title: $args");
+        print("Available chat titles: ${viewModel.getChatTitles()}");
+        viewModel.loadChatByTitle(args);
+      }
       updateChatTitles();
     });
   }
-
   void updateChatTitles() {
     final objectBox = context.read<ObjectBox>();
     setState(() {

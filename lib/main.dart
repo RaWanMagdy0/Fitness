@@ -1,3 +1,4 @@
+import 'package:fitness_app/presentation/auth/login/view_model/login_cubit.dart';
 import 'package:fitness_app/presentation/online_coach/widget/object_box.dart';
 import 'package:fitness_app/presentation/profile/view_model/profile_cubit.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +15,6 @@ import 'core/utils/functions/providers/local_provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'generated/l10n.dart';
 
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   configureDependencies();
@@ -28,6 +28,7 @@ void main() async {
     MultiProvider(
       providers: [
         BlocProvider(create: (context) => getIt<ProfileCubit>()),
+        BlocProvider(create: (context) => getIt<LoginCubit>()),
         ChangeNotifierProvider(create: (context) => localProvider),
         ChangeNotifierProvider(create: (context) => signupProvider),
         Provider<ObjectBox>.value(value: objectBox),
@@ -59,7 +60,7 @@ class MyApp extends StatelessWidget {
           supportedLocales: S.delegate.supportedLocales,
           debugShowCheckedModeBanner: false,
           theme: AppTheme.appTheme,
-          initialRoute: PageRouteName.onBoarding,
+          initialRoute: PageRouteName.exerciseScreen,
           onGenerateRoute: AppRoutes.onGenerateRoute,
         );
       },
