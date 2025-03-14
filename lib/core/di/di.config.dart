@@ -13,12 +13,18 @@ import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 
 import '../../data/api/auth_api/auth_api_manager.dart' as _i515;
+import '../../data/api/meal/meal_api_manager.dart' as _i1065;
 import '../../data/api/home_api/home_api_magager.dart' as _i968;
 import '../../data/api/profile_api/profile_api_manager.dart' as _i592;
+import '../../data/api/workout/workout_api_manager.dart' as _i772;
 import '../../data/data_source/auth_data_source/auth_remote_data_source.dart'
     as _i249;
 import '../../data/data_source/auth_data_source/auth_remote_data_source_impl.dart'
     as _i1001;
+import '../../data/data_source/meal_remote_data_source/meal_remote_data_source.dart'
+    as _i1034;
+import '../../data/data_source/meal_remote_data_source/meal_remote_data_source_impl.dart'
+    as _i222;
 import '../../data/data_source/home_data_source/home_remote_data_source.dart'
     as _i753;
 import '../../data/data_source/home_data_source/home_remote_data_source_impl.dart'
@@ -29,28 +35,20 @@ import '../../data/data_source/profile_data_source/profile_remote_data_source_im
     as _i715;
 import '../../data/repository/auth_repository/auth_repository_impl.dart'
     as _i313;
-import '../../data/repository/home_repository/home_repository_impl.dart'
-    as _i117;
 import '../../data/repository/profile_repository/profile_repository_impl.dart'
     as _i677;
 import '../../domain/repository/auth_repository/auth_repository.dart' as _i1056;
-import '../../domain/repository/home_repository/home_repository.dart' as _i97;
 import '../../domain/repository/profile_repository/profile_repository.dart'
     as _i265;
 import '../../domain/use_case/auth/edit_profile_use_case.dart' as _i606;
-import '../../domain/use_case/auth/logout_use_case.dart' as _i755;
 import '../../domain/use_case/auth/sign_up_use_case.dart' as _i322;
-import '../../domain/use_case/home/exercise_use_case.dart' as _i168;
 import '../../domain/use_case/profile/profile_use_case.dart' as _i679;
-import '../../domain/use_case/profile/upload_photo_use_case.dart' as _i659;
 import '../../presentation/auth/forgot_password/cubit/forgot_password_cubit.dart'
     as _i401;
 import '../../presentation/auth/login/view_model/login_cubit.dart' as _i97;
 import '../../presentation/auth/sign_up/view_model/sign_up_cubit.dart' as _i140;
 import '../../presentation/edit_profile/view_model/edit_profile_cubit.dart'
     as _i236;
-import '../../presentation/home/exercise_screen/view_model/exercise_view_model.dart'
-    as _i810;
 import '../../presentation/online_coach/view_model/smart_coach_cubit.dart'
     as _i721;
 import '../../presentation/profile/view_model/profile_cubit.dart' as _i821;
@@ -77,48 +75,32 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i361.Dio>(() => dioModule.dio(gh<_i763.DioFactory>()));
     gh.lazySingleton<_i515.AuthApiManager>(
         () => _i515.AuthApiManager(gh<_i361.Dio>()));
-    gh.lazySingleton<_i968.HomeApiManager>(
-        () => _i968.HomeApiManager(gh<_i361.Dio>()));
     gh.lazySingleton<_i592.ProfileApiManager>(
         () => _i592.ProfileApiManager(gh<_i361.Dio>()));
     gh.factory<_i2.ProfileRemoteDataSource>(() =>
         _i715.ProfileRemoteDataSourceImpl(
             profileApiManager: gh<_i592.ProfileApiManager>()));
-    gh.factory<_i753.HomeRemoteDataSource>(
-        () => _i1016.HomeRemoteDataSourceImpl(gh<_i968.HomeApiManager>()));
     gh.factory<_i249.AuthRemoteDataSource>(() =>
         _i1001.AuthRemoteDataSourceImpl(
             authApiManager: gh<_i515.AuthApiManager>()));
     gh.factory<_i265.ProfileRepository>(() => _i677.ProfileRepositoryImpl(
         profileRemoteDataSource: gh<_i2.ProfileRemoteDataSource>()));
-    gh.factory<_i97.HomeRepository>(
-        () => _i117.HomeRepositoryImpl(gh<_i753.HomeRemoteDataSource>()));
     gh.factory<_i721.GeminiCubit>(
         () => _i721.GeminiCubit(gh<_i265.ProfileRepository>()));
-    gh.factory<_i168.ExerciseUseCase>(
-        () => _i168.ExerciseUseCase(gh<_i97.HomeRepository>()));
     gh.factory<_i679.ProfileUseCase>(
         () => _i679.ProfileUseCase(gh<_i265.ProfileRepository>()));
-    gh.factory<_i659.UploadPhotoUseCase>(
-        () => _i659.UploadPhotoUseCase(gh<_i265.ProfileRepository>()));
     gh.factory<_i1056.AuthRepository>(() => _i313.AuthRepositoryImpl(
         authRemoteDataSource: gh<_i249.AuthRemoteDataSource>()));
-    gh.factory<_i810.ExerciseViewModel>(
-        () => _i810.ExerciseViewModel(gh<_i168.ExerciseUseCase>()));
+    gh.factory<_i821.ProfileCubit>(
+        () => _i821.ProfileCubit(gh<_i679.ProfileUseCase>()));
     gh.factory<_i606.EditProfileUseCase>(
         () => _i606.EditProfileUseCase(gh<_i1056.AuthRepository>()));
     gh.factory<_i322.SignupUseCase>(
         () => _i322.SignupUseCase(gh<_i1056.AuthRepository>()));
     gh.factory<_i97.LoginCubit>(
         () => _i97.LoginCubit(gh<_i1056.AuthRepository>()));
-    gh.factory<_i755.LogoutUseCase>(
-        () => _i755.LogoutUseCase(gh<_i1056.AuthRepository>()));
     gh.factory<_i401.ForgotPasswordCubit>(() =>
         _i401.ForgotPasswordCubit(authRepository: gh<_i1056.AuthRepository>()));
-    gh.factory<_i821.ProfileCubit>(() => _i821.ProfileCubit(
-          gh<_i679.ProfileUseCase>(),
-          gh<_i755.LogoutUseCase>(),
-        ));
     gh.factory<_i140.SignUpCubit>(
         () => _i140.SignUpCubit(gh<_i322.SignupUseCase>()));
     gh.factory<_i236.EditProfileCubit>(

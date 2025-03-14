@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../home/home_screen/view/home_screen.dart';
 import '../online_coach/view/robot_screen.dart';
+import '../workout/view/workout_screen.dart' show WorkoutScreen;
 import 'home_layout.dart';
 
 class MainPage extends StatefulWidget {
@@ -18,7 +19,7 @@ class _MainPageState extends State<MainPage> {
   final List<Widget> _screens = [
     HomeScreen(),
     RobotScreen(),
-    Scaffold(),
+    WorkoutScreen(),
     MainProfileScreen(),
   ];
 
