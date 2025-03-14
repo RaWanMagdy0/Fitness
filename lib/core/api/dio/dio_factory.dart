@@ -10,11 +10,20 @@ class DioFactory {
   Duration get _timeout => const Duration(seconds: 60);
 
   Dio createDio() {
-    final dio = Dio(
+    Dio dio = Dio();
+
+    dio.interceptors.clear();
+    dio.close(force: true);
+
+    dio = Dio(
       BaseOptions(
         baseUrl: ApiConstants.baseUrl,
         connectTimeout: _timeout,
         receiveTimeout: _timeout,
+        headers: {
+          "Cache-Control": "no-cache",
+          "Pragma": "no-cache",
+        },
         validateStatus: (status) =>
         status != null ? status == 200 || status == 201 : false,
       ),

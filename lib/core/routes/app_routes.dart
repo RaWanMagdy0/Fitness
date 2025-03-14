@@ -6,7 +6,6 @@ import '../../presentation/auth/forgot_password/cubit/forgot_password_cubit.dart
 import '../../presentation/auth/forgot_password/view/forgot_password_screen.dart';
 import '../../presentation/auth/forgot_password/view/reset_password_screen.dart';
 import '../../presentation/auth/forgot_password/view/verify_code_screen.dart';
-import '../../presentation/auth/home/view/home_screen.dart';
 import '../../presentation/auth/login/view/login_screen.dart' show LoginScreen;
 import '../../presentation/auth/login/view_model/login_cubit.dart';
 import '../../presentation/auth/sign_up/view/actvity_screen.dart';
@@ -19,15 +18,24 @@ import '../../presentation/auth/sign_up/view/weight_screen.dart';
 import '../../presentation/auth/sign_up/view_model/sign_up_cubit.dart';
 import '../../presentation/edit_profile/view/edit_profile_screen.dart'
     show EditProfileScreen;
-import '../../presentation/layout/home_layout.dart';
+import '../../presentation/exercise/view/exercise_screen.dart';
+import '../../presentation/home/view/home_screen.dart';
 import '../../presentation/layout/main_page.dart';
-import '../../presentation/edit_profile/view/edit_profile_screen.dart'
-    show EditProfileScreen;
 import '../../presentation/edit_profile/view_model/edit_profile_cubit.dart'
     show EditProfileCubit;
+import '../../presentation/meal/view/meal_details_screen.dart'
+    show MealDetailsScreen;
+import '../../presentation/meal/view_model/meal_details_cubit.dart'
+    show MealDetailsCubit;
+import '../../presentation/online_coach/view/chat_screen.dart';
+import '../../presentation/online_coach/view/robot_screen.dart';
+import '../../presentation/online_coach/view_model/smart_coach_cubit.dart';
 import '../../presentation/profile/view_model/profile_cubit.dart';
 import '../../presentation/splash/onboarding.dart';
 import '../../presentation/splash/splash_screen.dart';
+import '../../presentation/workout/view/workout_screen.dart' show WorkoutScreen;
+import '../../presentation/workout/view_model/workout_cubit.dart'
+    show WorkoutCubit;
 import '../di/di.dart';
 
 class AppRoutes {
@@ -49,6 +57,13 @@ class AppRoutes {
             child: GenderScreen(),
           ),
         );
+      case PageRouteName.workoutScreen:
+        return MaterialPageRoute(
+          builder: (context) => BlocProvider(
+            create: (context) => getIt<WorkoutCubit>(),
+            child: const WorkoutScreen(),
+          ),
+        );
       case PageRouteName.mainSignUp:
         return MaterialPageRoute(
           builder: (context) => BlocProvider.value(
@@ -67,6 +82,14 @@ class AppRoutes {
         return _handleMaterialPageRoute(widget: VerifyCodeScreen());
       case PageRouteName.resetPassword:
         return _handleMaterialPageRoute(widget: ResetPasswordScreen());
+      case PageRouteName.chatScreen:
+        return MaterialPageRoute(
+          builder: (context) => BlocProvider(
+            create: (context) => getIt<GeminiCubit>(),
+            child: ChatScreen(),
+          ),
+        );
+
       case PageRouteName.weightScreen:
         return MaterialPageRoute(
           builder: (context) => BlocProvider(
@@ -102,10 +125,23 @@ class AppRoutes {
             child: ActivityScreen(),
           ),
         );
+      case PageRouteName.mealDetailsScreen:
+        final args = setting.arguments as Map<String, dynamic>;
+        final String mealId = args['mealId'];
+        return MaterialPageRoute(
+          builder: (context) => BlocProvider(
+            create: (context) => getIt<MealDetailsCubit>(),
+            child: MealDetailsScreen(mealId: mealId),
+          ),
+        );
       case PageRouteName.onBoarding:
         return _handleMaterialPageRoute(widget: OnboardingScreen());
       case PageRouteName.homeScreen:
         return _handleMaterialPageRoute(widget: HomeScreen());
+      case PageRouteName.robotScreen:
+        return _handleMaterialPageRoute(widget: RobotScreen());
+      case PageRouteName.exerciseScreen:
+        return _handleMaterialPageRoute(widget: ExerciseScreen());
       case PageRouteName.mainProfileScreen:
         return MaterialPageRoute(
             builder: (context) => BlocProvider(

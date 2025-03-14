@@ -3,5 +3,6 @@ import '../../models/profile/user_model.dart';
 
 abstract class ProfileRemoteDataSource{
   Future<Result<UserModel?>> getUserData();
+  Future<Result<String?>> smartCoach(Map<String, dynamic> message);
 
 }

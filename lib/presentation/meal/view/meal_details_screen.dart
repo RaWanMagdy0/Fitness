@@ -1,0 +1,481 @@
+import 'package:fitness_app/core/styles/colors/app_colors.dart';
+import 'package:fitness_app/core/styles/fonts/app_fonts.dart';
+import 'package:fitness_app/core/utils/widget/custom%20scaffold.dart';
+import 'package:fitness_app/core/utils/widget/custom_arrow.dart';
+import 'package:fitness_app/presentation/meal/view_model/meal_details_cubit.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+class MealDetailsScreen extends StatefulWidget {
+  final String mealId;
+
+  const MealDetailsScreen({
+    Key? key,
+    required this.mealId,
+  }) : super(key: key);
+
+  @override
+  State<MealDetailsScreen> createState() => _MealDetailsScreenState();
+}
+
+class _MealDetailsScreenState extends State<MealDetailsScreen> with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 3, vsync: this);
+    context.read<MealDetailsCubit>().getMealDetails(widget.mealId);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomScaffold(
+      backgroundImage: "assets/images/home_background.png",
+      child: BlocBuilder<MealDetailsCubit, MealDetailsState>(
+        builder: (context, state) {
+          if (state is MealDetailsLoading) {
+            return const Center(
+              child: CircularProgressIndicator(color: AppColors.kOrange),
+            );
+          } else if (state is MealDetailsError) {
+            return Center(
+              child: Text(
+                state.errorMessage,
+                style: AppFonts.font16WhiteWeight500,
+                textAlign: TextAlign.center,
+              ),
+            );
+          } else if (state is MealDetailsSuccess) {
+            final meal = state.meal;
+            final nutritionalInfo = meal.getNutritionalInfo();
+
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Header with image
+                Stack(
+                  children: [
+                    // Meal Image
+                    SizedBox(
+                      width: double.infinity,
+                      height: 250.h,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(30.r),
+                          bottomRight: Radius.circular(30.r),
+                        ),
+                        child: Image.network(
+                          meal.strMealThumb ?? '',
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) =>
+                              Container(
+                                color: AppColors.kGray,
+                                child: Center(
+                                  child: Icon(
+                                    Icons.image_not_supported,
+                                    color: AppColors.kWhite,
+                                    size: 50.sp,
+                                  ),
+                                ),
+                              ),
+                        ),
+                      ),
+                    ),
+
+                    // Back button
+                    Positioned(
+                      top: 16.h,
+                      left: 16.w,
+                      child: GestureDetector(
+                        onTap: () => Navigator.pop(context),
+                        child: const CustomArrow(),
+                      ),
+                    ),
+
+                    // Gradient overlay at bottom
+                    Positioned(
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      child: Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 20.w,
+                          vertical: 20.h,
+                        ),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              Colors.transparent,
+                              Colors.black.withOpacity(0.8),
+                            ],
+                          ),
+                          borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(30.r),
+                            bottomRight: Radius.circular(30.r),
+                          ),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              meal.strMeal ?? 'Meal Name',
+                              style: AppFonts.font20WhiteWeight800,
+                            ),
+                            5.verticalSpace,
+                            Text(
+                              "${meal.strCategory ?? 'Category'} • ${meal.strArea ?? 'Area'}",
+                              style: AppFonts.font14WhiteWeight400,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+
+                10.verticalSpace,
+
+                // Nutritional info
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16.w),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      _buildNutritionItem(
+                        "${nutritionalInfo.energy} K",
+                        "Energy",
+                        AppColors.kOrange,
+                      ),
+                      _buildNutritionItem(
+                        "${nutritionalInfo.protein} G",
+                        "Protein",
+                        AppColors.kOrange,
+                      ),
+                      _buildNutritionItem(
+                        "${nutritionalInfo.carbs} G",
+                        "Carbs",
+                        AppColors.kOrange,
+                      ),
+                      _buildNutritionItem(
+                        "${nutritionalInfo.fat} G",
+                        "Fat",
+                        AppColors.kOrange,
+                      ),
+                    ],
+                  ),
+                ),
+
+                16.verticalSpace,
+
+                // Difficulty level tabs
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16.w),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      _buildDifficultyTab(
+                        "Beginner",
+                        state.selectedDifficulty == DifficultyLevel.beginner,
+                            () => context.read<MealDetailsCubit>().selectDifficultyLevel(DifficultyLevel.beginner),
+                      ),
+                      _buildDifficultyTab(
+                        "Intermediate",
+                        state.selectedDifficulty == DifficultyLevel.intermediate,
+                            () => context.read<MealDetailsCubit>().selectDifficultyLevel(DifficultyLevel.intermediate),
+                      ),
+                      _buildDifficultyTab(
+                        "Advanced",
+                        state.selectedDifficulty == DifficultyLevel.advanced,
+                            () => context.read<MealDetailsCubit>().selectDifficultyLevel(DifficultyLevel.advanced),
+                      ),
+                    ],
+                  ),
+                ),
+
+                16.verticalSpace,
+
+                // Content tabs
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16.w),
+                  child: TabBar(
+                    controller: _tabController,
+                    indicatorColor: AppColors.kOrange,
+                    indicatorSize: TabBarIndicatorSize.tab,
+                    labelColor: AppColors.kOrange,
+                    unselectedLabelColor: AppColors.kLightGrey,
+                    tabs: const [
+                      Tab(text: "Description"),
+                      Tab(text: "Video"),
+                      Tab(text: "Ingredients"),
+                    ],
+                  ),
+                ),
+
+                10.verticalSpace,
+
+                // Tab content
+                Expanded(
+                  child: TabBarView(
+                    controller: _tabController,
+                    children: [
+                      // Description Tab
+                      _buildDescriptionTab(meal),
+
+                      // Video Tab
+                      _buildVideoTab(meal),
+
+                      // Ingredients Tab
+                      _buildIngredientsTab(meal),
+                    ],
+                  ),
+                ),
+              ],
+            );
+          }
+
+          return const SizedBox();
+        },
+      ),
+    );
+  }
+
+  Widget _buildNutritionItem(String value, String label, Color color) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
+      decoration: BoxDecoration(
+        color: AppColors.kBlackBG.withOpacity(0.6),
+        borderRadius: BorderRadius.circular(20.r),
+      ),
+      child: Column(
+        children: [
+          Text(
+            value,
+            style: AppFonts.font14WhiteWeight600.copyWith(
+              color: AppColors.kWhite,
+            ),
+          ),
+          Text(
+            label,
+            style: AppFonts.font12OrangeWeight400.copyWith(
+              color: color,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDifficultyTab(String text, bool isSelected, VoidCallback onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+        decoration: BoxDecoration(
+          color: isSelected ? AppColors.kOrange : Colors.transparent,
+          borderRadius: BorderRadius.circular(20.r),
+          border: Border.all(
+            color: isSelected ? AppColors.kOrange : AppColors.kLightGrey,
+          ),
+        ),
+        child: Text(
+          text,
+          style: AppFonts.font14WhiteWeight400.copyWith(
+            color: isSelected ? AppColors.kWhite : AppColors.kLightGrey,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDescriptionTab(final meal) {
+    return SingleChildScrollView(
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
+      child: Text(
+        meal.strInstructions ?? 'No description available',
+        style: AppFonts.font14WhiteWeight400,
+      ),
+    );
+  }
+
+  Widget _buildVideoTab(final meal) {
+    final videoUrl = meal.strYoutube;
+
+    if (videoUrl == null || videoUrl.isEmpty) {
+      return Center(
+        child: Text(
+          'No video available',
+          style: AppFonts.font16WhiteWeight500,
+        ),
+      );
+    }
+
+    final videoId = _getYoutubeVideoId(videoUrl);
+    if (videoId == null) {
+      return Center(
+        child: Text(
+          'Invalid YouTube URL',
+          style: AppFonts.font16WhiteWeight500,
+        ),
+      );
+    }
+
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          // Video thumbnail with play button
+          Stack(
+            alignment: Alignment.center,
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(16.r),
+                child: AspectRatio(
+                  aspectRatio: 16 / 9,
+                  child: Image.network(
+                    'https://img.youtube.com/vi/$videoId/hqdefault.jpg',
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) => Container(
+                      color: AppColors.kBlackBG,
+                      child: Center(
+                        child: Icon(
+                          Icons.image_not_supported,
+                          color: AppColors.kWhite,
+                          size: 50.sp,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Container(
+                width: 60.w,
+                height: 60.h,
+                decoration: BoxDecoration(
+                  color: AppColors.kOrange,
+                  shape: BoxShape.circle,
+                ),
+                child: IconButton(
+                  icon: Icon(
+                    Icons.play_arrow,
+                    color: AppColors.kWhite,
+                    size: 36.sp,
+                  ),
+                  onPressed: () {
+                    _openYoutubeVideo(videoId);
+                  },
+                ),
+              ),
+            ],
+          ),
+          16.verticalSpace,
+          Text(
+            'Tap to watch the video tutorial',
+            style: AppFonts.font14WhiteWeight400,
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _openYoutubeVideo(String videoId) async {
+    // Try these different URL formats in this order
+    final urls = [
+      'youtube://www.youtube.com/watch?v=$videoId',   // YouTube app
+      'https://www.youtube.com/watch?v=$videoId',     // HTTPS
+      'https://youtu.be/$videoId',                    // Short URL
+    ];
+
+    bool launched = false;
+    for (final url in urls) {
+      try {
+        final Uri uri = Uri.parse(url);
+        launched = await launchUrl(
+          uri,
+          mode: LaunchMode.externalApplication,
+        );
+        if (launched) break;
+      } catch (e) {
+        print('Error launching $url: $e');
+      }
+    }
+
+    // Final fallback - in-app browser
+    if (!launched) {
+      try {
+        final Uri uri = Uri.parse('https://www.youtube.com/watch?v=$videoId');
+        await launchUrl(
+          uri,
+          mode: LaunchMode.inAppWebView,
+          webViewConfiguration: const WebViewConfiguration(
+            enableJavaScript: true,
+            enableDomStorage: true,
+          ),
+        );
+      } catch (e) {
+        print('Final fallback error: $e');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Could not open video. Please try again later.')),
+        );
+      }
+    }
+  }
+
+  String? _getYoutubeVideoId(String url) {
+    RegExp regExp = RegExp(
+      r'(?:youtube\.com\/(?:[^\/\n\s]+\/\s*[^\/\n\s]+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})',
+    );
+
+    final match = regExp.firstMatch(url);
+    return match?.group(1);
+  }
+
+  Widget _buildIngredientsTab(final meal) {
+    final ingredients = meal.getIngredientsWithMeasures();
+
+    if (ingredients.isEmpty) {
+      return Center(
+        child: Text(
+          'No ingredients available',
+          style: AppFonts.font16WhiteWeight500,
+        ),
+      );
+    }
+
+    return ListView.builder(
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
+      itemCount: ingredients.length,
+      itemBuilder: (context, index) {
+        final ingredient = ingredients[index];
+        return Padding(
+          padding: EdgeInsets.only(bottom: 12.h),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                ingredient.ingredient,
+                style: AppFonts.font12BlackWeight400,
+              ),
+              Text(
+                ingredient.measure,
+                style: AppFonts.font14LightOrangeWeight400,
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+}
