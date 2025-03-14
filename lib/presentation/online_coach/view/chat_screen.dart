@@ -14,7 +14,8 @@ import '../view_model/smart_coach_state.dart';
 import '../widget/object_box.dart';
 
 class ChatScreen extends StatefulWidget {
-  const ChatScreen({super.key});
+ final String? title;
+  const ChatScreen({super.key, this.title});
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -29,15 +30,13 @@ class _ChatScreenState extends State<ChatScreen> {
   void initState() {
     super.initState();
     viewModel = context.read<GeminiCubit>();
-
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final args = ModalRoute.of(context)?.settings.arguments;
-      if (args != null && args is String) {
-        print("🔄 Loading chat for title: $args");
-        print("Available chat titles: ${viewModel.getChatTitles()}");
-        viewModel.loadChatByTitle(args);
+      if (widget.title != null && widget.title!.isNotEmpty) {
+        context.read<GeminiCubit>().loadChatByTitle(widget.title!);
+      } else {
       }
       updateChatTitles();
+
     });
   }
   void updateChatTitles() {
@@ -180,7 +179,6 @@ class _ChatScreenState extends State<ChatScreen> {
                                 BlocBuilder<ProfileCubit, ProfileState>(
                                   builder: (context, state) {
                                     final userImage = context.watch<ProfileCubit>().userImage;
-                                    print("Current user image: $userImage");
                                     return CircleAvatar(
                                       radius: 24,
                                       backgroundColor: Colors.transparent,

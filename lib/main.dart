@@ -60,7 +60,7 @@ class MyApp extends StatelessWidget {
           supportedLocales: S.delegate.supportedLocales,
           debugShowCheckedModeBanner: false,
           theme: AppTheme.appTheme,
-          initialRoute: PageRouteName.exerciseScreen,
+          initialRoute: PageRouteName.layoutScreen,
           onGenerateRoute: AppRoutes.onGenerateRoute,
         );
       },

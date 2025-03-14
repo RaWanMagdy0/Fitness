@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:fitness_app/presentation/edit_profile/view/widgets/custom_profile_field.dart' show CustomProfileField;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -36,8 +35,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
-  final ImagePicker _picker = ImagePicker();  // Add this
-  File? _imageFile;  // Add this
+  final ImagePicker _picker = ImagePicker();
+  File? _imageFile;
 
   String _weight = '90 KG';
   String _goal = 'Gain Weight';

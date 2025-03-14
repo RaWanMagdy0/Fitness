@@ -2,9 +2,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../../core/styles/colors/app_colors.dart';
-import '../../../../core/styles/fonts/app_fonts.dart';
-import '../../../../core/utils/widget/shimmer_loading_widget.dart';
+import '../../../../../core/styles/colors/app_colors.dart';
+import '../../../../../core/styles/fonts/app_fonts.dart';
+import '../../../../../core/utils/widget/shimmer_loading_widget.dart';
 
 class MuscleCard extends StatelessWidget {
   final String title;
@@ -12,11 +12,11 @@ class MuscleCard extends StatelessWidget {
   final VoidCallback onTap;
 
   const MuscleCard({
-    Key? key,
+    super.key,
     required this.title,
     required this.imagePath,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

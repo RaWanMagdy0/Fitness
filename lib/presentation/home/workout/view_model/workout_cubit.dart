@@ -1,10 +1,8 @@
-
 import 'package:injectable/injectable.dart';
-
-import '../../../core/api/api_result.dart';
-import '../../../core/base/base_view_model.dart';
-import '../../../domain/use_case/workout/get_muscle_group_details_use_case.dart' show GetMuscleGroupDetailsUseCase;
-import '../../../domain/use_case/workout/get_muscle_groups_use_case.dart' show GetMuscleGroupsUseCase;
+import '../../../../core/api/api_result.dart';
+import '../../../../core/base/base_view_model.dart';
+import '../../../../domain/use_case/workout/get_muscle_group_details_use_case.dart';
+import '../../../../domain/use_case/workout/get_muscle_groups_use_case.dart';
 import 'workout_state.dart';
 
 @injectable
@@ -15,9 +13,9 @@ class WorkoutCubit extends BaseViewModel<WorkoutState> {
   String? selectedMuscleGroupId;
 
   WorkoutCubit(
-      this._getMuscleGroupsUseCase,
-      this._getMuscleGroupDetailsUseCase,
-      ) : super(WorkoutInitial());
+    this._getMuscleGroupsUseCase,
+    this._getMuscleGroupDetailsUseCase,
+  ) : super(WorkoutInitial());
 
   Future<void> getMuscleGroups() async {
     emit(GetMuscleGroupsLoading());
@@ -49,7 +47,6 @@ class WorkoutCubit extends BaseViewModel<WorkoutState> {
         if (result.data != null) {
           emit(GetMuscleDetailsSuccess(
             response: result.data!,
-            selectedGroupId: muscleGroupId,
           ));
         } else {
           emit(GetMuscleDetailsError(errorMessage: "No details found"));

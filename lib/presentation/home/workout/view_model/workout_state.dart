@@ -1,4 +1,4 @@
-import '../../../data/models/workout/muscle_model.dart';
+import '../../../../data/models/workout/muscle_model.dart';
 
 abstract class WorkoutState {}
 
@@ -24,11 +24,9 @@ class GetMuscleDetailsLoading extends WorkoutState {}
 
 class GetMuscleDetailsSuccess extends WorkoutState {
   final MuscleDetailResponse response;
-  final String selectedGroupId;
 
   GetMuscleDetailsSuccess({
     required this.response,
-    required this.selectedGroupId,
   });
 }
 

@@ -2,17 +2,16 @@ import 'package:fitness_app/core/styles/colors/app_colors.dart';
 import 'package:fitness_app/core/styles/fonts/app_fonts.dart';
 import 'package:fitness_app/core/utils/functions/dialogs/app_dialogs.dart';
 import 'package:fitness_app/core/utils/widget/custom%20scaffold.dart';
-import 'package:fitness_app/presentation/workout/view/widgets/muscle_card.dart';
-import 'package:fitness_app/presentation/workout/view_model/workout_cubit.dart';
-import 'package:fitness_app/presentation/workout/view_model/workout_state.dart';
+import 'package:fitness_app/presentation/home/workout/view/widgets/muscle_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
-
-import '../../../core/di/di.dart';
-import '../../../core/styles/images/app_images.dart';
-import '../../../data/models/workout/muscle_model.dart';
+import '../../../../core/di/di.dart';
+import '../../../../core/styles/images/app_images.dart';
+import '../../../../data/models/workout/muscle_model.dart';
+import '../view_model/workout_cubit.dart';
+import '../view_model/workout_state.dart';
 import 'widgets/category_chip.dart';
 
 class WorkoutScreen extends StatefulWidget {

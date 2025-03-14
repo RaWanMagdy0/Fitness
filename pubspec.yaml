@@ -64,6 +64,7 @@ dependencies:
   permission_handler: ^11.0.1
   share_plus: ^10.1.4
   url_launcher: ^6.3.1
+  image_picker: ^1.1.2
 
 
 

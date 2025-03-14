@@ -2,8 +2,8 @@ import 'package:fitness_app/presentation/profile/view/main_profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../home/home_screen/view/home_screen.dart';
+import '../home/workout/view/workout_screen.dart';
 import '../online_coach/view/robot_screen.dart';
-import '../workout/view/workout_screen.dart' show WorkoutScreen;
 import 'home_layout.dart';
 
 class MainPage extends StatefulWidget {

@@ -125,13 +125,14 @@ class RobotScreen extends StatelessWidget {
                       separatorBuilder: (context, index) => Divider(color: Colors.white24, thickness: 1),
                       itemBuilder: (context, index) {
                         return ListTile(
-                          leading: Icon(Icons.chat, color: AppColors.kOrange),
+                          leading: Icon(Icons.arrow_back_ios, color: AppColors.kOrange),
                           title: Text(
                             previousConversations[index],
                             style: TextStyle(color: Colors.white),
                           ),
                             onTap: () {
                               Navigator.pop(context);
+
                               Navigator.pushNamed(
                                 context,
                                 PageRouteName.chatScreen,

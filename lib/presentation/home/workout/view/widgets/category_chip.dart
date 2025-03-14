@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../../core/styles/colors/app_colors.dart';
-import '../../../../core/styles/fonts/app_fonts.dart';
+import '../../../../../core/styles/colors/app_colors.dart';
+import '../../../../../core/styles/fonts/app_fonts.dart';
 
 class CategoryChip extends StatelessWidget {
   final String label;
@@ -10,11 +10,11 @@ class CategoryChip extends StatelessWidget {
   final VoidCallback onTap;
 
   const CategoryChip({
-    Key? key,
+    super.key,
     required this.label,
     required this.isSelected,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

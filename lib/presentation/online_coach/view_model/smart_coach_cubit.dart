@@ -22,6 +22,7 @@ class GeminiCubit extends BaseViewModel<GeminiState> {
 
   GeminiCubit(this.profileRepository) : super(GeminiInitialState()) {
     _initObjectBox();
+   // sendWelcomeMessage();
   }
 
   Future<void> _initObjectBox() async {
@@ -107,29 +108,39 @@ class GeminiCubit extends BaseViewModel<GeminiState> {
   }
 
   void loadChatByTitle(String title) {
-    if (!_isObjectBoxReady) return;
+    if (!_isObjectBoxReady) {
+      Future.delayed(Duration(seconds: 1), () {
+        if (_isObjectBoxReady) {
+          loadChatByTitle(title);
+        } else {
+        }
+      });
+      return;
+    }
 
-    print(" Loading chat for title: $title");
+    print("🔍 Loading chat for title: $title");
     ChatHistory? chatHistory = objectBox!.getChatHistoryByTitle(title);
 
     if (chatHistory == null) {
-      print(" No chat history found for: $title");
+      print("❌ No chat history found for: $title");
       return;
     }
+
     List<Message> chatMessages = chatHistory.messages.toList();
+    print("📩 Found ${chatMessages.length} messages for chat: $title");
 
     if (chatMessages.isEmpty) {
-      print(" No messages found for chat history: $title");
+      print("⚠️ No messages found for chat history: $title");
       return;
     }
+
     messages.clear();
     messages.addAll(chatMessages.map((msg) => {
       "sender": msg.sender,
       "text": msg.text,
     }));
 
-    print(" Messages Loaded: ${messages.length}");
-
+    print("✅ Messages Loaded: ${messages.length}");
     emit(GeminiSuccessState(messages: List.from(messages)));
   }
 
@@ -189,4 +200,15 @@ class GeminiCubit extends BaseViewModel<GeminiState> {
     _speech.stop();
     emit(GeminiRecordingState(isListening: false, recordedText: recordedText));
   }
+  /*********
+  void sendWelcomeMessage() {
+    if (messages.isEmpty) {
+      messages.add({
+        "sender": "gemini",
+        "text": "Hello! I'm Gemini, your fitness assistant. How can I help you today?"
+      });
+      emit(GeminiSuccessState(messages: List.from(messages)));
+    }
+  }
+*********/
 }

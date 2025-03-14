@@ -1,41 +1,20 @@
+import 'package:fitness_app/core/styles/colors/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../../core/di/di.dart';
-import '../../../../core/styles/colors/app_colors.dart';
 import '../../../../core/styles/images/app_images.dart';
-import '../view_model/home_cubit.dart';
 
-class UpcomingCard extends StatefulWidget {
-  const UpcomingCard({
-    super.key,
-  });
-
-  @override
-  State<UpcomingCard> createState() => _UpcomingCardState();
-}
-class _UpcomingCardState extends State<UpcomingCard> {
-  int selectedIndex = 0;
-  late HomeCubit viewModel;
-
-  @override
-  void initState() {
-    super.initState();
-    viewModel = getIt.get<HomeCubit>();
-    viewModel.getMuscleGroups();
-  }
-
+class RecommFoodCard extends StatelessWidget {
+  const RecommFoodCard({super.key});
 
   @override
   Widget build(BuildContext context) {
-
-            return SizedBox(
-      height: 110.h,
+    return SizedBox(
+      height: 140.h,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
-        itemCount: 4,
+        itemCount: 3,
         itemBuilder: (context, index) {
-          return buildCardWidget(
-              "running" ?? "", AppImages.chestExerciseImage);
+          return buildCardWidget("dinner", AppImages.runningImage);
         },
         separatorBuilder: (BuildContext context, int index) {
           return SizedBox(width: 15.w);
@@ -58,8 +37,8 @@ buildCardWidget(String title, String imagePath) {
           borderRadius: BorderRadius.circular(20.r),
           child: Image.asset(
             imagePath,
-            width: 90.w,
-            height: 90.h,
+            width: 110.w,
+            height: 110.h,
             fit: BoxFit.cover,
           ),
         ),
