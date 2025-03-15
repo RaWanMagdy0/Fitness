@@ -18,4 +18,5 @@ class AppColors {
   static const bottomNavColor = Color(0xFF242424);
   static const kBlackBG = Color(0xFF2D2D2D);
   static const brownColor = Color(0xFFFF6A00);
+  static const kFont2Gray = Color(0xFFD3D3D3);
 }

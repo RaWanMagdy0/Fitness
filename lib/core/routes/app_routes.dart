@@ -23,8 +23,11 @@ import '../../presentation/home/view/home_screen.dart';
 import '../../presentation/layout/main_page.dart';
 import '../../presentation/edit_profile/view_model/edit_profile_cubit.dart'
     show EditProfileCubit;
-import '../../presentation/meal/view/meal_details_screen.dart' show MealDetailsScreen;
-import '../../presentation/meal/view_model/meal_details_cubit.dart' show MealDetailsCubit;
+import '../../presentation/meal/view/meals_screen.dart';
+import '../../presentation/meal/view/meal_details_screen.dart'
+    show MealDetailsScreen;
+import '../../presentation/meal/view_model/meal_details_cubit.dart'
+    show MealDetailsCubit;
 import '../../presentation/online_coach/view/chat_screen.dart';
 import '../../presentation/online_coach/view/robot_screen.dart';
 import '../../presentation/online_coach/view_model/smart_coach_cubit.dart';
@@ -126,9 +129,9 @@ class AppRoutes {
         return _handleMaterialPageRoute(widget: OnboardingScreen());
       case PageRouteName.homeScreen:
         return _handleMaterialPageRoute(widget: HomeScreen());
-        case PageRouteName.robotScreen:
+      case PageRouteName.robotScreen:
         return _handleMaterialPageRoute(widget: RobotScreen());
-        case PageRouteName.exerciseScreen:
+      case PageRouteName.exerciseScreen:
         return _handleMaterialPageRoute(widget: ExerciseScreen());
       case PageRouteName.mainProfileScreen:
         return MaterialPageRoute(
@@ -146,6 +149,9 @@ class AppRoutes {
 
       case PageRouteName.layoutScreen:
         return _handleMaterialPageRoute(widget: const MainPage());
+
+      case PageRouteName.mealsScreen:
+        return _handleMaterialPageRoute(widget: MealsScreen());
       default:
         return _handleMaterialPageRoute(
           widget: const Scaffold(
