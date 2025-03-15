@@ -1,5 +1,4 @@
 import 'package:fitness_app/core/routes/page_route_name.dart';
-import 'package:fitness_app/presentation/home/home_screen/view_model/home_cubit.dart';
 import 'package:fitness_app/presentation/profile/view/main_profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -171,6 +170,9 @@ class AppRoutes {
 
       case PageRouteName.layoutScreen:
         return _handleMaterialPageRoute(widget: const MainPage());
+
+      case PageRouteName.mealsScreen:
+        return _handleMaterialPageRoute(widget: MealsScreen());
       default:
         return _handleMaterialPageRoute(
           widget: const Scaffold(

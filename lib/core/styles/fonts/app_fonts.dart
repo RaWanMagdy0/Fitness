@@ -201,4 +201,15 @@ class AppFonts {
     decorationColor: AppColors.kBlack,
   );
 
+  static TextStyle font12WhiteWeight700 = TextStyle(
+    fontSize: 10.sp,
+    color: AppColors.kFont2Gray,
+    fontWeight: FontWeight.w700,
+  );
+
+  static TextStyle font16WhiteWeight700 = TextStyle(
+    fontSize: 15.sp,
+    color: AppColors.kWhite,
+    fontWeight: FontWeight.w700,
+  );
 }
