@@ -61,10 +61,10 @@ abstract class AuthApiManager {
 
   @PUT(ApiConstants.editProfile)
   Future<EditProfileResponseModel> editProfile(
-
-  @GET(ApiConstants.logout)
-  Future<String?> logout(@Header("Authorization") String token);
       @Body() EditProfileRequestModel requestModel,
       [@Extras() Options? options]
       );
+
+  @GET(ApiConstants.logout)
+  Future<String?> logout(@Header("Authorization") String token);
 }

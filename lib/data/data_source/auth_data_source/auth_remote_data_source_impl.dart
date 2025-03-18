@@ -61,6 +61,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       return response.message;
     });
   }
+
   @override
   Future<Result<EditProfileResponseModel>> editProfile(
       EditProfileRequestModel requestModel) {
@@ -125,17 +126,22 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }
 
   @override
-  Future<Result<String?>> logout() async {
-    return await executeApiCall<String?>(() async {
-      var token = await TokenManager.getToken();
-      if (token == null || token.isEmpty) {
-        throw Exception("Token is missing. Please try again.");
-      }
-      token = 'Bearer $token';
-      String? message = await authApiManager.logout(token);
-      return message;
+  Future<Result<String?>> logout() {
+    return executeApiCall<String?>(() async {
+      final token = await _getToken();
+      await _dio.get(
+        'api/v1/auth/logout',
+        options: Options(
+          headers: {
+            AppConst.authHeaderTokenKey: token,
+          },
+        ),
+      );
+      await TokenManager.deleteToken();
+      return "Logged out successfully";
     });
   }
+
   Future<String> _getToken() async {
     var token = await TokenManager.getToken();
     if (token == null || token.isEmpty) {
@@ -143,5 +149,4 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     }
     return 'Bearer $token';
   }
-}
 }

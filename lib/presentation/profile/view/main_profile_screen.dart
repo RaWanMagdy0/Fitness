@@ -37,8 +37,24 @@ class _MainProfileScreenState extends State<MainProfileScreen> {
   Widget build(BuildContext context) {
     final local = S.of(context);
     var provider = Provider.of<LocalProvider>(context);
-    return BlocBuilder<ProfileCubit, ProfileState>(
+    return BlocConsumer<ProfileCubit, ProfileState>(
         bloc: viewModel,
+        listener: (context, state) {
+          if (state is LogoutSuccessState) {
+            AppDialogs.showHideDialog(context);
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              PageRouteName.login,
+                  (route) => false,
+            );
+          } else if (state is LogoutErrorState) {
+            AppDialogs.showHideDialog(context);
+            AppDialogs.showErrorDialog(
+              context: context,
+              errorMassage: state.message ?? "Logout failed",
+            );
+          }
+        },
         builder: (context, state) {
           if (state is GetUserDataLoadingState) {
             return Center(
@@ -69,9 +85,9 @@ class _MainProfileScreenState extends State<MainProfileScreen> {
                           100.horizontalSpace,
                           Center(
                               child: Text(
-                            local.profile,
-                            style: AppFonts.font24WhiteWeight600,
-                          )),
+                                local.profile,
+                                style: AppFonts.font24WhiteWeight600,
+                              )),
                         ],
                       ),
                     ),

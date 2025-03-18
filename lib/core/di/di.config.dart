@@ -156,19 +156,17 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i606.EditProfileUseCase(gh<_i1056.AuthRepository>()));
     gh.factory<_i322.SignupUseCase>(
         () => _i322.SignupUseCase(gh<_i1056.AuthRepository>()));
+    gh.factory<_i11.EditProfileUseCase>(
+        () => _i11.EditProfileUseCase(gh<_i1056.AuthRepository>()));
     gh.factory<_i97.LoginCubit>(
         () => _i97.LoginCubit(gh<_i1056.AuthRepository>()));
     gh.factory<_i755.LogoutUseCase>(
         () => _i755.LogoutUseCase(gh<_i1056.AuthRepository>()));
-    gh.factory<_i352.WorkoutCubit>(() => _i352.WorkoutCubit(
+    gh.factory<_i915.HomeCubit>(() => _i915.HomeCubit(
           gh<_i789.GetMuscleGroupsUseCase>(),
           gh<_i473.GetMuscleGroupDetailsUseCase>(),
         ));
-    gh.factory<_i915.HomeCubit>(() => _i915.HomeCubit(
-
-    gh.factory<_i11.EditProfileUseCase>(
-        () => _i11.EditProfileUseCase(gh<_i1056.AuthRepository>()));
-    gh.factory<_i638.WorkoutCubit>(() => _i638.WorkoutCubit(
+    gh.factory<_i352.WorkoutCubit>(() => _i352.WorkoutCubit(
           gh<_i789.GetMuscleGroupsUseCase>(),
           gh<_i473.GetMuscleGroupDetailsUseCase>(),
         ));
@@ -179,6 +177,7 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i821.ProfileCubit>(() => _i821.ProfileCubit(
           gh<_i679.ProfileUseCase>(),
           gh<_i755.LogoutUseCase>(),
+          gh<_i659.UploadPhotoUseCase>(),
         ));
     gh.factory<_i140.SignUpCubit>(
         () => _i140.SignUpCubit(gh<_i322.SignupUseCase>()));

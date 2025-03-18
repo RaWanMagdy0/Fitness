@@ -5,7 +5,7 @@ import '../../repository/auth_repository/auth_repository.dart';
 
 @injectable
 class LogoutUseCase {
-  AuthRepository authRepository;
+  final AuthRepository authRepository;
 
   LogoutUseCase(this.authRepository);
 
