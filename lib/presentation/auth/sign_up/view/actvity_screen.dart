@@ -21,7 +21,7 @@ import '../view_model/sign_up_cubit.dart';
 import '../widgets/custom_indecator.dart';
 
 class ActivityScreen extends StatefulWidget {
-  const ActivityScreen({Key? key}) : super(key: key);
+  const ActivityScreen({super.key});
 
   @override
   _ActivityScreenState createState() => _ActivityScreenState();
@@ -32,7 +32,6 @@ class _ActivityScreenState extends State<ActivityScreen> {
   bool isFromEditProfile = false;
   bool isLoading = true;
 
-  // Map between displayable and stored values
   final Map<String, String> _activityMap = {
     'level1': 'Rookie',
     'level2': 'Beginner',
@@ -41,16 +40,13 @@ class _ActivityScreenState extends State<ActivityScreen> {
     'level5': 'Expert'
   };
 
-  // Reverse map for looking up keys by values
   late final Map<String, String> _reverseActivityMap;
 
   @override
   void initState() {
     super.initState();
-    // Initialize reverse map
     _reverseActivityMap = Map.fromEntries(_activityMap.entries.map((e) => MapEntry(e.value, e.key)));
 
-    // We need to delay this until the context is fully available
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _checkSourceAndLoadData();
     });
@@ -58,7 +54,6 @@ class _ActivityScreenState extends State<ActivityScreen> {
 
   Future<void> _checkSourceAndLoadData() async {
     try {
-      // Check the current route to determine if coming from edit profile
       final route = ModalRoute.of(context);
       final args = route?.settings.arguments;
 
@@ -86,7 +81,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
       }
 
       if (isFromEditProfile) {
-        // Try to get data from profile cubit
+
         try {
           final profileCubit = getIt<ProfileCubit>();
           final state = profileCubit.state;
@@ -111,7 +106,6 @@ class _ActivityScreenState extends State<ActivityScreen> {
             return;
           }
         } catch (e) {
-          print("Error accessing profile data: $e");
         }
       }
 
@@ -120,7 +114,6 @@ class _ActivityScreenState extends State<ActivityScreen> {
         isLoading = false;
       });
     } catch (e) {
-      print("Error loading activity data: $e");
       setState(() {
         isLoading = false;
       });
@@ -183,7 +176,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                   style: AppFonts.font20WhiteWeight800,
                   textAlign: TextAlign.start,
                 ),
-                32.verticalSpace,
+                65.verticalSpace,
                 ValueListenableBuilder<String?>(
                   valueListenable: _selectedActivityLevel,
                   builder: (context, selectedValue, child) {
@@ -287,7 +280,6 @@ class _ActivityScreenState extends State<ActivityScreen> {
                               );
                               signUpCubit.signUp(requestBody);
                             } catch (e) {
-                              print("Error accessing SignUpCubit: $e");
                               Navigator.pushNamed(context, PageRouteName.mainSignUp);
                             }
                           }
@@ -341,7 +333,6 @@ class _ActivityScreenState extends State<ActivityScreen> {
                 ),
               );
             } catch (e) {
-              print("No SignUpCubit available, using basic scaffold: $e");
             }
           }
 
