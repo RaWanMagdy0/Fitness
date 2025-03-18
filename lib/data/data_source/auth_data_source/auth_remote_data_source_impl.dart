@@ -16,13 +16,32 @@ import '../../models/forgot_password/request/verify_code_request_model.dart'
     show VerifyCodeRequestModel;
 import '../../models/login/request/login_request_model.dart'
     show LoginRequestModel;
+import 'package:dio/dio.dart';
+import '../../../core/local/token_manger.dart';
+import '../../../core/utils/const/app_const.dart';
+import '../../models/edit_profile/edit_profile_request_model.dart';
+import '../../models/edit_profile/edit_profile_response_model.dart';
+import '../../models/forgot_password/request/forgot_password_request_model.dart';
+import '../../models/forgot_password/request/reset_password_request_model.dart';
+import '../../models/forgot_password/request/verify_code_request_model.dart';
+import '../../models/login/request/login_request_model.dart';
 import 'auth_remote_data_source.dart';
 
 @Injectable(as: AuthRemoteDataSource)
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   final AuthApiManager authApiManager;
+  final Dio _dio;  // Add direct dio access for editProfile
 
-  AuthRemoteDataSourceImpl({required this.authApiManager});
+  AuthRemoteDataSourceImpl({required this.authApiManager})
+      : _dio = Dio(BaseOptions(
+    baseUrl: 'https://fitness.elevateegy.com/',
+    connectTimeout: Duration(seconds: 60),
+    receiveTimeout: Duration(seconds: 60),
+    headers: {
+      "Cache-Control": "no-cache",
+      "Pragma": "no-cache",
+    },
+  ));
 
   @override
   Future<Result<String?>> signUp(SignupRequestBody signupRequestBody) {
@@ -46,11 +65,39 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<Result<EditProfileResponseModel>> editProfile(
       EditProfileRequestModel requestModel) {
     return executeApiCall<EditProfileResponseModel>(() async {
-      var token = await _getToken();
-      final response = await authApiManager.editProfile(requestModel, token);
-      return response;
+      final token = await TokenManager.getToken();
+      if (token == null || token.isEmpty) {
+        throw DioException(
+          requestOptions: RequestOptions(path: ''),
+          type: DioExceptionType.cancel,
+          message: "Authorization token is missing. Please log in again.",
+        );
+      }
+
+      final response = await _dio.put(
+        'api/v1/auth/editProfile',
+        data: requestModel.toJson(),
+        options: Options(
+          headers: {
+            AppConst.authHeaderTokenKey: 'Bearer $token',
+            'Content-Type': 'application/json',
+          },
+        ),
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return EditProfileResponseModel.fromJson(response.data);
+      } else {
+        throw DioException(
+          requestOptions: RequestOptions(path: 'api/v1/auth/editProfile'),
+          response: response,
+          type: DioExceptionType.badResponse,
+          message: "Failed to update profile",
+        );
+      }
     });
   }
+
   @override
   Future<Result<String?>> forgotPassword(
       ForgotPasswordRequestModel requestModel) {
@@ -96,4 +143,5 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     }
     return 'Bearer $token';
   }
+}
 }

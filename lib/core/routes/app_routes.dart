@@ -17,20 +17,17 @@ import '../../presentation/auth/sign_up/view/height_screen.dart';
 import '../../presentation/auth/sign_up/view/main_sign_up_screen.dart';
 import '../../presentation/auth/sign_up/view/weight_screen.dart';
 import '../../presentation/auth/sign_up/view_model/sign_up_cubit.dart';
-import '../../presentation/edit_profile/view/edit_profile_screen.dart'
-    show EditProfileScreen;
+import '../../presentation/edit_profile/view/edit_profile_screen.dart';
 import '../../presentation/home/exercise_screen/view/exercise_screen.dart';
 import '../../presentation/home/exercise_screen/view_model/exercise_view_model.dart';
 import '../../presentation/home/home_screen/view/home_screen.dart';
 import '../../presentation/home/workout/view/workout_screen.dart';
 import '../../presentation/home/workout/view_model/workout_cubit.dart';
+import '../../presentation/edit_profile/view/edit_profile_screen.dart';
+import '../../presentation/exercise/view/exercise_screen.dart';
+import '../../presentation/home/view/home_screen.dart';
 import '../../presentation/layout/main_page.dart';
-import '../../presentation/edit_profile/view_model/edit_profile_cubit.dart'
-    show EditProfileCubit;
-import '../../presentation/meal/view/meal_details_screen.dart'
-    show MealDetailsScreen;
-import '../../presentation/meal/view_model/meal_details_cubit.dart'
-    show MealDetailsCubit;
+import '../../presentation/edit_profile/view_model/edit_profile_cubit.dart';
 import '../../presentation/online_coach/view/chat_screen.dart';
 import '../../presentation/online_coach/view/robot_screen.dart';
 import '../../presentation/online_coach/view_model/smart_coach_cubit.dart';
@@ -44,6 +41,7 @@ class AppRoutes {
     switch (setting.name) {
       case PageRouteName.splashscreen:
         return _handleMaterialPageRoute(widget: SplashScreen());
+
       case PageRouteName.login:
         return MaterialPageRoute(
           builder: (context) => BlocProvider(
@@ -51,6 +49,7 @@ class AppRoutes {
             child: LoginScreen(),
           ),
         );
+
       case PageRouteName.genderSignUp:
         return MaterialPageRoute(
           builder: (context) => BlocProvider(
@@ -58,13 +57,7 @@ class AppRoutes {
             child: GenderScreen(),
           ),
         );
-      case PageRouteName.workoutScreen:
-        return MaterialPageRoute(
-          builder: (context) => BlocProvider(
-            create: (context) => getIt<WorkoutCubit>(),
-            child: const WorkoutScreen(),
-          ),
-        );
+
       case PageRouteName.mainSignUp:
         return MaterialPageRoute(
           builder: (context) => BlocProvider.value(
@@ -72,6 +65,7 @@ class AppRoutes {
             child: SignUpPage(),
           ),
         );
+
       case PageRouteName.forgotPassword:
         return _handleMaterialPageRoute(
           widget: BlocProvider(
@@ -79,10 +73,13 @@ class AppRoutes {
             child: ForgotPasswordScreen(),
           ),
         );
+
       case PageRouteName.verifyCode:
         return _handleMaterialPageRoute(widget: VerifyCodeScreen());
+
       case PageRouteName.resetPassword:
         return _handleMaterialPageRoute(widget: ResetPasswordScreen());
+
       case PageRouteName.chatScreen:
         final chatTitle = setting.arguments as String?;
         return MaterialPageRoute(
@@ -93,35 +90,47 @@ class AppRoutes {
         );
 
       case PageRouteName.weightScreen:
+      // Handle differently if coming from edit profile vs signup flow
         return MaterialPageRoute(
+          settings: setting,
           builder: (context) => BlocProvider(
             create: (context) => getIt<SignUpCubit>(),
             child: WeightScreen(),
           ),
         );
+
       case PageRouteName.heightScreen:
         return MaterialPageRoute(
+          settings: setting,
           builder: (context) => BlocProvider(
             create: (context) => getIt<SignUpCubit>(),
             child: HeightScreen(),
           ),
         );
+
       case PageRouteName.ageScreen:
         return MaterialPageRoute(
+          settings: setting,
           builder: (context) => BlocProvider(
             create: (context) => getIt<SignUpCubit>(),
             child: AgeScreen(),
           ),
         );
+
       case PageRouteName.goalScreen:
+      // Handle differently if coming from edit profile vs signup flow
         return MaterialPageRoute(
+          settings: setting,
           builder: (context) => BlocProvider(
             create: (context) => getIt<SignUpCubit>(),
             child: GoalScreen(),
           ),
         );
+
       case PageRouteName.activityScreen:
+      // Handle differently if coming from edit profile vs signup flow
         return MaterialPageRoute(
+          settings: setting,
           builder: (context) => BlocProvider(
             create: (context) => getIt<SignUpCubit>(),
             child: ActivityScreen(),
@@ -150,27 +159,34 @@ class AppRoutes {
             child: HomeScreen(),
           ),
         );
-
       case PageRouteName.onBoarding:
         return _handleMaterialPageRoute(widget: OnboardingScreen());
+
       case PageRouteName.robotScreen:
         return _handleMaterialPageRoute(widget: RobotScreen());
       case PageRouteName.mainProfileScreen:
         return MaterialPageRoute(
-            builder: (context) => BlocProvider(
-                  create: (context) => getIt<ProfileCubit>(),
-                  child: MainProfileScreen(),
-                ));
+          builder: (context) => BlocProvider(
+            create: (context) => getIt<ProfileCubit>(),
+            child: MainProfileScreen(),
+          ),
+        );
+
       case PageRouteName.editProfileScreen:
         return MaterialPageRoute(
-          builder: (context) => BlocProvider(
-            create: (context) => getIt<EditProfileCubit>(),
+          settings: setting,
+          builder: (context) => MultiBlocProvider(
+            providers: [
+              BlocProvider(create: (context) => getIt<EditProfileCubit>()),
+              BlocProvider.value(value: getIt<ProfileCubit>()),
+            ],
             child: EditProfileScreen(),
           ),
         );
 
       case PageRouteName.layoutScreen:
         return _handleMaterialPageRoute(widget: const MainPage());
+
       default:
         return _handleMaterialPageRoute(
           widget: const Scaffold(

@@ -59,6 +59,7 @@ import '../../domain/use_case/auth/logout_use_case.dart' as _i755;
 import '../../domain/use_case/auth/sign_up_use_case.dart' as _i322;
 import '../../domain/use_case/home/exercise_use_case.dart' as _i168;
 import '../../domain/use_case/meal/meal_details_use_case.dart' as _i893;
+import '../../domain/use_case/profile/edit_profile_use_case.dart' as _i11;
 import '../../domain/use_case/profile/profile_use_case.dart' as _i679;
 import '../../domain/use_case/profile/upload_photo_use_case.dart' as _i659;
 import '../../domain/use_case/workout/get_muscle_group_details_use_case.dart'
@@ -96,9 +97,10 @@ extension GetItInjectableX on _i174.GetIt {
       environmentFilter,
     );
     final dioModule = _$DioModule();
-    gh.factory<_i763.DioFactory>(() => _i763.DioFactory());
     gh.factory<_i683.TokenInterceptor>(() => _i683.TokenInterceptor());
     gh.singleton<_i240.AppProvider>(() => _i240.AppProvider());
+    gh.factory<_i763.DioFactory>(
+        () => _i763.DioFactory(gh<_i683.TokenInterceptor>()));
     gh.lazySingleton<_i361.Dio>(() => dioModule.dio(gh<_i763.DioFactory>()));
     gh.lazySingleton<_i515.AuthApiManager>(
         () => _i515.AuthApiManager(gh<_i361.Dio>()));
@@ -163,6 +165,10 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i473.GetMuscleGroupDetailsUseCase>(),
         ));
     gh.factory<_i915.HomeCubit>(() => _i915.HomeCubit(
+
+    gh.factory<_i11.EditProfileUseCase>(
+        () => _i11.EditProfileUseCase(gh<_i1056.AuthRepository>()));
+    gh.factory<_i638.WorkoutCubit>(() => _i638.WorkoutCubit(
           gh<_i789.GetMuscleGroupsUseCase>(),
           gh<_i473.GetMuscleGroupDetailsUseCase>(),
         ));
