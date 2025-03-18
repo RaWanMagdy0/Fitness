@@ -1,5 +1,4 @@
 import 'package:fitness_app/presentation/auth/login/view_model/login_cubit.dart';
-import 'package:fitness_app/presentation/home/home_screen/view_model/home_cubit.dart';
 import 'package:fitness_app/presentation/online_coach/widget/object_box.dart';
 import 'package:fitness_app/presentation/profile/view_model/profile_cubit.dart';
 import 'package:flutter/material.dart';
@@ -35,7 +34,6 @@ void main() async {
         ChangeNotifierProvider(create: (context) => localProvider),
         ChangeNotifierProvider(create: (context) => signupProvider),
         Provider<ObjectBox>.value(value: objectBox),
-
       ],
       child: const MyApp(),
     ),
@@ -55,7 +53,6 @@ class MyApp extends StatelessWidget {
       builder: (context, child) {
         return WillPopScope(
           onWillPop: () async {
-            // Show exit confirmation dialog
             final shouldExit = await ExitConfirmationDialog.show(context);
             if (shouldExit) {
               SystemNavigator.pop(); // Close the app

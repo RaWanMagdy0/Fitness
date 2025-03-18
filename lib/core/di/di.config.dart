@@ -62,6 +62,7 @@ import '../../domain/use_case/home/random_muscle_use_case.dart' as _i888;
 import '../../domain/use_case/meal/meal_details_use_case.dart' as _i893;
 import '../../domain/use_case/meal/meals_tabs_use_case.dart' as _i954;
 import '../../domain/use_case/meal/meals_use_case.dart' as _i731;
+import '../../domain/use_case/profile/edit_profile_use_case.dart' as _i11;
 import '../../domain/use_case/profile/profile_use_case.dart' as _i679;
 import '../../domain/use_case/profile/upload_photo_use_case.dart' as _i659;
 import '../../domain/use_case/workout/get_muscle_group_details_use_case.dart'
@@ -166,6 +167,8 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i606.EditProfileUseCase(gh<_i1056.AuthRepository>()));
     gh.factory<_i322.SignupUseCase>(
         () => _i322.SignupUseCase(gh<_i1056.AuthRepository>()));
+    gh.factory<_i11.EditProfileUseCase>(
+        () => _i11.EditProfileUseCase(gh<_i1056.AuthRepository>()));
     gh.factory<_i97.LoginCubit>(
         () => _i97.LoginCubit(gh<_i1056.AuthRepository>()));
     gh.factory<_i448.MealsViewModel>(() => _i448.MealsViewModel(

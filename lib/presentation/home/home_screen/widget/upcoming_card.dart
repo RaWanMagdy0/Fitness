@@ -60,7 +60,7 @@ class _UpcomingCardState extends State<UpcomingCard> {
                   return Center(
                     child: Text("No Data Available",
                         style:
-                        TextStyle(color: AppColors.kWhite, fontSize: 14)),
+                            TextStyle(color: AppColors.kWhite, fontSize: 14)),
                   );
                 }
 
