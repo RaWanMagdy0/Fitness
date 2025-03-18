@@ -40,23 +40,19 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   Future<void> _loadUserData() async {
-    // Get user data from profile cubit
     final profileCubit = context.read<ProfileCubit>();
     final state = profileCubit.state;
 
     if (state is GetUserDataSuccessState && state.user != null) {
       _updateUIWithUserData(state.user);
     } else {
-      // If not already loaded, request user data
       await profileCubit.getUserData();
 
-      // Check again after data is loaded
       if (mounted) {
         final newState = profileCubit.state;
         if (newState is GetUserDataSuccessState && newState.user != null) {
           _updateUIWithUserData(newState.user);
         } else {
-          // Set data loaded to true even if we couldn't get the data
           setState(() {
             _dataLoaded = true;
           });
@@ -64,7 +60,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       }
     }
 
-    // Load from shared preferences in case we're returning from another screen
     await _loadUserPreferences();
   }
 
@@ -113,7 +108,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
     if (mounted) {
       setState(() {
-        // Only update if there are saved values from the sub-screens
         if (prefs.getString('edit_profile_weight') != null) {
           _weight = prefs.getString('edit_profile_weight') ?? _weight;
         }
@@ -128,7 +122,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   Future<void> _saveCurrentValues() async {
-    // Save current values before navigating
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('current_weight', _weight.replaceAll(' KG', ''));
     await prefs.setString('current_goal', _goal);
@@ -140,10 +133,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     final lastName = _lastNameController.text.trim();
     final email = _emailController.text.trim();
 
-    // Parse weight value (remove 'KG')
     final weightValue = int.tryParse(_weight.replaceAll('KG', '').trim());
 
-    // Convert goal and activity level to the expected API format
     String? formattedGoal = _convertGoalToApiFormat(_goal);
     String? formattedActivity = _convertActivityToApiFormat(_activityLevel);
 
@@ -182,7 +173,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   Future<void> _clearSavedData() async {
-    // Clear saved preferences after successful profile update
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('edit_profile_weight');
     await prefs.remove('edit_profile_goal');
@@ -214,7 +204,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             whenAnimationFinished: () {
               _clearSavedData();
 
-              // Refresh profile data before navigating back
               final profileCubit = context.read<ProfileCubit>();
               profileCubit.getUserData();
 
@@ -232,7 +221,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       builder: (context, state) {
         return WillPopScope(
           onWillPop: () async {
-            return true; // Allow back button
+            return true; 
           },
           child: CustomScaffold(
             backgroundImage: AppImages.authBackground,
@@ -324,7 +313,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             onTap: () async {
                               await _saveCurrentValues();
 
-                              // Navigate with flag to indicate coming from edit profile
                               Navigator.pushNamed(
                                   context,
                                   PageRouteName.weightScreen,
@@ -341,7 +329,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             onTap: () async {
                               await _saveCurrentValues();
 
-                              // Navigate with flag to indicate coming from edit profile
                               Navigator.pushNamed(
                                   context,
                                   PageRouteName.goalScreen,
@@ -358,7 +345,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             onTap: () async {
                               await _saveCurrentValues();
 
-                              // Navigate with flag to indicate coming from edit profile
                               Navigator.pushNamed(
                                   context,
                                   PageRouteName.activityScreen,

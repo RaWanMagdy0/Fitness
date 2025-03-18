@@ -20,3 +20,29 @@ class GetUserDataErrorState extends ProfileState {
   GetUserDataErrorState({this.errorMessage});
 }
 
+//LogoutStates
+class LogoutSuccessState extends ProfileState {
+  String? message;
+
+  LogoutSuccessState(this.message);
+}
+
+class LogoutErrorState extends ProfileState {
+  String? message;
+
+  LogoutErrorState(this.message);
+}
+class UploadPhotoLoadingState extends ProfileState {}
+
+class UploadPhotoSuccessState extends ProfileState {
+  final User? user;
+
+  UploadPhotoSuccessState({this.user});
+}
+
+class UploadPhotoErrorState extends ProfileState {
+  final String? errorMessage;
+
+  UploadPhotoErrorState({this.errorMessage});
+}
+

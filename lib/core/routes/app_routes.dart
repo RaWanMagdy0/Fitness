@@ -1,4 +1,5 @@
 import 'package:fitness_app/core/routes/page_route_name.dart';
+import 'package:fitness_app/presentation/home/home_screen/view_model/home_cubit.dart';
 import 'package:fitness_app/presentation/profile/view/main_profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,6 +17,12 @@ import '../../presentation/auth/sign_up/view/height_screen.dart';
 import '../../presentation/auth/sign_up/view/main_sign_up_screen.dart';
 import '../../presentation/auth/sign_up/view/weight_screen.dart';
 import '../../presentation/auth/sign_up/view_model/sign_up_cubit.dart';
+import '../../presentation/edit_profile/view/edit_profile_screen.dart';
+import '../../presentation/home/exercise_screen/view/exercise_screen.dart';
+import '../../presentation/home/exercise_screen/view_model/exercise_view_model.dart';
+import '../../presentation/home/home_screen/view/home_screen.dart';
+import '../../presentation/home/workout/view/workout_screen.dart';
+import '../../presentation/home/workout/view_model/workout_cubit.dart';
 import '../../presentation/edit_profile/view/edit_profile_screen.dart';
 import '../../presentation/exercise/view/exercise_screen.dart';
 import '../../presentation/home/view/home_screen.dart';
@@ -74,10 +81,11 @@ class AppRoutes {
         return _handleMaterialPageRoute(widget: ResetPasswordScreen());
 
       case PageRouteName.chatScreen:
+        final chatTitle = setting.arguments as String?;
         return MaterialPageRoute(
           builder: (context) => BlocProvider(
             create: (context) => getIt<GeminiCubit>(),
-            child: ChatScreen(),
+            child: ChatScreen(title: chatTitle),
           ),
         );
 
@@ -128,19 +136,34 @@ class AppRoutes {
             child: ActivityScreen(),
           ),
         );
-
+      case PageRouteName.mealDetailsScreen:
+        final args = setting.arguments as Map<String, dynamic>;
+        final String mealId = args['mealId'];
+        return MaterialPageRoute(
+          builder: (context) => BlocProvider(
+            create: (context) => getIt<MealDetailsCubit>(),
+            child: MealDetailsScreen(mealId: mealId),
+          ),
+        );
+      case PageRouteName.exerciseScreen:
+        return MaterialPageRoute(
+          builder: (context) => BlocProvider(
+            create: (context) => getIt<ExerciseViewModel>(),
+            child: ExerciseScreen(),
+          ),
+        );
+      case PageRouteName.homeScreen:
+        return MaterialPageRoute(
+          builder: (context) => BlocProvider(
+            create: (context) => getIt<HomeCubit>(),
+            child: HomeScreen(),
+          ),
+        );
       case PageRouteName.onBoarding:
         return _handleMaterialPageRoute(widget: OnboardingScreen());
 
-      case PageRouteName.homeScreen:
-        return _handleMaterialPageRoute(widget: HomeScreen());
-
       case PageRouteName.robotScreen:
         return _handleMaterialPageRoute(widget: RobotScreen());
-
-      case PageRouteName.exerciseScreen:
-        return _handleMaterialPageRoute(widget: ExerciseScreen());
-
       case PageRouteName.mainProfileScreen:
         return MaterialPageRoute(
           builder: (context) => BlocProvider(

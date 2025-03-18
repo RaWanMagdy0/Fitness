@@ -1,4 +1,3 @@
-import 'package:objectbox/objectbox.dart';
 import '../../../domain/online_coach_enity.dart';
 import '../../../objectbox.g.dart';
 import 'dart:async';

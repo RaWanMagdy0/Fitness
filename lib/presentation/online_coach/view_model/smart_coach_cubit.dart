@@ -2,13 +2,13 @@ import 'dart:convert';
 import 'dart:math';
 import 'package:fitness_app/presentation/online_coach/view_model/smart_coach_state.dart';
 import 'package:injectable/injectable.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import '../../../core/api/api_result.dart';
 import '../../../core/base/base_view_model.dart';
 import '../../../domain/online_coach_enity.dart';
 import '../../../domain/repository/profile_repository/profile_repository.dart';
 import '../widget/object_box.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 @injectable
 class GeminiCubit extends BaseViewModel<GeminiState> {
@@ -22,6 +22,7 @@ class GeminiCubit extends BaseViewModel<GeminiState> {
 
   GeminiCubit(this.profileRepository) : super(GeminiInitialState()) {
     _initObjectBox();
+   // sendWelcomeMessage();
   }
 
   Future<void> _initObjectBox() async {
@@ -29,7 +30,6 @@ class GeminiCubit extends BaseViewModel<GeminiState> {
     _isObjectBoxReady = objectBox != null;
     print(" ObjectBox Initialized: $_isObjectBoxReady");
   }
-
 
   Future<void> sendMessage(String userMessage) async {
     if (userMessage.isEmpty) return;
@@ -78,6 +78,7 @@ class GeminiCubit extends BaseViewModel<GeminiState> {
     if (!_isObjectBoxReady) return [];
     return objectBox!.getChatTitles();
   }
+
   void saveChatToHistory() async {
     if (!_isObjectBoxReady || messages.isEmpty) return;
 
@@ -105,30 +106,41 @@ class GeminiCubit extends BaseViewModel<GeminiState> {
 
     objectBox!.saveChatHistory(existingChat);
   }
-  void loadChatByTitle(String title) {
-    if (!_isObjectBoxReady) return;
 
-    print(" Loading chat for title: $title");
+  void loadChatByTitle(String title) {
+    if (!_isObjectBoxReady) {
+      Future.delayed(Duration(seconds: 1), () {
+        if (_isObjectBoxReady) {
+          loadChatByTitle(title);
+        } else {
+        }
+      });
+      return;
+    }
+
+    print("🔍 Loading chat for title: $title");
     ChatHistory? chatHistory = objectBox!.getChatHistoryByTitle(title);
 
     if (chatHistory == null) {
-      print(" No chat history found for: $title");
+      print("❌ No chat history found for: $title");
       return;
     }
+
     List<Message> chatMessages = chatHistory.messages.toList();
+    print("📩 Found ${chatMessages.length} messages for chat: $title");
 
     if (chatMessages.isEmpty) {
-      print(" No messages found for chat history: $title");
+      print("⚠️ No messages found for chat history: $title");
       return;
     }
+
     messages.clear();
     messages.addAll(chatMessages.map((msg) => {
       "sender": msg.sender,
       "text": msg.text,
     }));
 
-    print(" Messages Loaded: ${messages.length}");
-
+    print("✅ Messages Loaded: ${messages.length}");
     emit(GeminiSuccessState(messages: List.from(messages)));
   }
 
@@ -149,7 +161,6 @@ class GeminiCubit extends BaseViewModel<GeminiState> {
     }
   }
 
-
   Future<void> startListening() async {
     var status = await Permission.microphone.request();
     if (status.isGranted) {
@@ -158,7 +169,6 @@ class GeminiCubit extends BaseViewModel<GeminiState> {
         isListening = true;
         recordedText = "";
         emit(GeminiRecordingState(isListening: true));
-
         _speech.listen(
           onResult: (result) {
             recordedText = result.recognizedWords;
@@ -190,5 +200,15 @@ class GeminiCubit extends BaseViewModel<GeminiState> {
     _speech.stop();
     emit(GeminiRecordingState(isListening: false, recordedText: recordedText));
   }
-
+  /*********
+  void sendWelcomeMessage() {
+    if (messages.isEmpty) {
+      messages.add({
+        "sender": "gemini",
+        "text": "Hello! I'm Gemini, your fitness assistant. How can I help you today?"
+      });
+      emit(GeminiSuccessState(messages: List.from(messages)));
+    }
+  }
+*********/
 }

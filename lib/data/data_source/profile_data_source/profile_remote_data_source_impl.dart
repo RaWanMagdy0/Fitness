@@ -1,6 +1,7 @@
+import 'dart:io' show File;
+
 import 'package:fitness_app/core/api/api_result.dart';
 import 'package:fitness_app/core/api/execute_api_call.dart';
-import 'package:fitness_app/data/api/auth_api/auth_api_manager.dart';
 import 'package:fitness_app/data/api/profile_api/profile_api_manager.dart';
 import 'package:fitness_app/data/data_source/profile_data_source/profile_remote_data_source.dart';
 import 'package:fitness_app/data/models/profile/user_model.dart';
@@ -20,6 +21,13 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
       var token = await _getToken();
       final response = await profileApiManager.getUserData(token);
       return response.user;
+    });
+  }
+  @override
+  Future<Result<UserModel?>> uploadPhoto(File photo) {
+    return executeApiCall<UserModel?>(() async {
+      final response = await profileApiManager.uploadPhoto(photo);
+      return null;
     });
   }
 

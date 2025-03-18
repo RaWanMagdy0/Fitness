@@ -23,11 +23,12 @@ class LoginCubit extends Cubit<LoginState> {
     final result = await _authRepository.login(loginRequest);
 
     if (result is Success) {
-      final successResult = result as Success;
-      emit(LoginSuccess(successResult.data ?? "Login successful"));
+      // Just emit success with the message
+      final successMessage = (result as Success).data ?? "Login successful";
+      emit(LoginSuccess(successMessage));
+
     } else if (result is Fail) {
       final failResult = result as Fail;
       emit(LoginError(failResult.exception?.toString() ?? "Login failed"));
     }
-  }
-}
+  }}

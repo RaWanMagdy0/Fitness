@@ -1,6 +1,6 @@
-import 'package:fitness_app/presentation/auth/forgot_password/cubit/forgot_password_cubit.dart';
 import 'package:fitness_app/presentation/auth/login/view_model/login_cubit.dart';
 import 'package:fitness_app/presentation/online_coach/widget/object_box.dart';
+import 'package:fitness_app/presentation/profile/view_model/profile_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,7 +17,6 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'core/utils/widget/exit_confirmation_dialog.dart';
 import 'generated/l10n.dart';
 
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   configureDependencies();
@@ -30,8 +29,8 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
+        BlocProvider(create: (context) => getIt<ProfileCubit>()),
         BlocProvider(create: (context) => getIt<LoginCubit>()),
-        BlocProvider(create: (context) => getIt<ForgotPasswordCubit>()),
         ChangeNotifierProvider(create: (context) => localProvider),
         ChangeNotifierProvider(create: (context) => signupProvider),
         Provider<ObjectBox>.value(value: objectBox),

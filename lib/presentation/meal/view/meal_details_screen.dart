@@ -12,9 +12,9 @@ class MealDetailsScreen extends StatefulWidget {
   final String mealId;
 
   const MealDetailsScreen({
-    Key? key,
+    super.key,
     required this.mealId,
-  }) : super(key: key);
+  });
 
   @override
   State<MealDetailsScreen> createState() => _MealDetailsScreenState();

@@ -197,10 +197,13 @@ class _AuthApiManager implements AuthApiManager {
 
   @override
   Future<EditProfileResponseModel> editProfile(
-      EditProfileRequestModel requestModel) async {
+    EditProfileRequestModel requestModel,
+    String token,
+  ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'Authorization': token};
+    _headers.removeWhere((k, v) => v == null);
     final _data = <String, dynamic>{};
     _data.addAll(requestModel.toJson());
     final _options = _setStreamType<EditProfileResponseModel>(Options(
@@ -223,6 +226,40 @@ class _AuthApiManager implements AuthApiManager {
     late EditProfileResponseModel _value;
     try {
       _value = EditProfileResponseModel.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<String?> logout(String token) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'Authorization': token};
+    _headers.removeWhere((k, v) => v == null);
+    const Map<String, dynamic>? _data = null;
+    final _options = _setStreamType<String>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          'api/v1/auth/logout',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<String>(_options);
+    late String? _value;
+    try {
+      _value = _result.data;
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;
