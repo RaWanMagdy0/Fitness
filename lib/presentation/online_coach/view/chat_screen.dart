@@ -90,6 +90,9 @@ class _ChatScreenState extends State<ChatScreen> {
                             ),
                             onTap: () {
                               Navigator.pop(context);
+                              setState(() {
+                                showWelcomeMessage = false;
+                              });
                               viewModel.loadChatByTitle(
                                   previousConversations[index]);
                             });
@@ -115,6 +118,8 @@ class _ChatScreenState extends State<ChatScreen> {
           List<Map<String, String>> chatMessages = state is GeminiSuccessState
               ? state.messages
               : List.from(cubit.messages);
+          bool isLoading = state is GeminiLoadingState;
+
           return CustomScaffold(
             backgroundImage: AppImages.backgroundRobot,
             child: Padding(
@@ -142,31 +147,61 @@ class _ChatScreenState extends State<ChatScreen> {
                     ],
                   ),
                   50.verticalSpace,
-                  if (showWelcomeMessage)
+                  if (showWelcomeMessage && chatMessages.isEmpty && !isLoading)
                     Expanded(
                       child: Center(
-                        child: Column(
-                          children: [
-                            Lottie.asset(
-                              AppImages.geminiAnimi,
-                              height: 260.h,
-                            ),
-                            Text(
-                              "Hi How Can I Help You Today!",
-                              style: TextStyle(
-                                  color: AppColors.kWhite,
-                                  fontSize: 21.sp,
-                                  fontWeight: FontWeight.w500),
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              Lottie.asset(
+                                AppImages.geminiAnimi,
+                                height: 260.h,
+                              ),
+                              Text(
+                                "Hi How Can I Help You Today!",
+                                style: TextStyle(
+                                    color: AppColors.kWhite,
+                                    fontSize: 21.sp,
+                                    fontWeight: FontWeight.w500),
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
                   Expanded(
                     child: ListView.builder(
-                      itemCount: chatMessages.length,
+                      shrinkWrap: true,
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      itemCount: chatMessages.length + (isLoading ? 1 : 0),
                       itemBuilder: (context, index) {
+                        if (isLoading && index == chatMessages.length) {
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                CircleAvatar(
+                                  radius: 24.r,
+                                  backgroundColor: Colors.transparent,
+                                  child: ClipOval(
+                                    child: Image.asset(
+                                      AppImages.geminiImage,
+                                      fit: BoxFit.cover,
+                                      width: 48.w,
+                                      height: 48.h,
+                                    ),
+                                  ),
+                                ),
+                                16.horizontalSpace,
+                                _buildLoadingIndicator(),
+                              ],
+                            ),
+                          );
+                        }
+
                         final message = chatMessages[index];
                         final isSender = message['sender'] == "user";
                         return Padding(
@@ -254,20 +289,23 @@ class _ChatScreenState extends State<ChatScreen> {
                     padding: const EdgeInsets.all(8.0),
                     child: Row(
                       children: [
-                        IconButton(
-                          icon: Icon(Icons.emoji_emotions,
-                              color: AppColors.kWhite),
-                          onPressed: () {},
-                        ),
-                        8.horizontalSpace,
                         Expanded(
                           child: TextField(
-                            keyboardAppearance: Brightness.dark,
                             controller: _controller,
+
+                            maxLines: null,
                             decoration: InputDecoration(
                               hintText: "Write your message...",
                               hintStyle: AppFonts.font14WhiteWeight400,
+                              filled: true,
+                              fillColor:
+                                  AppColors.bottomNavColor.withOpacity(0.5),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(25.0),
+                                borderSide: BorderSide.none,
+                              ),
                             ),
+                            cursorColor: AppColors.kOrange,
                             style: AppFonts.font14WhiteWeight400,
                           ),
                         ),
@@ -309,6 +347,16 @@ class _ChatScreenState extends State<ChatScreen> {
             ),
           );
         },
+      ),
+    );
+  }
+
+  Widget _buildLoadingIndicator() {
+    return SizedBox(
+      height: 100.h,
+      child: Lottie.asset(
+        AppImages.loadingMess,
+        fit: BoxFit.cover,
       ),
     );
   }

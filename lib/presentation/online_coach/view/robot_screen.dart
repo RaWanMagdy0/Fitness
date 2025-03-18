@@ -47,7 +47,8 @@ class RobotScreen extends StatelessWidget {
                           children: [
                             Text("Hi", style: AppFonts.font16WhiteWeight500),
                             2.horizontalSpace,
-                            Text(userName ?? "Rowan", style: AppFonts.font16WhiteWeight500),
+                            Text(userName ?? "Rowan",
+                                style: AppFonts.font16WhiteWeight500),
                             Text(",", style: AppFonts.font16WhiteWeight500),
                           ],
                         );
@@ -78,7 +79,8 @@ class RobotScreen extends StatelessWidget {
             CustomButton(
               width: 300.w,
               onPressed: () {
-                Navigator.pushReplacementNamed(context, PageRouteName.chatScreen);
+                Navigator.pushReplacementNamed(
+                    context, PageRouteName.chatScreen);
               },
               text: "Get Started",
               textStyle: AppFonts.font14WhiteWeight800,
@@ -95,7 +97,6 @@ class RobotScreen extends StatelessWidget {
       builder: (context) {
         final objectBox = context.read<ObjectBox>();
         List<String> previousConversations = objectBox.getChatTitles();
-
         return Align(
           alignment: Alignment.centerRight,
           child: Material(
@@ -122,25 +123,23 @@ class RobotScreen extends StatelessWidget {
                   Expanded(
                     child: ListView.separated(
                       itemCount: previousConversations.length,
-                      separatorBuilder: (context, index) => Divider(color: Colors.white24, thickness: 1),
+                      separatorBuilder: (context, index) =>
+                          Divider(color: Colors.white24, thickness: 1),
                       itemBuilder: (context, index) {
                         return ListTile(
-                          leading: Icon(Icons.arrow_back_ios, color: AppColors.kOrange),
-                          title: Text(
-                            previousConversations[index],
-                            style: TextStyle(color: Colors.white),
-                          ),
+                            leading: Icon(Icons.arrow_back_ios,
+                                color: AppColors.kOrange),
+                            title: Text(
+                              previousConversations[index],
+                              style: TextStyle(color: Colors.white),
+                            ),
                             onTap: () {
-                              Navigator.pop(context);
-
                               Navigator.pushNamed(
                                 context,
                                 PageRouteName.chatScreen,
                                 arguments: previousConversations[index],
                               );
-                            }
-
-                        );
+                            });
                       },
                     ),
                   ),

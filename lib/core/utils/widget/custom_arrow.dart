@@ -1,4 +1,6 @@
+import 'package:fitness_app/core/routes/page_route_name.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../styles/colors/app_colors.dart';
@@ -14,7 +16,11 @@ class CustomArrow extends StatelessWidget {
       width: 25.w,
       decoration: BoxDecoration(
           color: AppColors.kOrange, borderRadius: BorderRadius.circular(25.r)),
-      child: Image.asset(AppImages.backArrow),
+      child: InkWell(
+        onTap: (){
+          Navigator.pushNamed(context, PageRouteName.layoutScreen);
+        },
+          child: Image.asset(AppImages.backArrow)),
     );
   }
 }
