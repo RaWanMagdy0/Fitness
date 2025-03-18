@@ -11,7 +11,6 @@ import '../../../../core/styles/fonts/app_fonts.dart';
 import '../../../../core/styles/images/app_images.dart';
 import '../../../../core/utils/widget/custom scaffold.dart';
 import '../../../../core/utils/widget/custom_button.dart';
-import '../../../../generated/l10n.dart';
 import '../../../profile/view_model/profile_cubit.dart';
 import '../../../profile/view_model/profile_state.dart';
 import '../widgets/custom_indecator.dart';
@@ -24,7 +23,7 @@ class WeightScreen extends StatefulWidget {
 }
 
 class _WeightScreenState extends State<WeightScreen> {
-  int selectedWeight = 70;
+  int selectedWeight = 90;
   final int minWeight = 30;
   final int maxWeight = 200;
   final ScrollController _scrollController = ScrollController();
@@ -48,7 +47,7 @@ class _WeightScreenState extends State<WeightScreen> {
       if (currentWeight != null) {
         isFromEditProfile = true;
         setState(() {
-          selectedWeight = int.tryParse(currentWeight) ?? 70;
+          selectedWeight = int.tryParse(currentWeight) ?? 90;
           isLoading = false;
         });
 
@@ -56,7 +55,6 @@ class _WeightScreenState extends State<WeightScreen> {
         return;
       }
 
-      // Check if we're coming from EditProfile by inspecting the route
       final route = ModalRoute.of(context);
       if (route != null && route.settings.name != PageRouteName.weightScreen) {
         // Most likely coming from EditProfileScreen
@@ -66,7 +64,7 @@ class _WeightScreenState extends State<WeightScreen> {
         if (state is GetUserDataSuccessState && state.user != null) {
           isFromEditProfile = true;
           setState(() {
-            selectedWeight = state.user?.weight ?? 70;
+            selectedWeight = state.user?.weight ?? 90;
             isLoading = false;
           });
 
@@ -81,7 +79,7 @@ class _WeightScreenState extends State<WeightScreen> {
         if (newState is GetUserDataSuccessState && newState.user != null) {
           isFromEditProfile = true;
           setState(() {
-            selectedWeight = newState.user?.weight ?? 70;
+            selectedWeight = newState.user?.weight ?? 90;
             isLoading = false;
           });
 
@@ -91,13 +89,12 @@ class _WeightScreenState extends State<WeightScreen> {
       }
 
       setState(() {
-        selectedWeight = int.tryParse(signupProvider.getData("weight") ?? '') ?? 70;
+        selectedWeight = int.tryParse(signupProvider.getData("weight") ?? '') ?? 50;
         isLoading = false;
       });
 
       _scrollToSelectedWeight();
     } catch (e) {
-      print("Error loading weight data: $e");
       setState(() {
         isLoading = false;
       });
@@ -106,7 +103,7 @@ class _WeightScreenState extends State<WeightScreen> {
 
   void _scrollToSelectedWeight() {
     if (_scrollController.hasClients) {
-      final itemWidth = 30.0; // Approximate width of each weight item + padding
+      final itemWidth = 30.0.w;
       final screenWidth = MediaQuery.of(context).size.width;
       final centerPosition = (selectedWeight - minWeight) * itemWidth - (screenWidth / 2) + itemWidth;
 
@@ -122,7 +119,6 @@ class _WeightScreenState extends State<WeightScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final local = S.of(context);
     final signupProvider = context.read<SignupProvider>();
 
     return WillPopScope(
@@ -137,9 +133,9 @@ class _WeightScreenState extends State<WeightScreen> {
         backgroundImage: AppImages.authBackground,
         enableBlur: true,
         blurStrength: 5.0,
-        blurHeight: 230,
-        blurWidth: 430,
-        borderRadius: 50.0,
+        blurHeight: 230.h,
+        blurWidth: 430.w,
+        borderRadius: 50.r,
         blurStartPosition: MediaQuery.of(context).size.height * 0.36,
         child: isLoading
             ? Center(child: CircularProgressIndicator(color: AppColors.kOrange))
@@ -156,38 +152,51 @@ class _WeightScreenState extends State<WeightScreen> {
                       if (isFromEditProfile) {
                         final prefs = await SharedPreferences.getInstance();
                         await prefs.setString('edit_profile_weight', '$selectedWeight KG');
+                        Navigator.pop(context);
+                      } else {
+                        Navigator.pushNamed(context, PageRouteName.ageScreen);
                       }
-                      Navigator.pop(context);
                     },
-                    child: Image.asset(AppImages.back),
+                    child: Image.asset(
+                      AppImages.back,
+                      width: 24.w,
+                      height: 24.h,
+                    ),
                   ),
                   100.horizontalSpace,
-                  Image.asset(AppImages.logoIcon),
+                  Image.asset(
+                    AppImages.logoIcon,
+                    width: 32.w,
+                    height: 32.h,
+                  ),
                 ],
               ),
               40.verticalSpace,
               if (!isFromEditProfile)
                 Center(
-                    child: ProgressIndicatorWidget(currentPage: 3, totalPages: 6)),
+                  child: ProgressIndicatorWidget(currentPage: 3, totalPages: 6),
+                ),
               30.verticalSpace,
               Text(
-                local.what_is_your_weight,
-                style: AppFonts.font14WhiteWeight800.copyWith(fontSize: 20),
+                "WHAT IS YOUR WEIGHT ?",
+                style: AppFonts.font14WhiteWeight800.copyWith(fontSize: 20.sp),
               ),
               Text(
-                local.this_helps_us_create_Your_personalized_plan,
-                style: AppFonts.font18WhiteWeight400.copyWith(fontSize: 15),
+                "This Helps Us Create Your Personalized Plan",
+                style: AppFonts.font18WhiteWeight400.copyWith(fontSize: 15.sp),
               ),
               20.verticalSpace,
+              SizedBox(height: 80.h),
               Center(
                 child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
                   decoration: BoxDecoration(
                     color: Colors.transparent,
                     borderRadius: BorderRadius.circular(50.r),
                   ),
                   child: Text(
-                      local.kg,
-                      style: AppFonts.font12OrangeWeight400
+                    "Kg",
+                    style: AppFonts.font12OrangeWeight400,
                   ),
                 ),
               ),
@@ -196,7 +205,7 @@ class _WeightScreenState extends State<WeightScreen> {
                 alignment: Alignment.center,
                 children: [
                   SizedBox(
-                    height: 60,
+                    height: 58.h,
                     child: ListView.builder(
                       controller: _scrollController,
                       scrollDirection: Axis.horizontal,
@@ -211,15 +220,13 @@ class _WeightScreenState extends State<WeightScreen> {
                             });
                           },
                           child: Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 10),
+                            padding: EdgeInsets.symmetric(horizontal: 11.w),
                             child: Text(
                               weight.toString(),
                               style: TextStyle(
-                                fontSize: isSelected ? 28 : 22,
+                                fontSize: isSelected ? 28.sp : 22.sp,
                                 fontWeight: FontWeight.bold,
-                                color: isSelected
-                                    ? AppColors.kOrange
-                                    : AppColors.kGray,
+                                color: isSelected ? AppColors.kOrange : AppColors.kGray,
                               ),
                             ),
                           ),
@@ -228,25 +235,27 @@ class _WeightScreenState extends State<WeightScreen> {
                     ),
                   ),
                   Positioned(
-                    bottom: -10,
-                    child: Icon(Icons.arrow_drop_up,
-                        color: AppColors.kOrange, size: 24),
+                    bottom: -10.h,
+                    child: Icon(
+                      Icons.arrow_drop_up,
+                      color: AppColors.kOrange,
+                      size: 24.h,
+                    ),
                   ),
                 ],
               ),
-              40.verticalSpace,
+              15.verticalSpace,
+              SizedBox(height: 20.h),
               CustomButton(
-                text: isFromEditProfile ? local.done : local.next,
+                text: isFromEditProfile ? "Done" : "Next",
                 onPressed: () async {
                   if (isFromEditProfile) {
                     final prefs = await SharedPreferences.getInstance();
                     await prefs.setString('edit_profile_weight', '$selectedWeight KG');
                     Navigator.pop(context);
                   } else {
-                    // Normal signup flow
                     signupProvider.saveData("weight", selectedWeight.toString());
-                    Navigator.pushReplacementNamed(
-                        context, PageRouteName.heightScreen);
+                    Navigator.pushReplacementNamed(context, PageRouteName.heightScreen);
                   }
                 },
                 color: AppColors.kOrange,
