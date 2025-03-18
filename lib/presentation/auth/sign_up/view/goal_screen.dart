@@ -29,7 +29,6 @@ class _GoalScreenState extends State<GoalScreen> {
   bool isFromEditProfile = false;
   bool isLoading = true;
 
-  // Map between displayed values and stored values
   final Map<String, String> _goalMap = {
     'gain_weight': 'Gain Weight',
     'lose_weight': 'Lose Weight',
@@ -57,7 +56,6 @@ class _GoalScreenState extends State<GoalScreen> {
       final currentGoal = prefs.getString('current_goal');
 
       if (currentGoal != null) {
-        // Coming from edit profile
         isFromEditProfile = true;
         final goalKey = _reverseGoalMap[currentGoal] ?? 'gain_weight';
         _selectedGoal.value = goalKey;
@@ -82,7 +80,7 @@ class _GoalScreenState extends State<GoalScreen> {
         }
 
         await profileCubit.getUserData();
-        await Future.delayed(Duration(milliseconds: 300));
+        await Future.delayed(const Duration(milliseconds: 300));
 
         final newState = profileCubit.state;
         if (newState is GetUserDataSuccessState && newState.user != null) {
@@ -100,7 +98,6 @@ class _GoalScreenState extends State<GoalScreen> {
         isLoading = false;
       });
     } catch (e) {
-      print("Error loading goal data: $e");
       setState(() {
         isLoading = false;
       });
@@ -131,9 +128,9 @@ class _GoalScreenState extends State<GoalScreen> {
         backgroundImage: AppImages.authBackground,
         enableBlur: true,
         blurStrength: 5.0,
-        blurHeight: 385.0,
+        blurHeight: 385.0.h,  // Added .h for height
         blurWidth: 370.0.w,
-        borderRadius: 50.0,
+        borderRadius: 50.0.r,  // Added .r for radius
         blurStartPosition: MediaQuery.of(context).size.height * 0.38,
         child: isLoading
             ? Center(child: CircularProgressIndicator(color: AppColors.kOrange))
@@ -154,99 +151,94 @@ class _GoalScreenState extends State<GoalScreen> {
                       }
                       Navigator.pop(context);
                     },
-                    child: Image.asset(AppImages.back),
+                    child: Image.asset(
+                      AppImages.back,
+                      width: 24.w,  // Added width
+                      height: 24.h,  // Added height
+                    ),
                   ),
-                  100.horizontalSpace,
-                  Image.asset(AppImages.logoIcon),
+                  Expanded(
+                    child: Center(
+                      child: Image.asset(
+                        AppImages.logoIcon,
+                        width: 48.w,  // Added width
+                        height: 48.h,  // Added height
+                      ),
+                    ),
+                  ),
                 ],
               ),
               50.verticalSpace,
               if (!isFromEditProfile)
                 Center(
-                    child: ProgressIndicatorWidget(currentPage: 5, totalPages: 6)),
+                  child: ProgressIndicatorWidget(currentPage: 5, totalPages: 6),
+                ),
               25.verticalSpace,
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     local.what_is_your_goal,
-                    style: AppFonts.font20WhiteWeight800,
+                    style: AppFonts.font20WhiteWeight800.copyWith(
+                      fontSize: 20.sp,  // Use .sp for font size
+                    ),
                     textAlign: TextAlign.start,
                   ),
                   5.verticalSpace,
                   Text(
                     local.this_helps_us_create_Your_personalized_plan,
-                    style:
-                    AppFonts.font18WhiteWeight400.copyWith(fontSize: 15.sp),
+                    style: AppFonts.font18WhiteWeight400.copyWith(
+                      fontSize: 15.sp,
+                    ),
                     textAlign: TextAlign.start,
                   ),
                 ],
               ),
-              38.verticalSpace,
+              65.verticalSpace,
               ValueListenableBuilder<String?>(
                 valueListenable: _selectedGoal,
                 builder: (context, selectedValue, child) {
                   return Center(
                     child: Column(
                       children: [
-                        CustomRadioButton(
+                        _buildRadioButton(
+                          context,
                           label: local.gain_weight,
                           value: "gain_weight",
-                          groupValue: selectedValue,
-                          onChanged: (value) {
-                            _selectedGoal.value = value;
-                            if (!isFromEditProfile) {
-                              signupProvider.saveData("goal", value);
-                            }
-                          },
+                          selectedValue: selectedValue,
+                          signupProvider: signupProvider,
                         ),
                         16.verticalSpace,
-                        CustomRadioButton(
+                        _buildRadioButton(
+                          context,
                           label: local.lose_weight,
                           value: "lose_weight",
-                          groupValue: selectedValue,
-                          onChanged: (value) {
-                            _selectedGoal.value = value;
-                            if (!isFromEditProfile) {
-                              signupProvider.saveData("goal", value);
-                            }
-                          },
+                          selectedValue: selectedValue,
+                          signupProvider: signupProvider,
                         ),
                         16.verticalSpace,
-                        CustomRadioButton(
+                        _buildRadioButton(
+                          context,
                           label: local.get_fitter,
                           value: "get_fitter",
-                          groupValue: selectedValue,
-                          onChanged: (value) {
-                            _selectedGoal.value = value;
-                            if (!isFromEditProfile) {
-                              signupProvider.saveData("goal", value);
-                            }
-                          },
+                          selectedValue: selectedValue,
+                          signupProvider: signupProvider,
                         ),
                         16.verticalSpace,
-                        CustomRadioButton(
+                        _buildRadioButton(
+                          context,
                           label: local.gain_more_flexible,
                           value: "gain_flexible",
-                          groupValue: selectedValue,
-                          onChanged: (value) {
-                            _selectedGoal.value = value;
-                            if (!isFromEditProfile) {
-                              signupProvider.saveData("goal", value);
-                            }
-                          },
+                          selectedValue: selectedValue,
+                          signupProvider: signupProvider,
                         ),
                         16.verticalSpace,
-                        CustomRadioButton(
+                        _buildRadioButton(
+                          context,
                           label: local.learn_the_basics,
                           value: "learn_basic",
-                          groupValue: selectedValue,
-                          onChanged: (value) {
-                            _selectedGoal.value = value;
-                            if (!isFromEditProfile) {
-                              signupProvider.saveData("goal", value);
-                            }
-                          },
+                          selectedValue: selectedValue,
+                          signupProvider: signupProvider,
                         ),
                       ],
                     ),
@@ -259,6 +251,7 @@ class _GoalScreenState extends State<GoalScreen> {
                 builder: (context, selectedValue, child) {
                   return SizedBox(
                     width: double.infinity,
+                    height: 50.h,
                     child: CustomButton(
                       color: AppColors.kOrange,
                       onPressed: selectedValue != null
@@ -277,16 +270,39 @@ class _GoalScreenState extends State<GoalScreen> {
                           : null,
                       child: Text(
                         isFromEditProfile ? local.done : local.next,
-                        style: AppFonts.font14LightWhiteWeight500,
+                        style: AppFonts.font14LightWhiteWeight500.copyWith(
+                          fontSize: 14.sp,
+                        ),
                       ),
                     ),
                   );
                 },
               ),
+              30.verticalSpace,  // Added bottom padding
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildRadioButton(
+      BuildContext context, {
+        required String label,
+        required String value,
+        required String? selectedValue,
+        required SignupProvider signupProvider,
+      }) {
+    return CustomRadioButton(
+      label: label,
+      value: value,
+      groupValue: selectedValue,
+      onChanged: (value) {
+        _selectedGoal.value = value;
+        if (!isFromEditProfile) {
+          signupProvider.saveData("goal", value);
+        }
+      },
     );
   }
 }
