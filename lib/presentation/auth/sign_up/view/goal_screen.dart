@@ -128,9 +128,9 @@ class _GoalScreenState extends State<GoalScreen> {
         backgroundImage: AppImages.authBackground,
         enableBlur: true,
         blurStrength: 5.0,
-        blurHeight: 385.0.h,  // Added .h for height
+        blurHeight: 385.0.h,
         blurWidth: 370.0.w,
-        borderRadius: 50.0.r,  // Added .r for radius
+        borderRadius: 50.0.r,
         blurStartPosition: MediaQuery.of(context).size.height * 0.38,
         child: isLoading
             ? Center(child: CircularProgressIndicator(color: AppColors.kOrange))
@@ -180,7 +180,7 @@ class _GoalScreenState extends State<GoalScreen> {
                   Text(
                     local.what_is_your_goal,
                     style: AppFonts.font20WhiteWeight800.copyWith(
-                      fontSize: 20.sp,  // Use .sp for font size
+                      fontSize: 20.sp,
                     ),
                     textAlign: TextAlign.start,
                   ),
