@@ -94,8 +94,7 @@ class HomeCubit extends BaseViewModel<HomeState> {
   }
 
   Future<void> getMuscleGroupById(String muscleGroupId) async {
-    emit(MuscleGroupIdLoading());
-    print("Loading data for muscle group: $muscleGroupId");
+    emit(MuscleGroupIdLoading());  // ✅ تغيير الحالة إلى "تحميل"
 
     try {
       var result = await muscleGroupByIdUseCase.invoke(muscleGroupId);
@@ -105,6 +104,7 @@ class HomeCubit extends BaseViewModel<HomeState> {
         case Success<List<MuscleEntity?>>():
           print("Success with data: ${result.data}");
           emit(MuscleGroupIdSuccess(muscleEntity: result.data));
+          break;
         case Fail<List<MuscleEntity?>>():
           print("Failed: ${result.exception}");
           emit(MuscleGroupIdError(

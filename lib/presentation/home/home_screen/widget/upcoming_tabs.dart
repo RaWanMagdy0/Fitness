@@ -12,7 +12,9 @@ import '../view_model/home_state.dart';
 
 //get all muscle group
 class CategoryTabs extends StatefulWidget {
-  const CategoryTabs({super.key});
+  final Function(String) onTabSelected;
+
+  const CategoryTabs({super.key, required this.onTabSelected});
 
   @override
   _CategoryTabsState createState() => _CategoryTabsState();
@@ -21,6 +23,7 @@ class CategoryTabs extends StatefulWidget {
 class _CategoryTabsState extends State<CategoryTabs> {
   int selectedIndex = 0;
   late HomeCubit viewModel;
+  bool isFirstLoad = true;
 
   @override
   void initState() {
@@ -47,6 +50,14 @@ class _CategoryTabsState extends State<CategoryTabs> {
           });
         } else if (state is GetMuscleSuccess) {
           List<MuscleGroup> muscleGroups = state.muscleGroups;
+
+          if (isFirstLoad && muscleGroups.isNotEmpty) {
+            Future.microtask(() {
+              widget.onTabSelected(muscleGroups[0].id ?? "");
+            });
+            isFirstLoad = false; // ✅ منع التكرار
+          }
+
           return Column(
             children: [
               SizedBox(
@@ -62,6 +73,7 @@ class _CategoryTabsState extends State<CategoryTabs> {
                           setState(() {
                             selectedIndex = index;
                           });
+                          widget.onTabSelected(muscleGroups[index].id ?? "");
                         },
                         child: Container(
                           margin: EdgeInsets.symmetric(horizontal: 5.0),

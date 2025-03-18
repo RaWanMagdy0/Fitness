@@ -3,9 +3,14 @@ import 'package:fitness_app/core/styles/fonts/app_fonts.dart';
 import 'package:fitness_app/core/utils/widget/custom%20scaffold.dart';
 import 'package:fitness_app/presentation/home/home_screen/widget/home_app_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../../../core/di/di.dart';
 import '../../../../core/styles/colors/app_colors.dart';
 import '../../../../core/styles/images/app_images.dart';
+import '../../../../core/utils/widget/shimmer_loading_widget.dart';
+import '../view_model/home_cubit.dart';
+import '../view_model/home_state.dart';
 import '../widget/category_section.dart';
 import '../widget/popular_card.dart';
 import '../widget/recomm_card.dart';
@@ -21,11 +26,18 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  String selectedMuscleGroupId = "";
+  late HomeCubit viewModel;
+
+  @override
+  void initState() {
+    super.initState();
+    viewModel = getIt.get<HomeCubit>();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return
-      Scaffold(
+    return Scaffold(
       body: Stack(
         children: [
           Positioned.fill(
@@ -45,29 +57,24 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("Category",
-                                style: AppFonts.font18WhiteWeight400),
+                            Text("Category", style: AppFonts.font18WhiteWeight400),
                             const SizedBox(height: 10),
                             const CategorySection(),
                             const SizedBox(height: 20),
-                            Text("Recommendation Today",
-                                style: AppFonts.font18WhiteWeight400),
+                            Text("Recommendation Today", style: AppFonts.font18WhiteWeight400),
                             const RecommCard(),
                             const SizedBox(height: 20),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text("Upcoming Workouts",
-                                    style: AppFonts.font18WhiteWeight400),
+                                Text("Upcoming Workouts", style: AppFonts.font18WhiteWeight400),
                                 InkWell(
                                   onTap: () {
-                                    Navigator.pushReplacementNamed(
-                                        context, PageRouteName.workoutScreen);
+                                    Navigator.pushReplacementNamed(context, PageRouteName.workoutScreen);
                                   },
                                   child: Text(
                                     "See All",
-                                    style:
-                                        AppFonts.font15OrangeWeight500.copyWith(
+                                    style: AppFonts.font15OrangeWeight500.copyWith(
                                       decoration: TextDecoration.underline,
                                       decorationColor: AppColors.kOrange,
                                     ),
@@ -76,35 +83,37 @@ class _HomeScreenState extends State<HomeScreen> {
                               ],
                             ),
                             const SizedBox(height: 15),
-                            const CategoryTabs(),
-                            const SizedBox(height: 20),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text("Recommendation For You",
-                                    style: AppFonts.font18WhiteWeight400),
-                                InkWell(
-                                  onTap: () {
-                                    Navigator.pushNamed(
-                                      context,
-                                      PageRouteName.mealsScreen,
-                                    );
-                                  },
-                                  child: Text(
-                                    "See All",
-                                    style:
-                                        AppFonts.font15OrangeWeight500.copyWith(
-                                      decoration: TextDecoration.underline,
-                                      decorationColor: AppColors.kOrange,
-                                    ),
-                                  ),
-                                ),
-                              ],
+                            CategoryTabs(
+                              onTabSelected: (muscleGroupId) {
+                                if (selectedMuscleGroupId != muscleGroupId) {
+                                  setState(() {
+                                    selectedMuscleGroupId = muscleGroupId;
+                                  });
+                                  viewModel.getMuscleGroupById(muscleGroupId); // ✅ استدعاء التحميل عند تغيير التاب
+                                }
+                              },
                             ),
+                            const SizedBox(height: 10),
+
+                            if (selectedMuscleGroupId.isNotEmpty)
+                              BlocBuilder<HomeCubit, HomeState>(
+                                bloc: viewModel,
+                                builder: (context, state) {
+                                  if (state is MuscleGroupIdLoading) {
+                                    return _buildShimmerTabs();
+                                  } else if (state is MuscleGroupIdError) {
+                                    return Center(child: Text("Error: ${state.errorMessage}"));
+                                  } else if (state is MuscleGroupIdSuccess) {
+                                    return UpcomingCard(muscleGroupId: selectedMuscleGroupId);
+                                  }
+                                  return Container();
+                                },
+                              ),
+                            const SizedBox(height: 20),
+                            Text("Recommendation For You", style: AppFonts.font18WhiteWeight400),
                             const RecommFoodCard(),
                             const SizedBox(height: 30),
-                            Text("Popular Training",
-                                style: AppFonts.font18WhiteWeight400),
+                            Text("Popular Training", style: AppFonts.font18WhiteWeight400),
                             const PopularCard(),
                           ],
                         ),
@@ -119,5 +128,25 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+  Widget _buildShimmerTabs() {
+    return SizedBox(
+      height: 110.h,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: 2,
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: EdgeInsets.symmetric(horizontal: 5.0),
+            child: ShimmerLoadingWidget(
+              width: 90.w,
+              height: 90.h,
+              borderRadius: 20.r,
+            ),
+          );
+        },
+      ),
+    );
+  }
 
 }
+
