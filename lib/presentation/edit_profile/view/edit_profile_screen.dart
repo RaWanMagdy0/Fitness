@@ -1,31 +1,22 @@
-import 'dart:io';
-import 'package:fitness_app/presentation/edit_profile/view/widgets/custom_profile_field.dart' show CustomProfileField;
+import 'package:fitness_app/presentation/edit_profile/view/widgets/custom_profile_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/styles/fonts/app_fonts.dart';
 import '../../../../core/utils/widget/custom_button.dart';
 import '../../../../core/utils/widget/custom_text_form_field.dart';
 import '../../../../core/utils/widget/custom scaffold.dart';
-import '../../../core/styles/colors/app_colors.dart';
-import '../../../core/styles/images/app_images.dart' show AppImages;
-import 'package:fitness_app/presentation/edit_profile/view/widgets/custom_profile_field.dart';
-import 'package:fitness_app/presentation/edit_profile/view_model/edit_profile_cubit.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../core/routes/page_route_name.dart';
 import '../../../core/styles/images/app_images.dart';
-import '../../../core/utils/functions/dialogs/app_dialogs.dart' show AppDialogs;
-import 'package:fitness_app/presentation/profile/view_model/profile_cubit.dart';
-import 'package:fitness_app/presentation/profile/view_model/profile_state.dart';
-import '../../../../core/di/di.dart';
-import '../../../../domain/entity/profile/user.dart';
-
-
-
-import '../../../../core/utils/functions/dialogs/app_dialogs.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../core/utils/functions/dialogs/app_dialogs.dart';
+import '../view_model/edit_profile_cubit.dart';
+import '../../profile/view_model/profile_cubit.dart';
+import '../../profile/view_model/profile_state.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({super.key});
-
   @override
   State<EditProfileScreen> createState() => _EditProfileScreenState();
 }
@@ -35,133 +26,160 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
-  final ImagePicker _picker = ImagePicker();
-  File? _imageFile;
 
-  String _weight = '90 KG';
+  String _weight = '70 KG';
   String _goal = 'Gain Weight';
-  String _activityLevel = 'level1';
-  late ProfileCubit _profileCubit;
-  User? _userData;
+  String _activityLevel = 'Rookie';
+  bool _dataLoaded = false;
+  String _profileImageUrl = '';
 
   @override
   void initState() {
     super.initState();
-    _profileCubit = getIt<ProfileCubit>();
     _loadUserData();
   }
 
-  void _loadUserData() {
-    if (_profileCubit.state is GetUserDataSuccessState) {
-      final userState = _profileCubit.state as GetUserDataSuccessState;
-      _userData = userState.user;
-      _populateFormFields();
+  Future<void> _loadUserData() async {
+    final profileCubit = context.read<ProfileCubit>();
+    final state = profileCubit.state;
+
+    if (state is GetUserDataSuccessState && state.user != null) {
+      _updateUIWithUserData(state.user);
     } else {
-      _profileCubit.getUserData().then((_) {
-        if (_profileCubit.state is GetUserDataSuccessState) {
+      await profileCubit.getUserData();
+
+      if (mounted) {
+        final newState = profileCubit.state;
+        if (newState is GetUserDataSuccessState && newState.user != null) {
+          _updateUIWithUserData(newState.user);
+        } else {
           setState(() {
-            final userState = _profileCubit.state as GetUserDataSuccessState;
-            _userData = userState.user;
-            _populateFormFields();
+            _dataLoaded = true;
           });
+        }
+      }
+    }
+
+    await _loadUserPreferences();
+  }
+
+  void _updateUIWithUserData(user) {
+    if (mounted) {
+      _firstNameController.text = user?.firstName ?? '';
+      _lastNameController.text = user?.lastName ?? '';
+      _emailController.text = user?.email ?? '';
+      _profileImageUrl = user?.photo ?? '';
+
+      setState(() {
+        _weight = '${user?.weight ?? 70} KG';
+        _goal = _mapGoalToDisplay(user?.goal);
+        _activityLevel = _mapActivityToDisplay(user?.activityLevel);
+        _dataLoaded = true;
+      });
+    }
+  }
+
+  String _mapGoalToDisplay(String? goal) {
+    final goalMap = {
+      'gain_weight': 'Gain Weight',
+      'lose_weight': 'Lose Weight',
+      'get_fitter': 'Get Fitter',
+      'gain_flexible': 'Gain More Flexible',
+      'learn_basic': 'Learn The Basics'
+    };
+
+    return goalMap[goal] ?? 'Gain Weight';
+  }
+
+  String _mapActivityToDisplay(String? activity) {
+    final activityMap = {
+      'level1': 'Rookie',
+      'level2': 'Beginner',
+      'level3': 'Intermediate',
+      'level4': 'Advanced',
+      'level5': 'Expert'
+    };
+
+    return activityMap[activity] ?? 'Rookie';
+  }
+
+  Future<void> _loadUserPreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    if (mounted) {
+      setState(() {
+        if (prefs.getString('edit_profile_weight') != null) {
+          _weight = prefs.getString('edit_profile_weight') ?? _weight;
+        }
+        if (prefs.getString('edit_profile_goal') != null) {
+          _goal = prefs.getString('edit_profile_goal') ?? _goal;
+        }
+        if (prefs.getString('edit_profile_activity') != null) {
+          _activityLevel = prefs.getString('edit_profile_activity') ?? _activityLevel;
         }
       });
     }
   }
 
-  void _populateFormFields() {
-    if (_userData != null) {
-      _firstNameController.text = _userData!.firstName ?? '';
-      _lastNameController.text = _userData!.lastName ?? '';
-      _emailController.text = _userData!.email ?? '';
-      setState(() {
-        _weight = _userData!.weight != null ? '${_userData!.weight} KG' : '90 KG';
-        _goal = _userData!.goal ?? 'Gain Weight';
-        _activityLevel = _userData!.activityLevel ?? 'level1';
-      });
-    }
+  Future<void> _saveCurrentValues() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('current_weight', _weight.replaceAll(' KG', ''));
+    await prefs.setString('current_goal', _goal);
+    await prefs.setString('current_activity', _activityLevel);
   }
 
-  void _showImagePickerOptions() {
-    showModalBottomSheet(
-      context: context,
-      builder: (context) => SafeArea(
-        child: Wrap(
-          children: [
-            ListTile(
-              leading: Icon(Icons.photo_library),
-              title: Text('Gallery'),
-              onTap: () {
-                Navigator.pop(context);
-                _pickImage(ImageSource.gallery);
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.photo_camera),
-              title: Text('Camera'),
-              onTap: () {
-                Navigator.pop(context);
-                _pickImage(ImageSource.camera);
-              },
-            ),
-          ],
-        ),
-      ),
+  void _submitEditProfile() async {
+    final firstName = _firstNameController.text.trim();
+    final lastName = _lastNameController.text.trim();
+    final email = _emailController.text.trim();
+
+    final weightValue = int.tryParse(_weight.replaceAll('KG', '').trim());
+
+    String? formattedGoal = _convertGoalToApiFormat(_goal);
+    String? formattedActivity = _convertActivityToApiFormat(_activityLevel);
+
+    context.read<EditProfileCubit>().editProfile(
+      firstName: firstName.isNotEmpty ? firstName : null,
+      lastName: lastName.isNotEmpty ? lastName : null,
+      email: email.isNotEmpty ? email : null,
+      weight: weightValue,
+      goal: formattedGoal,
+      activityLevel: formattedActivity,
     );
   }
 
-  Future<void> _pickImage(ImageSource source) async {
-    try {
-      final pickedFile = await _picker.pickImage(
-        source: source,
-        imageQuality: 50, // Compress image to reduce size
-      );
+  String? _convertGoalToApiFormat(String displayGoal) {
+    final reverseGoalMap = {
+      'Gain Weight': 'gain_weight',
+      'Lose Weight': 'lose_weight',
+      'Get Fitter': 'get_fitter',
+      'Gain More Flexible': 'gain_flexible',
+      'Learn The Basics': 'learn_basic'
+    };
 
-      if (pickedFile != null) {
-        setState(() {
-          _imageFile = File(pickedFile.path);
-        });
-
-        // Upload image immediately after picking
-        await _uploadImage();
-      }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to pick image: $e')),
-      );
-    }
+    return reverseGoalMap[displayGoal];
   }
 
-  // Add this method
-  Future<void> _uploadImage() async {
-    if (_imageFile == null) return;
+  String? _convertActivityToApiFormat(String displayActivity) {
+    final reverseActivityMap = {
+      'Rookie': 'level1',
+      'Beginner': 'level2',
+      'Intermediate': 'level3',
+      'Advanced': 'level4',
+      'Expert': 'level5'
+    };
 
-    AppDialogs.showLoading(context: context);
+    return reverseActivityMap[displayActivity];
+  }
 
-    try {
-      await _profileCubit.uploadPhoto(_imageFile!);
-
-      if (_profileCubit.state is UploadPhotoSuccessState) {
-        AppDialogs.showHideDialog(context);
-        AppDialogs.showSuccessDialog(
-          context: context,
-          message: "Profile picture updated successfully",
-        );
-      } else if (_profileCubit.state is UploadPhotoErrorState) {
-        final errorState = _profileCubit.state as UploadPhotoErrorState;
-        AppDialogs.showHideDialog(context);
-        AppDialogs.showErrorDialog(
-          context: context,
-          errorMassage: errorState.errorMessage ?? "Failed to upload photo",
-        );
-      }
-    } catch (e) {
-      AppDialogs.showHideDialog(context);
-      AppDialogs.showErrorDialog(
-        context: context,
-        errorMassage: "An error occurred: $e",
-      );
-    }
+  Future<void> _clearSavedData() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('edit_profile_weight');
+    await prefs.remove('edit_profile_goal');
+    await prefs.remove('edit_profile_activity');
+    await prefs.remove('current_weight');
+    await prefs.remove('current_goal');
+    await prefs.remove('current_activity');
   }
 
   @override
@@ -184,8 +202,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             context: context,
             message: state.message,
             whenAnimationFinished: () {
-              // Refresh user data after successful update
-              _profileCubit.getUserData();
+              _clearSavedData();
+
+              final profileCubit = context.read<ProfileCubit>();
+              profileCubit.getUserData();
+
               Navigator.pop(context);
             },
           );
@@ -198,281 +219,166 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         }
       },
       builder: (context, state) {
-        return CustomScaffold(
-          backgroundImage: AppImages.authBackground,
-          enableBlur: false,
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: EdgeInsets.all(24.w),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      InkWell(
-                        onTap: () => Navigator.pop(context),
-                        child: Image.asset(AppImages.back),
-                      ),
-                      SizedBox(width: 85.w),
-                      Text(
-                        "Edit Profile",
-                        style: AppFonts.font24WhiteWeight600,
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 30.h),
-                  Stack(
-                    children: [
-                      // Profile Image
-                      Container(
-                        width: 100.w,
-                        height: 100.h,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.2),
-                              spreadRadius: 1,
-                              blurRadius: 5,
-                              offset: Offset(0, 2),
-                            ),
-                          ],
-                        ),
-                        child: ClipOval(
-                          child: _imageFile != null
-                              ? Image.file(
-                            _imageFile!,
-                            width: 100.w,
-                            height: 100.h,
-                            fit: BoxFit.cover,
-                          )
-                              : (_userData?.photo != null && _userData!.photo!.isNotEmpty
-                              ? Image.network(
-                            _userData!.photo!,
-                            width: 100.w,
-                            height: 100.h,
-                            fit: BoxFit.cover,
-                            errorBuilder: (_, __, ___) => Image.asset(
-                                AppImages.person,
-                                width: 100.w,
-                                height: 100.h,
-                                fit: BoxFit.cover),
-                          )
-                              : Image.asset(
-                            AppImages.person,
-                            width: 100.w,
-                            height: 100.h,
-                            fit: BoxFit.cover,
-                          )),
-                        ),
-                      ),
-                      // Edit button
-                      Positioned(
-                        bottom: 0,
-                        right: 0,
-                        child: GestureDetector(
-                          onTap: _showImagePickerOptions,
-                          child: Container(
-                            padding: EdgeInsets.all(8.r),
-                            decoration: BoxDecoration(
-                              color: AppColors.kOrange,
-                              shape: BoxShape.circle,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.3),
-                                  spreadRadius: 1,
-                                  blurRadius: 3,
-                                  offset: Offset(0, 2),
-                                ),
-                              ],
-                            ),
-                            child: Icon(
-                              Icons.camera_alt,
-                              color: Colors.white,
-                              size: 20.sp,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Text(
-                    "${_userData?.firstName ?? ''} ${_userData?.lastName ?? ''}",
-                    style: AppFonts.font20WhiteWeight800,
-                  ),
-                  SizedBox(height: 30.h),
-                  Form(
-                    key: _formKey,
-                    child: Column(
+        return WillPopScope(
+          onWillPop: () async {
+            return true; 
+          },
+          child: CustomScaffold(
+            backgroundImage: AppImages.authBackground,
+            enableBlur: false,
+            child: _dataLoaded
+                ? SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.all(24.w),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        CustomTextFormField(
-                          controller: _firstNameController,
-                          hintText: "First Name",
-                          prefixIcon: Icon(Icons.person_outline),
-                          backgroundColor: Colors.white.withOpacity(0.1),
+                        InkWell(
+                          onTap: () => Navigator.pop(context),
+                          child: Image.asset(AppImages.back),
                         ),
-                        SizedBox(height: 16.h),
-                        CustomTextFormField(
-                          controller: _lastNameController,
-                          hintText: "Last Name",
-                          prefixIcon: Icon(Icons.person_outline),
-                          backgroundColor: Colors.white.withOpacity(0.1),
-                        ),
-                        SizedBox(height: 16.h),
-                        CustomTextFormField(
-                          controller: _emailController,
-                          hintText: "Email",
-                          prefixIcon: Icon(Icons.email_outlined),
-                          backgroundColor: Colors.white.withOpacity(0.1),
-                        ),
-                        SizedBox(height: 50.h),
-                        CustomProfileField(
-                          title: 'Your Weight',
-                          value: _weight,
-                          onTap: () {
-                            _showWeightDialog(context);
-                          },
-                        ),
-                        CustomProfileField(
-                          title: 'Your Goal',
-                          value: _goal,
-                          onTap: () {
-                            _showGoalDialog(context);
-                          },
-                        ),
-                        CustomProfileField(
-                          title: 'Your activity level',
-                          value: _activityLevel,
-                          onTap: () {
-                            _showActivityLevelDialog(context);
-                          },
-                        ),
-                        SizedBox(height: 32.h),
-                        CustomButton(
-                          onPressed: () {
-                            if (_formKey.currentState!.validate()) {
-                              _submitEditProfile(context);
-                            }
-                          },
-                          text: "Save",
-                          textStyle: AppFonts.font16WhiteWeight500,
+                        SizedBox(width: 85.w),
+                        Text(
+                          "Edit Profile",
+                          style: AppFonts.font24WhiteWeight600,
                         ),
                       ],
                     ),
-                  ),
-                ],
+                    SizedBox(height: 30.h),
+                    Center(
+                      child: Column(
+                        children: [
+                          ClipOval(
+                            child: _profileImageUrl.isNotEmpty
+                                ? CachedNetworkImage(
+                              imageUrl: _profileImageUrl,
+                              fit: BoxFit.cover,
+                              height: 100.h,
+                              width: 100.w,
+                              placeholder: (context, url) => CircularProgressIndicator(),
+                              errorWidget: (context, url, error) => Image.asset(
+                                AppImages.person,
+                                height: 100.h,
+                                width: 100.w,
+                                fit: BoxFit.cover,
+                              ),
+                            )
+                                : Image.asset(
+                              AppImages.person,
+                              height: 100.h,
+                              width: 100.w,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          SizedBox(height: 10.h),
+                          Text(
+                            "${_firstNameController.text} ${_lastNameController.text}",
+                            style: AppFonts.font20WhiteWeight800,
+                          )
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 30.h),
+                    Form(
+                      key: _formKey,
+                      child: Column(
+                        children: [
+                          CustomTextFormField(
+                            controller: _firstNameController,
+                            hintText: "First Name",
+                            prefixIcon: Icon(Icons.person_outline),
+                            backgroundColor: Colors.white.withOpacity(0.1),
+                          ),
+                          SizedBox(height: 16.h),
+                          CustomTextFormField(
+                            controller: _lastNameController,
+                            hintText: "Last Name",
+                            prefixIcon: Icon(Icons.person_outline),
+                            backgroundColor: Colors.white.withOpacity(0.1),
+                          ),
+                          SizedBox(height: 16.h),
+                          CustomTextFormField(
+                            controller: _emailController,
+                            hintText: "Email",
+                            prefixIcon: Icon(Icons.email_outlined),
+                            backgroundColor: Colors.white.withOpacity(0.1),
+                          ),
+                          SizedBox(height: 50.h),
+                          CustomProfileField(
+                            title: 'Your Weight',
+                            value: _weight,
+                            onTap: () async {
+                              await _saveCurrentValues();
+
+                              Navigator.pushNamed(
+                                  context,
+                                  PageRouteName.weightScreen,
+                                  arguments: {'isFromEdit': true}
+                              ).then((_) async {
+                                await _loadUserPreferences();
+                              });
+                            },
+                          ),
+                          SizedBox(height: 8.h),
+                          CustomProfileField(
+                            title: 'Your Goal',
+                            value: _goal,
+                            onTap: () async {
+                              await _saveCurrentValues();
+
+                              Navigator.pushNamed(
+                                  context,
+                                  PageRouteName.goalScreen,
+                                  arguments: {'isFromEdit': true}
+                              ).then((_) async {
+                                await _loadUserPreferences();
+                              });
+                            },
+                          ),
+                          SizedBox(height: 8.h),
+                          CustomProfileField(
+                            title: 'Your activity level',
+                            value: _activityLevel,
+                            onTap: () async {
+                              await _saveCurrentValues();
+
+                              Navigator.pushNamed(
+                                  context,
+                                  PageRouteName.activityScreen,
+                                  arguments: {'isFromEdit': true}
+                              ).then((_) async {
+                                await _loadUserPreferences();
+                              });
+                            },
+                          ),
+                          SizedBox(height: 32.h),
+                          CustomButton(
+                            onPressed: () {
+                              if (_formKey.currentState!.validate()) {
+                                _submitEditProfile();
+                              }
+                            },
+                            text: "Save",
+                            textStyle: AppFonts.font16WhiteWeight500,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            )
+                : Center(
+              child: CircularProgressIndicator(
+                color: Colors.orange,
               ),
             ),
           ),
         );
       },
-    );
-  }
-
-  void _submitEditProfile(BuildContext context) {
-    final firstName = _firstNameController.text.trim();
-    final lastName = _lastNameController.text.trim();
-    final email = _emailController.text.trim();
-
-    final weightValue = int.tryParse(_weight.replaceAll('KG', '').trim());
-
-    context.read<EditProfileCubit>().editProfile(
-      firstName: firstName.isNotEmpty ? firstName : null,
-      lastName: lastName.isNotEmpty ? lastName : null,
-      email: email.isNotEmpty ? email : null,
-      weight: weightValue,
-      goal: _goal != 'Gain Weight' ? _goal : null,
-      activityLevel: _activityLevel,
-    );
-  }
-
-  void _showWeightDialog(BuildContext context) {
-    final controller = TextEditingController(text: _weight.replaceAll('KG', '').trim());
-
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text('Edit Weight', style: AppFonts.font18BlackWeight500),
-        content: CustomTextFormField(
-          controller: controller,
-          hintText: "Weight in KG",
-          keyBordType: TextInputType.number,
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text('Cancel', style: AppFonts.font14GreyWeight500),
-          ),
-          TextButton(
-            onPressed: () {
-              setState(() {
-                _weight = '${controller.text.trim()} KG';
-              });
-              Navigator.pop(context);
-            },
-            child: Text('Save', style: AppFonts.font14LightGreenWeight500),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _showGoalDialog(BuildContext context) {
-    final goals = ['Gain Weight', 'Lose Weight', 'Maintain Weight', 'Build Muscle'];
-
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text('Select Goal', style: AppFonts.font18BlackWeight500),
-        content: SizedBox(
-          width: double.maxFinite,
-          child: ListView.builder(
-            shrinkWrap: true,
-            itemCount: goals.length,
-            itemBuilder: (context, index) {
-              return ListTile(
-                title: Text(goals[index]),
-                onTap: () {
-                  setState(() {
-                    _goal = goals[index];
-                  });
-                  Navigator.pop(context);
-                },
-              );
-            },
-          ),
-        ),
-      ),
-    );
-  }
-
-  void _showActivityLevelDialog(BuildContext context) {
-    final activityLevels = ['level1', 'level2', 'level3', 'level4', 'level5'];
-
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text('Select Activity Level', style: AppFonts.font18BlackWeight500),
-        content: SizedBox(
-          width: double.maxFinite,
-          child: ListView.builder(
-            shrinkWrap: true,
-            itemCount: activityLevels.length,
-            itemBuilder: (context, index) {
-              return ListTile(
-                title: Text(activityLevels[index]),
-                onTap: () {
-                  setState(() {
-                    _activityLevel = activityLevels[index];
-                  });
-                  Navigator.pop(context);
-                },
-              );
-            },
-          ),
-        ),
-      ),
     );
   }
 }

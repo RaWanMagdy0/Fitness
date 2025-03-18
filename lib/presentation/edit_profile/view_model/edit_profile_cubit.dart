@@ -1,9 +1,10 @@
 import 'package:injectable/injectable.dart';
 import '../../../../domain/use_case/auth/edit_profile_use_case.dart';
-import '../../../core/api/api_result.dart' show Fail, Success;
-import '../../../core/base/base_view_model.dart' show BaseViewModel;
-import '../../../data/models/edit_profile/edit_profile_request_model.dart' show EditProfileRequestModel;
-import '../../../data/models/edit_profile/edit_profile_response_model.dart' show EditProfileResponseModel;
+import '../../../core/api/api_result.dart';
+import '../../../core/base/base_view_model.dart';
+import '../../../core/local/token_manger.dart';
+import '../../../data/models/edit_profile/edit_profile_request_model.dart';
+import '../../../data/models/edit_profile/edit_profile_response_model.dart';
 
 part 'edit_profile_state.dart';
 
@@ -28,6 +29,13 @@ class EditProfileCubit extends BaseViewModel<EditProfileState> {
   }) async {
     emit(EditProfileLoading());
 
+    // Verify token is available
+    final token = await TokenManager.getToken();
+    if (token == null || token.isEmpty) {
+      emit(EditProfileError("Authorization token is missing. Please log in again."));
+      return;
+    }
+
     final requestModel = EditProfileRequestModel(
       firstName: firstName,
       lastName: lastName,
@@ -49,7 +57,16 @@ class EditProfileCubit extends BaseViewModel<EditProfileState> {
       emit(EditProfileSuccess(data?.message ?? "Profile updated successfully"));
     } else if (result is Fail<EditProfileResponseModel>) {
       final exception = (result).exception;
-      emit(EditProfileError(getErrorMassageFromException(exception)));
+      final errorMsg = getErrorMassageFromException(exception);
+
+      // Handle token specific errors
+      if (errorMsg.contains("token") ||
+          errorMsg.contains("unauthorized") ||
+          errorMsg.contains("Unauthorized")) {
+        emit(EditProfileError("Your session has expired. Please log in again."));
+      } else {
+        emit(EditProfileError(errorMsg));
+      }
     }
   }
 }

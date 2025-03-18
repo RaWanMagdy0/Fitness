@@ -7,7 +7,7 @@ import '../api_const.dart';
 
 @injectable
 class DioFactory {
-  Duration get _timeout => const Duration(seconds: 120);
+  Duration get _timeout => const Duration(seconds: 60);
 
   Dio createDio() {
     Dio dio = Dio();

@@ -19,6 +19,14 @@ import '../../models/login/request/login_request_model.dart'
     show LoginRequestModel;
 import '../../models/login/response/login_response_model.dart'
     show LoginResponseModel;
+import '../../models/edit_profile/edit_profile_request_model.dart';
+import '../../models/edit_profile/edit_profile_response_model.dart';
+import '../../models/forgot_password/request/forgot_password_request_model.dart';
+import '../../models/forgot_password/request/reset_password_request_model.dart';
+import '../../models/forgot_password/request/verify_code_request_model.dart';
+import '../../models/forgot_password/response/forgot_password_response_model.dart';
+import '../../models/login/request/login_request_model.dart';
+import '../../models/login/response/login_response_model.dart';
 import '../../models/sign_up/request/sign_up_request_body.dart';
 part 'auth_api_manager.g.dart';
 
@@ -27,34 +35,36 @@ part 'auth_api_manager.g.dart';
 abstract class AuthApiManager {
   @factoryMethod
   factory AuthApiManager(Dio dio) = _AuthApiManager;
+
   @POST(ApiConstants.login)
   Future<LoginResponseModel> login(@Body() LoginRequestModel loginRequestBody);
 
   @POST(ApiConstants.signUp)
   Future<SignUpResponseModel> signUp(
-    @Body() SignupRequestBody signupRequestBody,
-  );
+      @Body() SignupRequestBody signupRequestBody,
+      );
+
   @POST(ApiConstants.forgotPassword)
   Future<ForgotPasswordResponseModel> forgotPassword(
-    @Body() ForgotPasswordRequestModel requestModel,
-  );
+      @Body() ForgotPasswordRequestModel requestModel,
+      );
 
   @POST(ApiConstants.verifyResetCode)
   Future<ForgotPasswordResponseModel> verifyResetCode(
-    @Body() VerifyCodeRequestModel requestModel,
-  );
+      @Body() VerifyCodeRequestModel requestModel,
+      );
 
   @PUT(ApiConstants.resetPassword)
   Future<ForgotPasswordResponseModel> resetPassword(
-    @Body() ResetPasswordRequestModel requestModel,
-  );
+      @Body() ResetPasswordRequestModel requestModel,
+      );
 
   @PUT(ApiConstants.editProfile)
   Future<EditProfileResponseModel> editProfile(
-    @Body() EditProfileRequestModel requestModel,
-      @Header("Authorization") String token
-  );
 
   @GET(ApiConstants.logout)
   Future<String?> logout(@Header("Authorization") String token);
+      @Body() EditProfileRequestModel requestModel,
+      [@Extras() Options? options]
+      );
 }
