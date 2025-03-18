@@ -185,9 +185,7 @@ class _MealsScreenState extends State<MealsScreen> {
                         itemCount: state.meals.length,
                         itemBuilder: (context, index) {
                           final meal = state.meals[index];
-                          // Inside MealsScreen class, update the GestureDetector's onTap in the GridView.builder:
 
-                          // 1. Update your navigation code in MealsScreen:
 
                           return GestureDetector(
                             onTap: () => Navigator.push(
@@ -201,50 +199,42 @@ class _MealsScreenState extends State<MealsScreen> {
                                 ),
                               ),
                             ),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(20),
-                                child: Stack(
-                                  fit: StackFit.expand,
-                                  children: [
-                                    Image.network(
-                                      meal.strMealThumb ?? '',
-                                      fit: BoxFit.cover,
-                                      errorBuilder:
-                                          (context, error, stackTrace) {
-                                        return Container(
-                                          color: Colors.grey[800],
-                                          child: const Center(
-                                            child: Icon(
-                                              Icons.restaurant,
-                                              color: Colors.white54,
-                                              size: 48,
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                    Align(
-                                      alignment: Alignment.bottomCenter,
-                                      child: Container(
-                                        width: double.infinity,
-                                        padding:
-                                            EdgeInsets.symmetric(vertical: 8.h),
-                                        color: Colors.black.withOpacity(0.5),
-                                        child: Text(
-                                          meal.strMeal ?? '',
-                                          style: AppFonts.font16WhiteWeight700,
-                                          textAlign: TextAlign.center,
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(20),
+                              child: Stack(
+                                fit: StackFit.expand,
+                                children: [
+                                  Image.network(
+                                    meal.strMealThumb ?? '',
+                                    fit: BoxFit.cover,
+                                    errorBuilder:
+                                        (context, error, stackTrace) {
+                                      return  Center(
+                                        child: Icon(
+                                          Icons.restaurant,
+                                          color: Colors.white54,
+                                          size: 48,
                                         ),
+                                      );
+                                    },
+                                  ),
+                                  Align(
+                                    alignment: Alignment.bottomCenter,
+                                    child: Container(
+                                      width: double.infinity,
+                                      padding:
+                                          EdgeInsets.symmetric(vertical: 8.h),
+                                      color: Colors.black.withOpacity(0.5),
+                                      child: Text(
+                                        meal.strMeal ?? '',
+                                        style: AppFonts.font16WhiteWeight700,
+                                        textAlign: TextAlign.center,
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
                                       ),
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
                             ),
                           );
