@@ -1,11 +1,11 @@
 import 'package:fitness_app/core/styles/colors/app_colors.dart';
 import 'package:fitness_app/core/styles/fonts/app_fonts.dart';
 import 'package:fitness_app/core/utils/widget/custom%20scaffold.dart';
+import 'package:fitness_app/core/utils/widget/shimmer_loading_widget.dart';
 import 'package:fitness_app/presentation/profile/view/widgets/custom_profile_row.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import '../../../core/di/di.dart';
 import '../../../core/routes/page_route_name.dart';
@@ -57,9 +57,7 @@ class _MainProfileScreenState extends State<MainProfileScreen> {
         },
         builder: (context, state) {
           if (state is GetUserDataLoadingState) {
-            return Center(
-              child: Lottie.asset(AppImages.loadingAnimation),
-            );
+            return _buildShimmerProfile(context, local, provider);
           } else if (state is GetUserDataErrorState) {
             return Center(
               child: Text(state.errorMessage ?? 'An error occurred'),
@@ -220,5 +218,106 @@ class _MainProfileScreenState extends State<MainProfileScreen> {
           }
           return Container();
         });
+  }
+
+  Widget _buildShimmerProfile(BuildContext context, S local, LocalProvider provider) {
+    return CustomScaffold(
+      backgroundImage: AppImages.splashBackG,
+      enableBlur: true,
+      blurStrength: 6.0,
+      blurHeight: 320.0.h,
+      blurWidth: 350.0.w,
+      borderRadius: 30.0,
+      overlayOpacity: 0.7,
+      color: Color(0xFF242424).withOpacity(0.6),
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            // Header
+            Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: Row(
+                children: [
+                  Image.asset(AppImages.back),
+                  100.horizontalSpace,
+                  Center(
+                    child: Text(
+                      local.profile,
+                      style: AppFonts.font24WhiteWeight600,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            // Profile image and name shimmer
+            Column(
+              children: [
+                // Profile image shimmer
+                ShimmerLoadingWidget(
+                  width: 100.w,
+                  height: 100.h,
+                  borderRadius: 50.r, // Circle shape
+                ),
+                15.verticalSpace,
+                // Name shimmer
+                ShimmerLoadingWidget(
+                  width: 150.w,
+                  height: 24.h,
+                  borderRadius: 4.r,
+                ),
+              ],
+            ),
+
+            70.verticalSpace,
+
+            // Menu items shimmer
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 23.0.w),
+              child: Column(
+                children: List.generate(
+                  7,
+                      (index) => Column(
+                    children: [
+                      Row(
+                        children: [
+                          // Icon shimmer
+                          ShimmerLoadingWidget(
+                            width: 24.w,
+                            height: 24.h,
+                            borderRadius: 4.r,
+                          ),
+                          15.horizontalSpace,
+                          // Text shimmer
+                          ShimmerLoadingWidget(
+                            width: 200.w,
+                            height: 18.h,
+                            borderRadius: 4.r,
+                          ),
+                          Spacer(),
+                          // Arrow shimmer
+                          ShimmerLoadingWidget(
+                            width: 16.w,
+                            height: 16.h,
+                            borderRadius: 2.r,
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        width: 350.0.w,
+                        child: Divider(
+                          color: AppColors.kGray,
+                        ),
+                      ),
+                      10.verticalSpace,
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
