@@ -8,15 +8,15 @@ class FoodTabBar extends StatelessWidget {
   final List<String> tabNames;
 
   const FoodTabBar({
-    Key? key,
+    super.key,
     required this.selectedIndex,
     required this.onTabSelected,
     required this.tabNames,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 40.h,
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,

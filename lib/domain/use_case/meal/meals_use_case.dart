@@ -2,7 +2,6 @@ import 'package:fitness_app/data/models/meal/meals_response_model.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../core/api/api_result.dart';
-import '../../entity/meal/meals_tabs_entity.dart';
 import '../../repository/meal_repository/meal_repo.dart';
 
 @injectable

@@ -6,10 +6,10 @@ class FoodCategory extends StatelessWidget {
   final String imageUrl;
   final String name;
   const FoodCategory({
-    Key? key,
+    super.key,
     required this.imageUrl,
     required this.name,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

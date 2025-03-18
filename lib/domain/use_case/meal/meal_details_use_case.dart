@@ -1,7 +1,6 @@
 import 'package:injectable/injectable.dart';
 import '../../../core/api/api_result.dart';
 import '../../../data/models/meal/meal_model.dart';
-import '../../repository/meal_repository/meal_repository.dart';
 import '../../repository/meal_repository/meal_repo.dart';
 
 @injectable

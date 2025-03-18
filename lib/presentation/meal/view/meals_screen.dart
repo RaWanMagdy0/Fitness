@@ -15,7 +15,7 @@ import '../../../data/models/meal/meals_tabs_response_model.dart';
 import 'meal_details_screen.dart';
 
 class MealsScreen extends StatefulWidget {
-  const MealsScreen({Key? key}) : super(key: key);
+  const MealsScreen({super.key});
 
   @override
   State<MealsScreen> createState() => _MealsScreenState();

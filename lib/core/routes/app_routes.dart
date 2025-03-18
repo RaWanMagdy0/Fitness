@@ -21,6 +21,7 @@ import '../../presentation/edit_profile/view/edit_profile_screen.dart'
 import '../../presentation/home/exercise_screen/view/exercise_screen.dart';
 import '../../presentation/home/exercise_screen/view_model/exercise_view_model.dart';
 import '../../presentation/home/home_screen/view/home_screen.dart';
+import '../../presentation/home/home_screen/view_model/home_cubit.dart';
 import '../../presentation/home/workout/view/workout_screen.dart';
 import '../../presentation/home/workout/view_model/workout_cubit.dart';
 import '../../presentation/layout/main_page.dart';
@@ -28,6 +29,7 @@ import '../../presentation/edit_profile/view_model/edit_profile_cubit.dart'
     show EditProfileCubit;
 import '../../presentation/meal/view/meal_details_screen.dart'
     show MealDetailsScreen;
+import '../../presentation/meal/view/meals_screen.dart';
 import '../../presentation/meal/view_model/meal_details_cubit.dart'
     show MealDetailsCubit;
 import '../../presentation/online_coach/view/chat_screen.dart';

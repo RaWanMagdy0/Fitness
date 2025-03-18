@@ -1,6 +1,5 @@
 import '../../../data/models/meal/meals_response_model.dart';
 import '../../../data/models/meal/meals_tabs_response_model.dart';
-import '../../../data/models/meal/meal_model.dart';
 
 sealed class MealsScreenState {}
 

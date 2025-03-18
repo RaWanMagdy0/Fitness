@@ -3,7 +3,6 @@ import 'package:injectable/injectable.dart';
 
 import '../../../core/api/api_result.dart';
 import '../../../data/models/meal/meals_tabs_response_model.dart';
-import '../../entity/meal/meals_tabs_entity.dart';
 
 @injectable
 class MealsTabsUseCase {

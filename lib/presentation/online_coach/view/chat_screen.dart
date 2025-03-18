@@ -5,6 +5,7 @@ import 'package:fitness_app/presentation/profile/view_model/profile_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lottie/lottie.dart';
 import '../../../core/styles/fonts/app_fonts.dart';
 import '../../../core/styles/images/app_images.dart';
 import '../../../core/utils/widget/custom_arrow.dart';
@@ -14,7 +15,8 @@ import '../view_model/smart_coach_state.dart';
 import '../widget/object_box.dart';
 
 class ChatScreen extends StatefulWidget {
- final String? title;
+  final String? title;
+
   const ChatScreen({super.key, this.title});
 
   @override
@@ -25,6 +27,7 @@ class _ChatScreenState extends State<ChatScreen> {
   final TextEditingController _controller = TextEditingController();
   List<String> previousConversations = [];
   late GeminiCubit viewModel;
+  bool showWelcomeMessage = true;
 
   @override
   void initState() {
@@ -33,12 +36,11 @@ class _ChatScreenState extends State<ChatScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (widget.title != null && widget.title!.isNotEmpty) {
         context.read<GeminiCubit>().loadChatByTitle(widget.title!);
-      } else {
-      }
+      } else {}
       updateChatTitles();
-
     });
   }
+
   void updateChatTitles() {
     final objectBox = context.read<ObjectBox>();
     setState(() {
@@ -57,8 +59,8 @@ class _ChatScreenState extends State<ChatScreen> {
             child: Container(
               decoration: BoxDecoration(
                   color: AppColors.kMainColor.withOpacity(0.8),
-                  borderRadius: BorderRadius.only(topLeft:Radius.circular(15.r) )
-              ),
+                  borderRadius:
+                      BorderRadius.only(topLeft: Radius.circular(15.r))),
               width: MediaQuery.of(context).size.width * 0.7,
               height: double.infinity,
               padding: EdgeInsets.all(16),
@@ -76,19 +78,21 @@ class _ChatScreenState extends State<ChatScreen> {
                   Expanded(
                     child: ListView.separated(
                       itemCount: previousConversations.length,
-                      separatorBuilder: (context, index) => Divider(color: Colors.white24, thickness: 1),
+                      separatorBuilder: (context, index) =>
+                          Divider(color: Colors.white24, thickness: 1),
                       itemBuilder: (context, index) {
                         return ListTile(
-                            leading: Icon(Icons.arrow_back_ios, color: AppColors.kOrange),
+                            leading: Icon(Icons.arrow_back_ios,
+                                color: AppColors.kOrange),
                             title: Text(
                               previousConversations[index],
                               style: TextStyle(color: Colors.white),
                             ),
                             onTap: () {
                               Navigator.pop(context);
-                              viewModel.loadChatByTitle(previousConversations[index]);
-                            }
-                        );
+                              viewModel.loadChatByTitle(
+                                  previousConversations[index]);
+                            });
                       },
                     ),
                   ),
@@ -100,6 +104,7 @@ class _ChatScreenState extends State<ChatScreen> {
       },
     );
   }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider.value(
@@ -107,8 +112,9 @@ class _ChatScreenState extends State<ChatScreen> {
       child: BlocBuilder<GeminiCubit, GeminiState>(
         builder: (context, state) {
           GeminiCubit cubit = BlocProvider.of<GeminiCubit>(context);
-          List<Map<String, String>> chatMessages = state is GeminiSuccessState ? state.messages : List.from(cubit.messages);
-
+          List<Map<String, String>> chatMessages = state is GeminiSuccessState
+              ? state.messages
+              : List.from(cubit.messages);
           return CustomScaffold(
             backgroundImage: AppImages.backgroundRobot,
             child: Padding(
@@ -119,13 +125,15 @@ class _ChatScreenState extends State<ChatScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       InkWell(
-                        onTap: (){
-                          Navigator.pushReplacementNamed(context, PageRouteName.robotScreen);
-                        },
+                          onTap: () {
+                            Navigator.pushReplacementNamed(
+                                context, PageRouteName.robotScreen);
+                          },
                           child: CustomArrow()),
                       Text(
                         "Search Coach",
-                        style: AppFonts.font16WhiteWeight500.copyWith(fontSize: 18),
+                        style: AppFonts.font16WhiteWeight500
+                            .copyWith(fontSize: 18),
                       ),
                       GestureDetector(
                         onTap: openPreviousChats,
@@ -133,7 +141,28 @@ class _ChatScreenState extends State<ChatScreen> {
                       ),
                     ],
                   ),
-                  25.verticalSpace,
+                  50.verticalSpace,
+                  if (showWelcomeMessage)
+                    Expanded(
+                      child: Center(
+                        child: Column(
+                          children: [
+                            Lottie.asset(
+                              AppImages.geminiAnimi,
+                              height: 260.h,
+                            ),
+                            Text(
+                              "Hi How Can I Help You Today!",
+                              style: TextStyle(
+                                  color: AppColors.kWhite,
+                                  fontSize: 21.sp,
+                                  fontWeight: FontWeight.w500),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                   Expanded(
                     child: ListView.builder(
                       itemCount: chatMessages.length,
@@ -143,7 +172,9 @@ class _ChatScreenState extends State<ChatScreen> {
                         return Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Row(
-                            mainAxisAlignment: isSender ? MainAxisAlignment.end : MainAxisAlignment.start,
+                            mainAxisAlignment: isSender
+                                ? MainAxisAlignment.end
+                                : MainAxisAlignment.start,
                             children: [
                               if (!isSender)
                                 CircleAvatar(
@@ -158,13 +189,15 @@ class _ChatScreenState extends State<ChatScreen> {
                                     ),
                                   ),
                                 ),
-
                               8.horizontalSpace,
                               Flexible(
                                 child: Container(
                                   padding: EdgeInsets.all(10.0),
                                   decoration: BoxDecoration(
-                                    color: isSender ? AppColors.brownColor.withOpacity(0.5) : AppColors.bottomNavColor.withOpacity(0.9),
+                                    color: isSender
+                                        ? AppColors.brownColor.withOpacity(0.5)
+                                        : AppColors.bottomNavColor
+                                            .withOpacity(0.9),
                                     borderRadius: BorderRadius.circular(12.0),
                                   ),
                                   child: Text(
@@ -178,37 +211,39 @@ class _ChatScreenState extends State<ChatScreen> {
                               if (isSender)
                                 BlocBuilder<ProfileCubit, ProfileState>(
                                   builder: (context, state) {
-                                    final userImage = context.watch<ProfileCubit>().userImage;
+                                    final userImage =
+                                        context.watch<ProfileCubit>().userImage;
                                     return CircleAvatar(
                                       radius: 24,
                                       backgroundColor: Colors.transparent,
                                       child: ClipOval(
-                                        child: userImage != null && userImage.isNotEmpty
+                                        child: userImage != null &&
+                                                userImage.isNotEmpty
                                             ? Image.network(
-                                          userImage,
-                                          fit: BoxFit.cover,
-                                          width: 48,
-                                          height: 48,
-                                          errorBuilder: (context, error, stackTrace) {
-                                            return Image.asset(
-                                              AppImages.person,
-                                              fit: BoxFit.cover,
-                                              width: 48,
-                                              height: 48,
-                                            );
-                                          },
-                                        )
+                                                userImage,
+                                                fit: BoxFit.cover,
+                                                width: 48,
+                                                height: 48,
+                                                errorBuilder: (context, error,
+                                                    stackTrace) {
+                                                  return Image.asset(
+                                                    AppImages.person,
+                                                    fit: BoxFit.cover,
+                                                    width: 48,
+                                                    height: 48,
+                                                  );
+                                                },
+                                              )
                                             : Image.asset(
-                                          AppImages.person,
-                                          fit: BoxFit.cover,
-                                          width: 48,
-                                          height: 48,
-                                        ),
+                                                AppImages.person,
+                                                fit: BoxFit.cover,
+                                                width: 48,
+                                                height: 48,
+                                              ),
                                       ),
                                     );
                                   },
                                 ),
-
                             ],
                           ),
                         );
@@ -220,7 +255,8 @@ class _ChatScreenState extends State<ChatScreen> {
                     child: Row(
                       children: [
                         IconButton(
-                          icon: Icon(Icons.emoji_emotions, color: AppColors.kWhite),
+                          icon: Icon(Icons.emoji_emotions,
+                              color: AppColors.kWhite),
                           onPressed: () {},
                         ),
                         8.horizontalSpace,
@@ -239,7 +275,9 @@ class _ChatScreenState extends State<ChatScreen> {
                         IconButton(
                           icon: Icon(
                             cubit.isListening ? Icons.stop_circle : Icons.mic,
-                            color: cubit.isListening ? Colors.red : AppColors.kWhite,
+                            color: cubit.isListening
+                                ? Colors.red
+                                : AppColors.kWhite,
                             size: 28,
                           ),
                           onPressed: () {
@@ -250,14 +288,18 @@ class _ChatScreenState extends State<ChatScreen> {
                             }
                           },
                         ),
-
                         IconButton(
                           icon: Icon(Icons.send, color: AppColors.kWhite),
                           onPressed: () {
-                            cubit.sendMessage(_controller.text);
-                            _controller.clear();
-                            updateChatTitles();
-                          }
+                            if (_controller.text.trim().isNotEmpty) {
+                              cubit.sendMessage(_controller.text);
+                              _controller.clear();
+                              setState(() {
+                                showWelcomeMessage = false;
+                              });
+                              updateChatTitles();
+                            }
+                          },
                         ),
                       ],
                     ),

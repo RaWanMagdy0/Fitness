@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart' show Injectable;
 
 import '../../../core/api/api_result.dart' show Fail, Result, Success;
