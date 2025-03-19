@@ -177,16 +177,13 @@ extension GetItInjectableX on _i174.GetIt {
         ));
     gh.factory<_i755.LogoutUseCase>(
         () => _i755.LogoutUseCase(gh<_i1056.AuthRepository>()));
-    gh.factory<_i915.HomeCubit>(() => _i915.HomeCubit(
+    gh.factory<_i352.WorkoutCubit>(() => _i352.WorkoutCubit(
           gh<_i789.GetMuscleGroupsUseCase>(),
           gh<_i473.GetMuscleGroupDetailsUseCase>(),
         ));
- FIT-23-Exercise
     gh.factory<_i360.MealDetailsCubit>(
         () => _i360.MealDetailsCubit(gh<_i893.MealDetailsUseCase>()));
     gh.factory<_i915.HomeCubit>(() => _i915.HomeCubit(
-    gh.factory<_i352.WorkoutCubit>(() => _i352.WorkoutCubit(
- development
           gh<_i789.GetMuscleGroupsUseCase>(),
           gh<_i954.MealsTabsUseCase>(),
           gh<_i888.RandomMuscleUseCase>(),

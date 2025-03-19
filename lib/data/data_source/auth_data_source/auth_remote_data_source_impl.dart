@@ -149,4 +149,4 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     }
     return 'Bearer $token';
   }
-}}
+}

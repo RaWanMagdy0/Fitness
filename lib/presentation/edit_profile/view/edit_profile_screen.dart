@@ -1,20 +1,20 @@
-import 'package:fitness_app/presentation/edit_profile/view/widgets/custom_profile_field.dart';
+
+import 'package:fitness_app/presentation/edit_profile/view/widgets/edit_profile_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../../../core/styles/fonts/app_fonts.dart';
-import '../../../../core/utils/widget/custom_button.dart';
-import '../../../../core/utils/widget/custom_text_form_field.dart';
-import '../../../../core/utils/widget/custom scaffold.dart';
-import '../../../../core/utils/widget/shimmer_loading_widget.dart';
-import '../../../../core/routes/page_route_name.dart';
+
 import '../../../core/styles/images/app_images.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../core/styles/fonts/app_fonts.dart';
 import '../../../core/utils/functions/dialogs/app_dialogs.dart';
-import '../view_model/edit_profile_cubit.dart';
+import '../../../core/utils/widget/custom scaffold.dart';
 import '../../profile/view_model/profile_cubit.dart';
 import '../../profile/view_model/profile_state.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import '../view_model/edit_profile_cubit.dart';
+import 'widgets/edit_profile_form.dart';
+import 'widgets/edit_profile_shimmer.dart';
+import 'widgets/profile_image_widget.dart';
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({super.key});
@@ -73,35 +73,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
       setState(() {
         _weight = '${user?.weight ?? 70} KG';
-        _goal = _mapGoalToDisplay(user?.goal);
-        _activityLevel = _mapActivityToDisplay(user?.activityLevel);
+        _goal = EditProfileUtils.mapGoalToDisplay(user?.goal);
+        _activityLevel = EditProfileUtils.mapActivityToDisplay(user?.activityLevel);
         _dataLoaded = true;
       });
     }
-  }
-
-  String _mapGoalToDisplay(String? goal) {
-    final goalMap = {
-      'gain_weight': 'Gain Weight',
-      'lose_weight': 'Lose Weight',
-      'get_fitter': 'Get Fitter',
-      'gain_flexible': 'Gain More Flexible',
-      'learn_basic': 'Learn The Basics'
-    };
-
-    return goalMap[goal] ?? 'Gain Weight';
-  }
-
-  String _mapActivityToDisplay(String? activity) {
-    final activityMap = {
-      'level1': 'Rookie',
-      'level2': 'Beginner',
-      'level3': 'Intermediate',
-      'level4': 'Advanced',
-      'level5': 'Expert'
-    };
-
-    return activityMap[activity] ?? 'Rookie';
   }
 
   Future<void> _loadUserPreferences() async {
@@ -123,10 +99,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   Future<void> _saveCurrentValues() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('current_weight', _weight.replaceAll(' KG', ''));
-    await prefs.setString('current_goal', _goal);
-    await prefs.setString('current_activity', _activityLevel);
+    await EditProfileUtils.saveCurrentValues(_weight, _goal, _activityLevel);
   }
 
   void _submitEditProfile() async {
@@ -136,8 +109,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
     final weightValue = int.tryParse(_weight.replaceAll('KG', '').trim());
 
-    String? formattedGoal = _convertGoalToApiFormat(_goal);
-    String? formattedActivity = _convertActivityToApiFormat(_activityLevel);
+    String? formattedGoal = EditProfileUtils.convertGoalToApiFormat(_goal);
+    String? formattedActivity = EditProfileUtils.convertActivityToApiFormat(_activityLevel);
 
     context.read<EditProfileCubit>().editProfile(
       firstName: firstName.isNotEmpty ? firstName : null,
@@ -147,40 +120,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       goal: formattedGoal,
       activityLevel: formattedActivity,
     );
-  }
-
-  String? _convertGoalToApiFormat(String displayGoal) {
-    final reverseGoalMap = {
-      'Gain Weight': 'gain_weight',
-      'Lose Weight': 'lose_weight',
-      'Get Fitter': 'get_fitter',
-      'Gain More Flexible': 'gain_flexible',
-      'Learn The Basics': 'learn_basic'
-    };
-
-    return reverseGoalMap[displayGoal];
-  }
-
-  String? _convertActivityToApiFormat(String displayActivity) {
-    final reverseActivityMap = {
-      'Rookie': 'level1',
-      'Beginner': 'level2',
-      'Intermediate': 'level3',
-      'Advanced': 'level4',
-      'Expert': 'level5'
-    };
-
-    return reverseActivityMap[displayActivity];
-  }
-
-  Future<void> _clearSavedData() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove('edit_profile_weight');
-    await prefs.remove('edit_profile_goal');
-    await prefs.remove('edit_profile_activity');
-    await prefs.remove('current_weight');
-    await prefs.remove('current_goal');
-    await prefs.remove('current_activity');
   }
 
   @override
@@ -203,7 +142,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             context: context,
             message: state.message,
             whenAnimationFinished: () {
-              _clearSavedData();
+              EditProfileUtils.clearSavedData();
 
               final profileCubit = context.read<ProfileCubit>();
               profileCubit.getUserData();
@@ -249,251 +188,32 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       ],
                     ),
                     SizedBox(height: 30.h),
-                    Center(
-                      child: Column(
-                        children: [
-                          ClipOval(
-                            child: _profileImageUrl.isNotEmpty
-                                ? CachedNetworkImage(
-                              imageUrl: _profileImageUrl,
-                              fit: BoxFit.cover,
-                              height: 100.h,
-                              width: 100.w,
-                              placeholder: (context, url) => CircularProgressIndicator(),
-                              errorWidget: (context, url, error) => Image.asset(
-                                AppImages.person,
-                                height: 100.h,
-                                width: 100.w,
-                                fit: BoxFit.cover,
-                              ),
-                            )
-                                : Image.asset(
-                              AppImages.person,
-                              height: 100.h,
-                              width: 100.w,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          SizedBox(height: 10.h),
-                          Text(
-                            "${_firstNameController.text} ${_lastNameController.text}",
-                            style: AppFonts.font20WhiteWeight800,
-                          )
-                        ],
-                      ),
+                    ProfileImageWidget(
+                      profileImageUrl: _profileImageUrl,
+                      firstName: _firstNameController.text,
+                      lastName: _lastNameController.text,
                     ),
                     SizedBox(height: 30.h),
-                    Form(
-                      key: _formKey,
-                      child: Column(
-                        children: [
-                          CustomTextFormField(
-                            controller: _firstNameController,
-                            hintText: "First Name",
-                            prefixIcon: Icon(Icons.person_outline),
-                            backgroundColor: Colors.white.withOpacity(0.1),
-                          ),
-                          SizedBox(height: 16.h),
-                          CustomTextFormField(
-                            controller: _lastNameController,
-                            hintText: "Last Name",
-                            prefixIcon: Icon(Icons.person_outline),
-                            backgroundColor: Colors.white.withOpacity(0.1),
-                          ),
-                          SizedBox(height: 16.h),
-                          CustomTextFormField(
-                            controller: _emailController,
-                            hintText: "Email",
-                            prefixIcon: Icon(Icons.email_outlined),
-                            backgroundColor: Colors.white.withOpacity(0.1),
-                          ),
-                          SizedBox(height: 50.h),
-                          CustomProfileField(
-                            title: 'Your Weight',
-                            value: _weight,
-                            onTap: () async {
-                              await _saveCurrentValues();
-
-                              Navigator.pushNamed(
-                                  context,
-                                  PageRouteName.weightScreen,
-                                  arguments: {'isFromEdit': true}
-                              ).then((_) async {
-                                await _loadUserPreferences();
-                              });
-                            },
-                          ),
-                          SizedBox(height: 8.h),
-                          CustomProfileField(
-                            title: 'Your Goal',
-                            value: _goal,
-                            onTap: () async {
-                              await _saveCurrentValues();
-
-                              Navigator.pushNamed(
-                                  context,
-                                  PageRouteName.goalScreen,
-                                  arguments: {'isFromEdit': true}
-                              ).then((_) async {
-                                await _loadUserPreferences();
-                              });
-                            },
-                          ),
-                          SizedBox(height: 8.h),
-                          CustomProfileField(
-                            title: 'Your activity level',
-                            value: _activityLevel,
-                            onTap: () async {
-                              await _saveCurrentValues();
-
-                              Navigator.pushNamed(
-                                  context,
-                                  PageRouteName.activityScreen,
-                                  arguments: {'isFromEdit': true}
-                              ).then((_) async {
-                                await _loadUserPreferences();
-                              });
-                            },
-                          ),
-                          SizedBox(height: 32.h),
-                          CustomButton(
-                            onPressed: () {
-                              if (_formKey.currentState!.validate()) {
-                                _submitEditProfile();
-                              }
-                            },
-                            text: "Save",
-                            textStyle: AppFonts.font16WhiteWeight500,
-                          ),
-                        ],
-                      ),
+                    EditProfileForm(
+                      formKey: _formKey,
+                      firstNameController: _firstNameController,
+                      lastNameController: _lastNameController,
+                      emailController: _emailController,
+                      weight: _weight,
+                      goal: _goal,
+                      activityLevel: _activityLevel,
+                      onSaveCurrentValues: _saveCurrentValues,
+                      onLoadUserPreferences: _loadUserPreferences,
+                      onSubmit: _submitEditProfile,
                     ),
                   ],
                 ),
               ),
             )
-                : _buildShimmerLoading(),
+                : const EditProfileShimmer(),
           ),
         );
       },
-    );
-  }
-
-  Widget _buildShimmerLoading() {
-    return SingleChildScrollView(
-      padding: EdgeInsets.all(24.w),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          // Header
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Image.asset(AppImages.back),
-              SizedBox(width: 85.w),
-              ShimmerLoadingWidget(
-                width: 120.w,
-                height: 30.h,
-                borderRadius: 4.r,
-              ),
-            ],
-          ),
-
-          SizedBox(height: 30.h),
-
-          // Profile image and name shimmer
-          Center(
-            child: Column(
-              children: [
-                // Profile image shimmer
-                ShimmerLoadingWidget(
-                  width: 100.w,
-                  height: 100.h,
-                  borderRadius: 50.r, // Circle shape
-                ),
-                SizedBox(height: 10.h),
-                // Name shimmer
-                ShimmerLoadingWidget(
-                  width: 150.w,
-                  height: 24.h,
-                  borderRadius: 4.r,
-                ),
-              ],
-            ),
-          ),
-
-          SizedBox(height: 30.h),
-
-          // Form fields shimmer
-          Column(
-            children: [
-              // First Name field
-              ShimmerLoadingWidget(
-                width: double.infinity,
-                height: 50.h,
-                borderRadius: 25.r,
-              ),
-              SizedBox(height: 16.h),
-
-              // Last Name field
-              ShimmerLoadingWidget(
-                width: double.infinity,
-                height: 50.h,
-                borderRadius: 25.r,
-              ),
-              SizedBox(height: 16.h),
-
-              // Email field
-              ShimmerLoadingWidget(
-                width: double.infinity,
-                height: 50.h,
-                borderRadius: 25.r,
-              ),
-              SizedBox(height: 50.h),
-
-              // Custom fields (Weight, Goal, Activity)
-              _buildCustomFieldShimmer(),
-              SizedBox(height: 8.h),
-              _buildCustomFieldShimmer(),
-              SizedBox(height: 8.h),
-              _buildCustomFieldShimmer(),
-              SizedBox(height: 32.h),
-
-              // Save button
-              ShimmerLoadingWidget(
-                width: double.infinity,
-                height: 45.h,
-                borderRadius: 50.r,
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildCustomFieldShimmer() {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 16.w),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10.r),
-        border: Border.all(color: Colors.grey.withOpacity(0.3)),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          ShimmerLoadingWidget(
-            width: 120.w,
-            height: 18.h,
-            borderRadius: 4.r,
-          ),
-          ShimmerLoadingWidget(
-            width: 80.w,
-            height: 18.h,
-            borderRadius: 4.r,
-          ),
-        ],
-      ),
     );
   }
 }
