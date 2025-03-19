@@ -68,3 +68,4 @@ abstract class AuthApiManager {
   @GET(ApiConstants.logout)
   Future<String?> logout(@Header("Authorization") String token);
 }
+}

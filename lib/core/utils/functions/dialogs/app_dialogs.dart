@@ -3,6 +3,7 @@ import 'package:fitness_app/presentation/profile/view_model/profile_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
+import '../../../routes/page_route_name.dart';
 import '../../../styles/colors/app_colors.dart';
 import '../../../styles/fonts/app_fonts.dart';
 import '../../../styles/images/app_images.dart';
@@ -41,19 +42,6 @@ class AppDialogs {
           errorMassage,
           style: AppFonts.font18BlackWeight500,
         ),
-        /************
-                actions: [
-                TextButton(
-                onPressed: () {
-                Navigator.of(context).pop();
-                },
-                child: Text(
-                'Got it',
-                style: AppFonts.font20BlackWeight400,
-                ),
-                ),
-                ],
-             ************/
       ),
     );
   }
@@ -74,7 +62,7 @@ class AppDialogs {
           onLoaded: (composition) {
             Future.delayed(
               composition.duration,
-              () {
+                  () {
                 if (context.mounted) {
                   Navigator.of(context).pop();
                   if (whenAnimationFinished != null) {
@@ -159,16 +147,20 @@ class AppDialogs {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(50.r),
                           side:
-                              BorderSide(color: Colors.transparent, width: 1.w),
+                          BorderSide(color: Colors.transparent, width: 1.w),
                         ),
                       ),
                       onPressed: () {
                         Navigator.pop(context);
-                        profileCubit.logout();
-                        Navigator.push(
+                        showLoading(context: context);
+                        profileCubit.logout().then((_) {
+                          showHideDialog(context);
+                          Navigator.pushNamedAndRemoveUntil(
                             context,
-                            MaterialPageRoute(
-                                builder: (context) => LoginScreen()));
+                            PageRouteName.login,
+                                (route) => false,
+                          );
+                        });
                       },
                       child: Text(
                         'Logout',

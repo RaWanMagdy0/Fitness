@@ -1,6 +1,7 @@
 import 'package:fitness_app/core/routes/page_route_name.dart';
 import 'package:fitness_app/core/styles/colors/app_colors.dart';
 import 'package:fitness_app/core/utils/widget/custom%20scaffold.dart';
+import 'package:fitness_app/core/utils/widget/shimmer_loading_widget.dart';
 import 'package:fitness_app/presentation/profile/view_model/profile_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -61,6 +62,8 @@ class _ChatScreenState extends State<ChatScreen> {
                   color: AppColors.kMainColor.withOpacity(0.8),
                   borderRadius:
                       BorderRadius.only(topLeft: Radius.circular(15.r))),
+                  borderRadius: BorderRadius.only(topLeft:Radius.circular(15.r))
+              ),
               width: MediaQuery.of(context).size.width * 0.7,
               height: double.infinity,
               padding: EdgeInsets.all(16),
@@ -133,6 +136,9 @@ class _ChatScreenState extends State<ChatScreen> {
                           onTap: () {
                             Navigator.pushReplacementNamed(
                                 context, PageRouteName.robotScreen);
+
+                          onTap: (){
+                            Navigator.pushReplacementNamed(context, PageRouteName.robotScreen);
                           },
                           child: CustomArrow()),
                       Text(
@@ -175,6 +181,10 @@ class _ChatScreenState extends State<ChatScreen> {
                       shrinkWrap: true,
                       physics: const AlwaysScrollableScrollPhysics(),
                       itemCount: chatMessages.length + (isLoading ? 1 : 0),
+                    child: state is GeminiLoadingState
+                        ? _buildLoadingShimmer()
+                        : ListView.builder(
+                      itemCount: chatMessages.length,
                       itemBuilder: (context, index) {
                         if (isLoading && index == chatMessages.length) {
                           return Padding(
@@ -358,6 +368,70 @@ class _ChatScreenState extends State<ChatScreen> {
         AppImages.loadingMess,
         fit: BoxFit.cover,
       ),
+    );
+  }
+}
+                            icon: Icon(Icons.send, color: AppColors.kWhite),
+                            onPressed: () {
+                              cubit.sendMessage(_controller.text);
+                              _controller.clear();
+                              updateChatTitles();
+                            }
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildLoadingShimmer() {
+    return ListView.builder(
+      itemCount: 5, // Show 5 shimmer placeholders
+      itemBuilder: (context, index) {
+        // Alternate between user and AI messages
+        final isUserMessage = index % 2 == 0;
+
+        return Padding(
+          padding: EdgeInsets.all(8.0),
+          child: Row(
+            mainAxisAlignment: isUserMessage ? MainAxisAlignment.end : MainAxisAlignment.start,
+            children: [
+              if (!isUserMessage)
+                ShimmerLoadingWidget(
+                  width: 48.w,
+                  height: 48.h,
+                  borderRadius: 24.r, // Circle
+                ),
+
+              8.horizontalSpace,
+
+              // Message bubble shimmer
+              Flexible(
+                child: ShimmerLoadingWidget(
+                  width: (200 + (index * 20) % 100).w, // Varied width for more natural look
+                  height: (40 + (index * 10) % 30).h, // Varied height
+                  borderRadius: 12.r,
+                ),
+              ),
+
+              8.horizontalSpace,
+
+              if (isUserMessage)
+                ShimmerLoadingWidget(
+                  width: 48.w,
+                  height: 48.h,
+                  borderRadius: 24.r, // Circle
+                ),
+            ],
+          ),
+        );
+      },
     );
   }
 }
