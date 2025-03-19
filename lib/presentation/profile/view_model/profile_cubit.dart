@@ -5,21 +5,23 @@ import '../../../../../../core/api/api_result.dart';
 import '../../../../../../core/base/base_view_model.dart';
 import '../../../domain/entity/profile/user.dart';
 import '../../../domain/use_case/auth/logout_use_case.dart';
+import '../../../domain/use_case/profile/upload_photo_use_case.dart';
 import 'profile_state.dart';
 
 @injectable
 class ProfileCubit extends BaseViewModel<ProfileState> {
   final ProfileUseCase profileUseCase;
   final LogoutUseCase logoutUseCase;
+  final UploadPhotoUseCase _uploadPhotoUseCase;
 
   ProfileCubit(
-    this.profileUseCase,
-    this.logoutUseCase,
-  ) : super(ProfileInitialState());
+      this.profileUseCase,
+      this.logoutUseCase,
+      this._uploadPhotoUseCase,
+      ) : super(ProfileInitialState());
 
-   String? userImage;
-   String? userName;
-  get uploadPhotoUseCase => null;
+  String? userImage;
+  String? userName;
 
   Future<void> getUserData() async {
     emit(GetUserDataLoadingState());
@@ -40,7 +42,7 @@ class ProfileCubit extends BaseViewModel<ProfileState> {
   Future<void> uploadPhoto(File photo) async {
     emit(UploadPhotoLoadingState());
     try {
-      final result = await uploadPhotoUseCase.invoke(photo);
+      final result = await _uploadPhotoUseCase.invoke(photo);
       if (result is Success<User?>) {
         emit(UploadPhotoSuccessState(user: result.data));
         // Refresh user data after successful upload

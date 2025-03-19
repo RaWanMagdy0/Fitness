@@ -57,7 +57,7 @@ class MyApp extends StatelessWidget {
             if (shouldExit) {
               SystemNavigator.pop(); // Close the app
             }
-            return false; // Prevent default back button behavior
+            return false;
           },
           child: MaterialApp(
             locale: Locale(provider.locale),

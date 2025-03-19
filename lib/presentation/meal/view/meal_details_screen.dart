@@ -2,6 +2,7 @@ import 'package:fitness_app/core/styles/colors/app_colors.dart';
 import 'package:fitness_app/core/styles/fonts/app_fonts.dart';
 import 'package:fitness_app/core/utils/widget/custom%20scaffold.dart';
 import 'package:fitness_app/core/utils/widget/custom_arrow.dart';
+import 'package:fitness_app/core/utils/widget/shimmer_loading_widget.dart';
 import 'package:fitness_app/presentation/meal/view_model/meal_details_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -43,9 +44,7 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> with SingleTicker
       child: BlocBuilder<MealDetailsCubit, MealDetailsState>(
         builder: (context, state) {
           if (state is MealDetailsLoading) {
-            return const Center(
-              child: CircularProgressIndicator(color: AppColors.kOrange),
-            );
+            return _buildLoadingShimmer();
           } else if (state is MealDetailsError) {
             return Center(
               child: Text(
@@ -247,6 +246,124 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> with SingleTicker
           return const SizedBox();
         },
       ),
+    );
+  }
+
+  Widget _buildLoadingShimmer() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Header image shimmer
+        Stack(
+          children: [
+            // Image shimmer
+            ShimmerLoadingWidget(
+              width: double.infinity,
+              height: 250.h,
+              borderRadius: 0,
+            ),
+
+            // Back button
+            Positioned(
+              top: 16.h,
+              left: 16.w,
+              child: GestureDetector(
+                onTap: () => Navigator.pop(context),
+                child: const CustomArrow(),
+              ),
+            ),
+
+            // Title shimmer
+            Positioned(
+              bottom: 20.h,
+              left: 20.w,
+              right: 20.w,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ShimmerLoadingWidget(
+                    width: 200.w,
+                    height: 24.h,
+                    borderRadius: 4.r,
+                  ),
+                  SizedBox(height: 5.h),
+                  ShimmerLoadingWidget(
+                    width: 150.w,
+                    height: 16.h,
+                    borderRadius: 4.r,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+
+        10.verticalSpace,
+
+        // Nutrition info shimmer
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16.w),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: List.generate(
+              4,
+                  (index) => ShimmerLoadingWidget(
+                width: 70.w,
+                height: 50.h,
+                borderRadius: 20.r,
+              ),
+            ),
+          ),
+        ),
+
+        16.verticalSpace,
+
+        // Difficulty level tabs shimmer
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16.w),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: List.generate(
+              3,
+                  (index) => ShimmerLoadingWidget(
+                width: 100.w,
+                height: 35.h,
+                borderRadius: 20.r,
+              ),
+            ),
+          ),
+        ),
+
+        16.verticalSpace,
+
+        // Tab bar shimmer
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16.w),
+          child: ShimmerLoadingWidget(
+            width: double.infinity,
+            height: 40.h,
+            borderRadius: 4.r,
+          ),
+        ),
+
+        10.verticalSpace,
+
+        // Tab content shimmer
+        Expanded(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
+            child: ListView.separated(
+              itemCount: 8,
+              separatorBuilder: (context, index) => SizedBox(height: 10.h),
+              itemBuilder: (context, index) => ShimmerLoadingWidget(
+                width: double.infinity,
+                height: 20.h,
+                borderRadius: 4.r,
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -477,5 +594,4 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> with SingleTicker
       },
     );
   }
-
 }
