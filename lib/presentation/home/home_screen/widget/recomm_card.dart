@@ -1,21 +1,80 @@
 import 'package:fitness_app/core/styles/colors/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../../core/styles/images/app_images.dart';
+import '../../../../core/di/di.dart';
+import '../../../../core/utils/widget/custom_cached_network_image.dart';
+import '../../../../core/utils/widget/shimmer_loading_widget.dart';
+import '../../../../domain/entity/home/random_muscle_entity.dart';
+import '../view_model/home_cubit.dart';
+import '../view_model/home_state.dart';
 
-class RecommCard extends StatelessWidget {
+//get 20 random
+
+class RecommCard extends StatefulWidget {
   const RecommCard({super.key});
 
   @override
+  State<RecommCard> createState() => _RecommCardState();
+}
+
+class _RecommCardState extends State<RecommCard> {
+  late HomeCubit viewModel;
+
+  @override
+  void initState() {
+    super.initState();
+    viewModel = getIt.get<HomeCubit>();
+    viewModel.getRandomMuscle();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return  SizedBox(
+    return BlocBuilder<HomeCubit, HomeState>(
+      bloc: viewModel,
+      builder: (context, state) {
+        if (state is RandomMuscleLoading) {
+          return _buildShimmerLoading();
+        } else if (state is RandomMuscleError) {
+          return SizedBox.shrink();
+        } else if (state is RandomMuscleSuccess) {
+          List<MuscleEntity?>? muscleEntity = state.muscleEntity;
+
+          return SizedBox(
+            height: 140.h,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              itemCount: muscleEntity?.length ?? 4,
+              itemBuilder: (context, index) {
+                return buildCardWidget(
+                  muscleEntity?[index]?.name ?? "",
+                  muscleEntity?[index]?.image ?? "",
+                );
+              },
+              separatorBuilder: (BuildContext context, int index) {
+                return SizedBox(width: 15.w);
+              },
+            ),
+          );
+        }
+
+        return Container();
+      },
+    );
+  }
+
+  Widget _buildShimmerLoading() {
+    return SizedBox(
       height: 140.h,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         itemCount: 4,
         itemBuilder: (context, index) {
-          return
-            buildCardWidget("Jogging", AppImages.runningImage);
+          return ShimmerLoadingWidget(
+            width: 110.w,
+            height: 110.h,
+            borderRadius: 20.r,
+          );
         },
         separatorBuilder: (BuildContext context, int index) {
           return SizedBox(width: 15.w);
@@ -23,10 +82,12 @@ class RecommCard extends StatelessWidget {
       ),
     );
   }
-  }
 
+  Widget buildCardWidget(String title, String? imagePath) {
+    if (imagePath == null || imagePath.isEmpty) {
+      return SizedBox.shrink();
+    }
 
-  buildCardWidget(String title, String imagePath) {
     return Container(
       width: 100,
       decoration: BoxDecoration(
@@ -37,18 +98,21 @@ class RecommCard extends StatelessWidget {
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(20.r),
-            child: Image.asset(
-              imagePath,
+            child: CustomCachedNetworkImage(
+              imageUrl: imagePath,
               width: 110.w,
               height: 110.h,
+              shimmerRadiusValue: 0,
               fit: BoxFit.cover,
+              shimmerHeight: 110.h,
+              shimmerWidth: 110.w,
             ),
           ),
           Container(
             width: double.infinity,
             padding: const EdgeInsets.symmetric(vertical: 8),
             decoration: BoxDecoration(
-              borderRadius:  BorderRadius.only(
+              borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(20.r),
                 bottomRight: Radius.circular(20.r),
               ),
@@ -75,4 +139,4 @@ class RecommCard extends StatelessWidget {
       ),
     );
   }
-
+}

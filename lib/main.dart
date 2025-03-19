@@ -53,7 +53,6 @@ class MyApp extends StatelessWidget {
       builder: (context, child) {
         return WillPopScope(
           onWillPop: () async {
-            // Show exit confirmation dialog
             final shouldExit = await ExitConfirmationDialog.show(context);
             if (shouldExit) {
               SystemNavigator.pop(); // Close the app

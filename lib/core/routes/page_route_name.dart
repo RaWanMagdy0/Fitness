@@ -24,4 +24,9 @@ class PageRouteName {
   static const String exerciseScreen = "exerciseScreen";
   static const String mealDetailsScreen = "mealDetailsScreen";
   static const String workoutScreen = "workoutScreen";
+  static const String mealsScreen = "mealsScreen";
+  static const String recommCard = "recommCard";
+  static const String categoryTabs = "categoryTabs";
+  static const String recommFoodCard = "recommFoodCard";
+  static const String upcomingCard = "upcomingCard";
 }

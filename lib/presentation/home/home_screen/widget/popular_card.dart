@@ -16,7 +16,8 @@ class PopularCard extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         itemCount: 4,
         itemBuilder: (context, index) {
-          return buildCardWidget("Exercises That Strengthen Your Chest", AppImages.runningImage);
+          return buildCardWidget(
+              "Exercises That Strengthen Your Chest", AppImages.runningImage);
         },
         separatorBuilder: (BuildContext context, int index) {
           return SizedBox(width: 15.w);
@@ -43,6 +44,17 @@ Widget buildCardWidget(String title, String imagePath) {
             height: 150.h,
             fit: BoxFit.cover,
           ),
+          /************
+              CustomCachedNetworkImage(
+              imageUrl: imagePath,
+              width: 110.w,
+              height: 110.h,
+              shimmerRadiusValue: 0,
+              fit: BoxFit.cover,
+              shimmerHeight:110.h,
+              shimmerWidth: 110.w,
+              ),
+           ************/
         ),
         Container(
           width: double.infinity,
@@ -70,8 +82,10 @@ Widget buildCardWidget(String title, String imagePath) {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  _buildTag("24 Tasks",isOrange: true),
-                  _buildTag("Beginner", ),
+                  _buildTag("24 Tasks", isOrange: true),
+                  _buildTag(
+                    "Beginner",
+                  ),
                 ],
               ),
             ],

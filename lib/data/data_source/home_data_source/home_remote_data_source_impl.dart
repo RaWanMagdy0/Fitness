@@ -4,6 +4,7 @@ import 'package:injectable/injectable.dart';
 import '../../../core/api/api_result.dart';
 import '../../../core/api/execute_api_call.dart';
 import '../../../core/local/token_manger.dart';
+import '../../models/home/random_muscle/muscle_model.dart';
 import 'home_remote_data_source.dart';
 
 @Injectable(as: HomeRemoteDataSource)
@@ -19,6 +20,24 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
       final response = await _homeApiManager.getExercise(token);
       List<ExerciseModel?> exercises = response.exercises?.map((e) => e as ExerciseModel?).toList() ?? [];
       return exercises;
+    });
+  }
+  @override
+  Future<Result<List<MuscleModel?>>> getRandomMuscle() {
+    return executeApiCall<List<MuscleModel?>>(() async {
+      var token = await _getToken();
+      final response = await _homeApiManager.getRandomMuscle(token);
+      List<MuscleModel?> randomMuscle = response.muscles?.map((e) => e as MuscleModel?).toList() ?? [];
+      return randomMuscle;
+    });
+  }
+  @override
+  Future<Result<List<MuscleModel?>>> getMuscleGroupById(String muscleGroupId) {
+    return executeApiCall<List<MuscleModel?>>(() async {
+      var token = await _getToken();
+      final response = await _homeApiManager.getMuscleGroupById(token, muscleGroupId);
+      List<MuscleModel?> getMuscleGroupById = response.muscles?.map((e) => e as MuscleModel?).toList() ?? [];
+      return getMuscleGroupById;
     });
   }
   Future<String> _getToken() async {

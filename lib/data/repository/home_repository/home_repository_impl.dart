@@ -1,4 +1,5 @@
 import 'package:fitness_app/data/data_source/home_data_source/home_remote_data_source.dart';
+import 'package:fitness_app/domain/entity/home/random_muscle_entity.dart';
 import 'package:fitness_app/domain/repository/home_repository/home_repository.dart';
 import 'package:injectable/injectable.dart';
 
@@ -18,6 +19,30 @@ class HomeRepositoryImpl implements HomeRepository {
       case Success():
         final exercises = response.data?.map((model) => model?.toEntity()).toList() ?? [];
         return Success(data: exercises);
+
+      case Fail():
+        return Fail(exception: response.exception);
+    }
+  }
+  @override
+  Future<Result<List<MuscleEntity?>>> getRandomMuscle() async {
+    final response = await _homeRemoteDataSource.getRandomMuscle();
+    switch (response) {
+      case Success():
+        final randomMuscle = response.data?.map((model) => model?.toEntity()).toList() ?? [];
+        return Success(data: randomMuscle);
+
+      case Fail():
+        return Fail(exception: response.exception);
+    }
+  }
+  @override
+  Future<Result<List<MuscleEntity?>>> getMuscleGroupById(String muscleGroupId) async {
+    final response = await _homeRemoteDataSource.getMuscleGroupById(muscleGroupId);
+    switch (response) {
+      case Success():
+        final randomMuscle = response.data?.map((model) => model?.toEntity()).toList() ?? [];
+        return Success(data: randomMuscle);
 
       case Fail():
         return Fail(exception: response.exception);

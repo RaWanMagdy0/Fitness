@@ -1,4 +1,3 @@
-import 'package:fitness_app/core/styles/colors/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -41,12 +40,12 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.splashColor,
+      backgroundColor: const Color(0xFF1E1E1E),
       body: Center(
         child: FadeTransition(
           opacity: _animation,
           child: Image.asset(
-            'assets/images/splash_logo.png',
+            'assets/images/new_splash_fit.png',
             width: 200.w,
             height: 200.w,
             fit: BoxFit.contain,

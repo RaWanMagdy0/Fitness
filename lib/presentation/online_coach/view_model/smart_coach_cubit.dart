@@ -31,46 +31,72 @@ class GeminiCubit extends BaseViewModel<GeminiState> {
     print(" ObjectBox Initialized: $_isObjectBoxReady");
   }
 
+
   Future<void> sendMessage(String userMessage) async {
     if (userMessage.isEmpty) return;
 
     messages.add({"sender": "user", "text": userMessage});
     emit(GeminiLoadingState());
 
-    if (_isObjectBoxReady) {
-      var userMsg = Message(sender: "user", text: userMessage);
-      objectBox!.saveMessage(userMsg);
-      print(" Message saved in ObjectBox: $userMessage");
-    }
+    _saveMessageToObjectBox("user", userMessage);
 
+    if (_handleGreeting(userMessage)) return;
+
+    String responseMessage = await _fetchGeminiResponse(userMessage);
+
+    _saveMessageToObjectBox("gemini", responseMessage);
+    messages.add({"sender": "gemini", "text": responseMessage});
+    saveChatToHistory();
+
+    emit(GeminiSuccessState(messages: List.from(messages)));
+  }
+
+  bool _handleGreeting(String userMessage) {
+    List<String> greetings = [
+      "hi", "hello", "hey", "good morning", "good evening", "good night",
+      "مرحبا", "اهلا", "هاي", "صباح الخير", "مساء الخير"
+    ];
+
+    if (greetings.contains(userMessage.toLowerCase())) {
+      String greetingResponse = "Hello! How can I assist you with your fitness journey today? 💪";
+      messages.add({"sender": "gemini", "text": greetingResponse});
+      emit(GeminiSuccessState(messages: List.from(messages)));
+      return true;
+    }
+    return false;
+  }
+
+  Future<String> _fetchGeminiResponse(String userMessage) async {
     var result = await profileRepository.smartCoach({
       "contents": [
         {
           "role": "user",
-          "parts": [{"text": userMessage}]
+          "parts": [
+            {
+              "text": "You are a professional fitness trainer. Only provide answers related to health, exercise, and nutrition. "
+                  "If the user's question is unrelated, clearly inform them that you specialize in fitness only.\n\n"
+                  "User's question: $userMessage"
+            }
+          ]
         }
       ]
     });
 
     switch (result) {
       case Success<String?>():
-        var jsonResponse = result.data;
-        String responseMessage = extractTextFromGeminiResponse(jsonResponse) ??
-            "I'm here to help with fitness advice.";
-
-        if (_isObjectBoxReady) {
-          var botMsg = Message(sender: "gemini", text: responseMessage);
-          objectBox!.saveMessage(botMsg);
-          print("Gemini response saved: $responseMessage");
-        }
-
-        messages.add({"sender": "gemini", "text": responseMessage});
-        print(" Saving chat to history...");
-        saveChatToHistory();
-        emit(GeminiSuccessState(messages: List.from(messages)));
+        return extractTextFromGeminiResponse(result.data) ??
+            "I'm here to help you achieve your fitness and health goals!";
 
       case Fail<String?>():
         emit(GeminiErrorState(errorMessage: getErrorMassageFromException(result.exception)));
+        return "I'm having trouble retrieving an answer right now. Please try again later.";
+    }
+  }
+
+  void _saveMessageToObjectBox(String sender, String message) {
+    if (_isObjectBoxReady) {
+      var msg = Message(sender: sender, text: message);
+      objectBox!.saveMessage(msg);
     }
   }
 

@@ -1,20 +1,22 @@
 import 'package:fitness_app/core/routes/page_route_name.dart';
 import 'package:fitness_app/core/styles/fonts/app_fonts.dart';
 import 'package:fitness_app/core/utils/widget/custom%20scaffold.dart';
+import 'package:fitness_app/presentation/home/home_screen/widget/home_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../../../core/di/di.dart';
 import '../../../../core/styles/colors/app_colors.dart';
 import '../../../../core/styles/images/app_images.dart';
-import '../../../profile/view_model/profile_cubit.dart';
-import '../../../profile/view_model/profile_state.dart';
+import '../../../../core/utils/widget/shimmer_loading_widget.dart';
+import '../view_model/home_cubit.dart';
+import '../view_model/home_state.dart';
 import '../widget/category_section.dart';
 import '../widget/popular_card.dart';
 import '../widget/recomm_card.dart';
 import '../widget/recomm_food_card.dart';
 import '../widget/upcoming_card.dart';
 import '../widget/upcoming_tabs.dart';
-import 'package:shimmer/shimmer.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -24,6 +26,15 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  String selectedMuscleGroupId = "";
+  late HomeCubit viewModel;
+
+  @override
+  void initState() {
+    super.initState();
+    viewModel = getIt.get<HomeCubit>();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,64 +46,8 @@ class _HomeScreenState extends State<HomeScreen> {
               overlayOpacity: 0.1,
               child: Column(
                 children: [
-                  BlocBuilder<ProfileCubit, ProfileState>(
-                    builder: (context, state) {
-                      final cubit = context.watch<ProfileCubit>();
-                      if (state is ProfileInitialState) {
-                        cubit.getUserData();
-                      }
-                      final userName = cubit.userName;
-                      final userImage = cubit.userImage;
-
-                      return Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    Text("Hi ",
-                                        style: AppFonts.font16WhiteWeight500),
-                                    const SizedBox(width: 2),
-                                    Text(userName ?? "Rowan",
-                                        style: AppFonts.font16WhiteWeight500),
-                                    Text(",",
-                                        style: AppFonts.font16WhiteWeight500),
-                                  ],
-                                ),
-                                const SizedBox(height: 5),
-                                Text("Let's Start Your Day",
-                                    style: AppFonts.font18WhiteWeight400),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 60,
-                              width: 60,
-                              child: userImage == null
-                                  ? _buildShimmerEffect()
-                                  : ClipOval(
-                                child: Image.network(
-                                  userImage,
-                                  fit: BoxFit.cover,
-                                  loadingBuilder: (context, child, loadingProgress) {
-                                    if (loadingProgress == null) return child;
-                                    return _buildShimmerEffect();
-                                  },
-                                  errorBuilder: (context, error, stackTrace) {
-                                    return Image.asset(AppImages.chestExerciseImage);
-                                  },
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
-                   10.verticalSpace,
+                  HomeAppBar(),
+                  10.verticalSpace,
                   Expanded(
                     child: SingleChildScrollView(
                       physics: const BouncingScrollPhysics(),
@@ -115,8 +70,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 Text("Upcoming Workouts", style: AppFonts.font18WhiteWeight400),
                                 InkWell(
                                   onTap: () {
-                                    Navigator.pushReplacementNamed(
-                                        context, PageRouteName.workoutScreen);
+                                    Navigator.pushReplacementNamed(context, PageRouteName.workoutScreen);
                                   },
                                   child: Text(
                                     "See All",
@@ -129,25 +83,34 @@ class _HomeScreenState extends State<HomeScreen> {
                               ],
                             ),
                             const SizedBox(height: 15),
-                            const CategoryTabs(),
-                            const UpcomingCard(),
-                            const SizedBox(height: 20),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text("Recommendation For You", style: AppFonts.font18WhiteWeight400),
-                                InkWell(
-                                  onTap: () {},
-                                  child: Text(
-                                    "See All",
-                                    style: AppFonts.font15OrangeWeight500.copyWith(
-                                      decoration: TextDecoration.underline,
-                                      decorationColor: AppColors.kOrange,
-                                    ),
-                                  ),
-                                ),
-                              ],
+                            CategoryTabs(
+                              onTabSelected: (muscleGroupId) {
+                                if (selectedMuscleGroupId != muscleGroupId) {
+                                  setState(() {
+                                    selectedMuscleGroupId = muscleGroupId;
+                                  });
+                                  viewModel.getMuscleGroupById(muscleGroupId); // ✅ استدعاء التحميل عند تغيير التاب
+                                }
+                              },
                             ),
+                            const SizedBox(height: 10),
+
+                            if (selectedMuscleGroupId.isNotEmpty)
+                              BlocBuilder<HomeCubit, HomeState>(
+                                bloc: viewModel,
+                                builder: (context, state) {
+                                  if (state is MuscleGroupIdLoading) {
+                                    return _buildShimmerTabs();
+                                  } else if (state is MuscleGroupIdError) {
+                                    return Center(child: Text("Error: ${state.errorMessage}"));
+                                  } else if (state is MuscleGroupIdSuccess) {
+                                    return UpcomingCard(muscleGroupId: selectedMuscleGroupId);
+                                  }
+                                  return Container();
+                                },
+                              ),
+                            const SizedBox(height: 20),
+                            Text("Recommendation For You", style: AppFonts.font18WhiteWeight400),
                             const RecommFoodCard(),
                             const SizedBox(height: 30),
                             Text("Popular Training", style: AppFonts.font18WhiteWeight400),
@@ -165,18 +128,25 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-  Widget _buildShimmerEffect() {
-    return Shimmer.fromColors(
-      baseColor: Colors.grey.shade300,
-      highlightColor: Colors.grey.shade100,
-      child: Container(
-        height: 60,
-        width: 60,
-        decoration: BoxDecoration(
-          color: Colors.grey,
-          shape: BoxShape.circle,
-        ),
+  Widget _buildShimmerTabs() {
+    return SizedBox(
+      height: 110.h,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: 2,
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: EdgeInsets.symmetric(horizontal: 5.0),
+            child: ShimmerLoadingWidget(
+              width: 90.w,
+              height: 90.h,
+              borderRadius: 20.r,
+            ),
+          );
+        },
       ),
     );
   }
+
 }
+

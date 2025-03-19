@@ -197,13 +197,10 @@ class _AuthApiManager implements AuthApiManager {
 
   @override
   Future<EditProfileResponseModel> editProfile(
-    EditProfileRequestModel requestModel,
-    String token,
-  ) async {
+      EditProfileRequestModel requestModel) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{r'Authorization': token};
-    _headers.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(requestModel.toJson());
     final _options = _setStreamType<EditProfileResponseModel>(Options(
