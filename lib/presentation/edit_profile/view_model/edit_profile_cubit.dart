@@ -59,7 +59,6 @@ class EditProfileCubit extends BaseViewModel<EditProfileState> {
       final exception = (result).exception;
       final errorMsg = getErrorMassageFromException(exception);
 
-      // Handle token specific errors
       if (errorMsg.contains("token") ||
           errorMsg.contains("unauthorized") ||
           errorMsg.contains("Unauthorized")) {
