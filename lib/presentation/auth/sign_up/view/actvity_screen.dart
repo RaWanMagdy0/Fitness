@@ -54,34 +54,34 @@ class _ActivityScreenState extends State<ActivityScreen> {
 
   Future<void> _checkSourceAndLoadData() async {
     try {
+      // Check for explicit "isFromEdit" argument
       final route = ModalRoute.of(context);
       final args = route?.settings.arguments;
 
       if (args is Map && args['isFromEdit'] == true) {
         isFromEditProfile = true;
-      }
-
-      if (route?.settings.name == 'ActivityScreenFromEdit') {
-        isFromEditProfile = true;
+      } else {
+        // Regular sign-up flow
+        isFromEditProfile = false;
       }
 
       final signupProvider = context.read<SignupProvider>();
       final prefs = await SharedPreferences.getInstance();
-      final currentActivity = prefs.getString('current_activity');
-
-      if (currentActivity != null) {
-        // Coming from edit profile
-        isFromEditProfile = true;
-        final activityKey = _reverseActivityMap[currentActivity] ?? 'level1';
-        _selectedActivityLevel.value = activityKey;
-        setState(() {
-          isLoading = false;
-        });
-        return;
-      }
 
       if (isFromEditProfile) {
+        // First try to get from shared preferences
+        final currentActivity = prefs.getString('current_activity');
 
+        if (currentActivity != null) {
+          final activityKey = _reverseActivityMap[currentActivity] ?? 'level1';
+          _selectedActivityLevel.value = activityKey;
+          setState(() {
+            isLoading = false;
+          });
+          return;
+        }
+
+        // If not available in preferences, try getting from profile data
         try {
           final profileCubit = getIt<ProfileCubit>();
           final state = profileCubit.state;
@@ -106,14 +106,18 @@ class _ActivityScreenState extends State<ActivityScreen> {
             return;
           }
         } catch (e) {
+          print("Error fetching profile data: $e");
         }
+      } else {
+        // For sign-up flow, get the value from SignupProvider
+        _selectedActivityLevel.value = signupProvider.getData("activityLevel");
       }
 
-      _selectedActivityLevel.value = signupProvider.getData("activityLevel");
       setState(() {
         isLoading = false;
       });
     } catch (e) {
+      print("Error in _checkSourceAndLoadData: $e");
       setState(() {
         isLoading = false;
       });
@@ -296,10 +300,12 @@ class _ActivityScreenState extends State<ActivityScreen> {
               ],
             ),
           );
+
+          // Choose the appropriate scaffold based on pathway
           if (!isFromEditProfile) {
             try {
+              // For sign-up flow, include the SignUpCubit BlocListener
               context.read<SignUpCubit>();
-
               return CustomScaffold(
                 backgroundImage: AppImages.authBackground,
                 enableBlur: true,
@@ -333,9 +339,11 @@ class _ActivityScreenState extends State<ActivityScreen> {
                 ),
               );
             } catch (e) {
+              print("Error getting SignUpCubit: $e");
             }
           }
 
+          // Default scaffold for edit profile flow
           return CustomScaffold(
             backgroundImage: AppImages.authBackground,
             enableBlur: true,

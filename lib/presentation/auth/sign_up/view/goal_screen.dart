@@ -11,13 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../core/di/di.dart';
 import '../../../../core/local/sign_up_provider.dart';
-import '../../../../core/routes/page_route_name.dart';
-import '../../../../core/styles/colors/app_colors.dart';
-import '../../../../core/styles/fonts/app_fonts.dart';
-import '../../../../core/styles/images/app_images.dart';
 import '../../../../core/utils/widget/custom scaffold.dart';
-import '../../../../core/utils/widget/custom_button.dart';
-import '../../../../core/utils/widget/custom_radio.dart';
 import '../../../../generated/l10n.dart';
 import '../../../profile/view_model/profile_cubit.dart';
 import '../../../profile/view_model/profile_state.dart';
@@ -59,25 +53,29 @@ class _GoalScreenState extends State<GoalScreen> {
     try {
       final signupProvider = context.read<SignupProvider>();
       final prefs = await SharedPreferences.getInstance();
-      final currentGoal = prefs.getString('current_goal');
 
-      if (currentGoal != null) {
-        isFromEditProfile = true;
-        final goalKey = _reverseGoalMap[currentGoal] ?? 'gain_weight';
-        _selectedGoal.value = goalKey;
-        setState(() {
-          isLoading = false;
-        });
-        return;
-      }
-
+      // Check if we were explicitly passed isFromEdit parameter
       final route = ModalRoute.of(context);
-      if (route != null && route.settings.name != PageRouteName.goalScreen) {
+      final args = route?.settings.arguments;
+
+      if (args is Map && args['isFromEdit'] == true) {
+        isFromEditProfile = true;
+        final currentGoal = prefs.getString('current_goal');
+
+        if (currentGoal != null) {
+          final goalKey = _reverseGoalMap[currentGoal] ?? 'gain_weight';
+          _selectedGoal.value = goalKey;
+          setState(() {
+            isLoading = false;
+          });
+          return;
+        }
+
+        // Get goal from profile data
         final profileCubit = getIt<ProfileCubit>();
         final state = profileCubit.state;
 
         if (state is GetUserDataSuccessState && state.user != null) {
-          isFromEditProfile = true;
           _selectedGoal.value = state.user?.goal ?? 'gain_weight';
           setState(() {
             isLoading = false;
@@ -90,19 +88,19 @@ class _GoalScreenState extends State<GoalScreen> {
 
         final newState = profileCubit.state;
         if (newState is GetUserDataSuccessState && newState.user != null) {
-          isFromEditProfile = true;
           _selectedGoal.value = newState.user?.goal ?? 'gain_weight';
           setState(() {
             isLoading = false;
           });
           return;
         }
+      } else {
+        // Regular sign up flow
+        _selectedGoal.value = signupProvider.getData("goal");
+        setState(() {
+          isLoading = false;
+        });
       }
-
-      _selectedGoal.value = signupProvider.getData("goal");
-      setState(() {
-        isLoading = false;
-      });
     } catch (e) {
       setState(() {
         isLoading = false;
@@ -159,16 +157,16 @@ class _GoalScreenState extends State<GoalScreen> {
                     },
                     child: Image.asset(
                       AppImages.back,
-                      width: 24.w,  // Added width
-                      height: 24.h,  // Added height
+                      width: 24.w,
+                      height: 24.h,
                     ),
                   ),
                   Expanded(
                     child: Center(
                       child: Image.asset(
                         AppImages.logoIcon,
-                        width: 48.w,  // Added width
-                        height: 48.h,  // Added height
+                        width: 48.w,
+                        height: 48.h,
                       ),
                     ),
                   ),
@@ -284,7 +282,7 @@ class _GoalScreenState extends State<GoalScreen> {
                   );
                 },
               ),
-              30.verticalSpace,  // Added bottom padding
+              30.verticalSpace,
             ],
           ),
         ),

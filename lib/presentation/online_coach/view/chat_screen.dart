@@ -1,6 +1,7 @@
 import 'package:fitness_app/core/routes/page_route_name.dart';
 import 'package:fitness_app/core/styles/colors/app_colors.dart';
 import 'package:fitness_app/core/utils/widget/custom%20scaffold.dart';
+import 'package:fitness_app/core/utils/widget/shimmer_loading_widget.dart';
 import 'package:fitness_app/presentation/profile/view_model/profile_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -60,7 +61,7 @@ class _ChatScreenState extends State<ChatScreen> {
               decoration: BoxDecoration(
                   color: AppColors.kMainColor.withOpacity(0.8),
                   borderRadius:
-                      BorderRadius.only(topLeft: Radius.circular(15.r))),
+                  BorderRadius.only(topLeft: Radius.circular(15.r))),
               width: MediaQuery.of(context).size.width * 0.7,
               height: double.infinity,
               padding: EdgeInsets.all(16),
@@ -232,7 +233,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                     color: isSender
                                         ? AppColors.brownColor.withOpacity(0.5)
                                         : AppColors.bottomNavColor
-                                            .withOpacity(0.9),
+                                        .withOpacity(0.9),
                                     borderRadius: BorderRadius.circular(12.0),
                                   ),
                                   child: Text(
@@ -253,28 +254,28 @@ class _ChatScreenState extends State<ChatScreen> {
                                       backgroundColor: Colors.transparent,
                                       child: ClipOval(
                                         child: userImage != null &&
-                                                userImage.isNotEmpty
+                                            userImage.isNotEmpty
                                             ? Image.network(
-                                                userImage,
-                                                fit: BoxFit.cover,
-                                                width: 48,
-                                                height: 48,
-                                                errorBuilder: (context, error,
-                                                    stackTrace) {
-                                                  return Image.asset(
-                                                    AppImages.person,
-                                                    fit: BoxFit.cover,
-                                                    width: 48,
-                                                    height: 48,
-                                                  );
-                                                },
-                                              )
+                                          userImage,
+                                          fit: BoxFit.cover,
+                                          width: 48,
+                                          height: 48,
+                                          errorBuilder: (context, error,
+                                              stackTrace) {
+                                            return Image.asset(
+                                              AppImages.person,
+                                              fit: BoxFit.cover,
+                                              width: 48,
+                                              height: 48,
+                                            );
+                                          },
+                                        )
                                             : Image.asset(
-                                                AppImages.person,
-                                                fit: BoxFit.cover,
-                                                width: 48,
-                                                height: 48,
-                                              ),
+                                          AppImages.person,
+                                          fit: BoxFit.cover,
+                                          width: 48,
+                                          height: 48,
+                                        ),
                                       ),
                                     );
                                   },
@@ -299,7 +300,7 @@ class _ChatScreenState extends State<ChatScreen> {
                               hintStyle: AppFonts.font14WhiteWeight400,
                               filled: true,
                               fillColor:
-                                  AppColors.bottomNavColor.withOpacity(0.5),
+                              AppColors.bottomNavColor.withOpacity(0.5),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(25.0),
                                 borderSide: BorderSide.none,
@@ -361,3 +362,48 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 }
+
+  Widget _buildLoadingShimmer() {
+    return ListView.builder(
+      itemCount: 5, // Show 5 shimmer placeholders
+      itemBuilder: (context, index) {
+        // Alternate between user and AI messages
+        final isUserMessage = index % 2 == 0;
+
+        return Padding(
+          padding: EdgeInsets.all(8.0),
+          child: Row(
+            mainAxisAlignment: isUserMessage ? MainAxisAlignment.end : MainAxisAlignment.start,
+            children: [
+              if (!isUserMessage)
+                ShimmerLoadingWidget(
+                  width: 48.w,
+                  height: 48.h,
+                  borderRadius: 24.r, // Circle
+                ),
+
+              8.horizontalSpace,
+
+              // Message bubble shimmer
+              Flexible(
+                child: ShimmerLoadingWidget(
+                  width: (200 + (index * 20) % 100).w, // Varied width for more natural look
+                  height: (40 + (index * 10) % 30).h, // Varied height
+                  borderRadius: 12.r,
+                ),
+              ),
+
+              8.horizontalSpace,
+
+              if (isUserMessage)
+                ShimmerLoadingWidget(
+                  width: 48.w,
+                  height: 48.h,
+                  borderRadius: 24.r, // Circle
+                ),
+            ],
+          ),
+        );
+      },
+    );
+  }

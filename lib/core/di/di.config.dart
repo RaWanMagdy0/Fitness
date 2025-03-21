@@ -194,7 +194,6 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i821.ProfileCubit>(() => _i821.ProfileCubit(
           gh<_i679.ProfileUseCase>(),
           gh<_i755.LogoutUseCase>(),
-          gh<_i659.UploadPhotoUseCase>(),
         ));
     gh.factory<_i140.SignUpCubit>(
         () => _i140.SignUpCubit(gh<_i322.SignupUseCase>()));

@@ -61,6 +61,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       return response.message;
     });
   }
+
   @override
   Future<Result<EditProfileResponseModel>> editProfile(
       EditProfileRequestModel requestModel) {
@@ -136,6 +137,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       return message;
     });
   }
+
   Future<String> _getToken() async {
     var token = await TokenManager.getToken();
     if (token == null || token.isEmpty) {
@@ -143,5 +145,4 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     }
     return 'Bearer $token';
   }
-}
-
+}}
