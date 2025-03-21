@@ -61,9 +61,7 @@ class _ChatScreenState extends State<ChatScreen> {
               decoration: BoxDecoration(
                   color: AppColors.kMainColor.withOpacity(0.8),
                   borderRadius:
-                      BorderRadius.only(topLeft: Radius.circular(15.r))),
-                  borderRadius: BorderRadius.only(topLeft:Radius.circular(15.r))
-              ),
+                  BorderRadius.only(topLeft: Radius.circular(15.r))),
               width: MediaQuery.of(context).size.width * 0.7,
               height: double.infinity,
               padding: EdgeInsets.all(16),
@@ -136,9 +134,6 @@ class _ChatScreenState extends State<ChatScreen> {
                           onTap: () {
                             Navigator.pushReplacementNamed(
                                 context, PageRouteName.robotScreen);
-
-                          onTap: (){
-                            Navigator.pushReplacementNamed(context, PageRouteName.robotScreen);
                           },
                           child: CustomArrow()),
                       Text(
@@ -181,10 +176,6 @@ class _ChatScreenState extends State<ChatScreen> {
                       shrinkWrap: true,
                       physics: const AlwaysScrollableScrollPhysics(),
                       itemCount: chatMessages.length + (isLoading ? 1 : 0),
-                    child: state is GeminiLoadingState
-                        ? _buildLoadingShimmer()
-                        : ListView.builder(
-                      itemCount: chatMessages.length,
                       itemBuilder: (context, index) {
                         if (isLoading && index == chatMessages.length) {
                           return Padding(
@@ -242,7 +233,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                     color: isSender
                                         ? AppColors.brownColor.withOpacity(0.5)
                                         : AppColors.bottomNavColor
-                                            .withOpacity(0.9),
+                                        .withOpacity(0.9),
                                     borderRadius: BorderRadius.circular(12.0),
                                   ),
                                   child: Text(
@@ -263,28 +254,28 @@ class _ChatScreenState extends State<ChatScreen> {
                                       backgroundColor: Colors.transparent,
                                       child: ClipOval(
                                         child: userImage != null &&
-                                                userImage.isNotEmpty
+                                            userImage.isNotEmpty
                                             ? Image.network(
-                                                userImage,
-                                                fit: BoxFit.cover,
-                                                width: 48,
-                                                height: 48,
-                                                errorBuilder: (context, error,
-                                                    stackTrace) {
-                                                  return Image.asset(
-                                                    AppImages.person,
-                                                    fit: BoxFit.cover,
-                                                    width: 48,
-                                                    height: 48,
-                                                  );
-                                                },
-                                              )
+                                          userImage,
+                                          fit: BoxFit.cover,
+                                          width: 48,
+                                          height: 48,
+                                          errorBuilder: (context, error,
+                                              stackTrace) {
+                                            return Image.asset(
+                                              AppImages.person,
+                                              fit: BoxFit.cover,
+                                              width: 48,
+                                              height: 48,
+                                            );
+                                          },
+                                        )
                                             : Image.asset(
-                                                AppImages.person,
-                                                fit: BoxFit.cover,
-                                                width: 48,
-                                                height: 48,
-                                              ),
+                                          AppImages.person,
+                                          fit: BoxFit.cover,
+                                          width: 48,
+                                          height: 48,
+                                        ),
                                       ),
                                     );
                                   },
@@ -309,7 +300,7 @@ class _ChatScreenState extends State<ChatScreen> {
                               hintStyle: AppFonts.font14WhiteWeight400,
                               filled: true,
                               fillColor:
-                                  AppColors.bottomNavColor.withOpacity(0.5),
+                              AppColors.bottomNavColor.withOpacity(0.5),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(25.0),
                                 borderSide: BorderSide.none,
@@ -371,24 +362,6 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 }
-                            icon: Icon(Icons.send, color: AppColors.kWhite),
-                            onPressed: () {
-                              cubit.sendMessage(_controller.text);
-                              _controller.clear();
-                              updateChatTitles();
-                            }
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
-        },
-      ),
-    );
-  }
 
   Widget _buildLoadingShimmer() {
     return ListView.builder(
@@ -434,4 +407,3 @@ class _ChatScreenState extends State<ChatScreen> {
       },
     );
   }
-}
