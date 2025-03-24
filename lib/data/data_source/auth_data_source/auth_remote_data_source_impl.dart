@@ -66,15 +66,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<Result<EditProfileResponseModel>> editProfile(
       EditProfileRequestModel requestModel) {
     return executeApiCall<EditProfileResponseModel>(() async {
-      final token = await TokenManager.getToken();
-      if (token == null || token.isEmpty) {
-        throw DioException(
-          requestOptions: RequestOptions(path: ''),
-          type: DioExceptionType.cancel,
-          message: "Authorization token is missing. Please log in again.",
-        );
-      }
-
+      var token = await _getToken();
       final response = await _dio.put(
         'api/v1/auth/editProfile',
         data: requestModel.toJson(),
@@ -128,11 +120,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   @override
   Future<Result<String?>> logout() async {
     return await executeApiCall<String?>(() async {
-      var token = await TokenManager.getToken();
-      if (token == null || token.isEmpty) {
-        throw Exception("Token is missing. Please try again.");
-      }
-      token = 'Bearer $token';
+      var token = await _getToken();
       String? message = await authApiManager.logout(token);
       return message;
     });
@@ -145,4 +133,4 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     }
     return 'Bearer $token';
   }
-}}
+}

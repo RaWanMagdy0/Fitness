@@ -29,7 +29,6 @@ class EditProfileCubit extends BaseViewModel<EditProfileState> {
   }) async {
     emit(EditProfileLoading());
 
-    // Verify token is available
     final token = await TokenManager.getToken();
     if (token == null || token.isEmpty) {
       emit(EditProfileError("Authorization token is missing. Please log in again."));

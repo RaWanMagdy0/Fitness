@@ -6,31 +6,29 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import '../../../core/api/api_result.dart';
 import '../../../core/base/base_view_model.dart';
-import '../../../domain/online_coach_enity.dart';
+import '../../../domain/entity/online_coach_enity.dart';
 import '../../../domain/repository/profile_repository/profile_repository.dart';
 import '../widget/object_box.dart';
 
 @injectable
 class GeminiCubit extends BaseViewModel<GeminiState> {
   final ProfileRepository profileRepository;
-  ObjectBox? objectBox;
   final List<Map<String, String>> messages = [];
   final stt.SpeechToText _speech = stt.SpeechToText();
   bool isListening = false;
   String recordedText = "";
+  ObjectBox? objectBox;
   bool _isObjectBoxReady = false;
 
   GeminiCubit(this.profileRepository) : super(GeminiInitialState()) {
     _initObjectBox();
-   // sendWelcomeMessage();
+    // sendWelcomeMessage();
   }
 
   Future<void> _initObjectBox() async {
     objectBox ??= await ObjectBox.create();
     _isObjectBoxReady = objectBox != null;
-    print(" ObjectBox Initialized: $_isObjectBoxReady");
   }
-
 
   Future<void> sendMessage(String userMessage) async {
     if (userMessage.isEmpty) return;
@@ -53,12 +51,22 @@ class GeminiCubit extends BaseViewModel<GeminiState> {
 
   bool _handleGreeting(String userMessage) {
     List<String> greetings = [
-      "hi", "hello", "hey", "good morning", "good evening", "good night",
-      "مرحبا", "اهلا", "هاي", "صباح الخير", "مساء الخير"
+      "hi",
+      "hello",
+      "hey",
+      "good morning",
+      "good evening",
+      "good night",
+      "مرحبا",
+      "اهلا",
+      "هاي",
+      "صباح الخير",
+      "مساء الخير"
     ];
 
     if (greetings.contains(userMessage.toLowerCase())) {
-      String greetingResponse = "Hello! How can I assist you with your fitness journey today? 💪";
+      String greetingResponse =
+          "Hello! How can I assist you with your fitness journey today? 💪";
       messages.add({"sender": "gemini", "text": greetingResponse});
       emit(GeminiSuccessState(messages: List.from(messages)));
       return true;
@@ -88,7 +96,8 @@ class GeminiCubit extends BaseViewModel<GeminiState> {
             "I'm here to help you achieve your fitness and health goals!";
 
       case Fail<String?>():
-        emit(GeminiErrorState(errorMessage: getErrorMassageFromException(result.exception)));
+        emit(GeminiErrorState(
+            errorMessage: getErrorMassageFromException(result.exception)));
         return "I'm having trouble retrieving an answer right now. Please try again later.";
     }
   }
@@ -121,10 +130,7 @@ class GeminiCubit extends BaseViewModel<GeminiState> {
     }
 
     for (var msg in messages) {
-      Message newMessage = Message(
-          sender: msg['sender']!,
-          text: msg['text']!
-      );
+      Message newMessage = Message(sender: msg['sender']!, text: msg['text']!);
       newMessage.chatHistory.target = existingChat;
       existingChat.messages.add(newMessage);
       objectBox!.saveMessage(newMessage);
@@ -138,8 +144,7 @@ class GeminiCubit extends BaseViewModel<GeminiState> {
       Future.delayed(Duration(seconds: 1), () {
         if (_isObjectBoxReady) {
           loadChatByTitle(title);
-        } else {
-        }
+        } else {}
       });
       return;
     }
@@ -162,9 +167,9 @@ class GeminiCubit extends BaseViewModel<GeminiState> {
 
     messages.clear();
     messages.addAll(chatMessages.map((msg) => {
-      "sender": msg.sender,
-      "text": msg.text,
-    }));
+          "sender": msg.sender,
+          "text": msg.text,
+        }));
 
     print("✅ Messages Loaded: ${messages.length}");
     emit(GeminiSuccessState(messages: List.from(messages)));
@@ -198,12 +203,14 @@ class GeminiCubit extends BaseViewModel<GeminiState> {
         _speech.listen(
           onResult: (result) {
             recordedText = result.recognizedWords;
-            emit(GeminiRecordingState(isListening: true, recordedText: recordedText));
+            emit(GeminiRecordingState(
+                isListening: true, recordedText: recordedText));
 
             if (result.finalResult) {
               isListening = false;
               _speech.stop();
-              emit(GeminiRecordingState(isListening: false, recordedText: recordedText));
+              emit(GeminiRecordingState(
+                  isListening: false, recordedText: recordedText));
 
               if (recordedText.isNotEmpty) {
                 sendMessage(recordedText);
@@ -226,15 +233,15 @@ class GeminiCubit extends BaseViewModel<GeminiState> {
     _speech.stop();
     emit(GeminiRecordingState(isListening: false, recordedText: recordedText));
   }
-  /*********
-  void sendWelcomeMessage() {
+/*********
+    void sendWelcomeMessage() {
     if (messages.isEmpty) {
-      messages.add({
-        "sender": "gemini",
-        "text": "Hello! I'm Gemini, your fitness assistant. How can I help you today?"
-      });
-      emit(GeminiSuccessState(messages: List.from(messages)));
+    messages.add({
+    "sender": "gemini",
+    "text": "Hello! I'm Gemini, your fitness assistant. How can I help you today?"
+    });
+    emit(GeminiSuccessState(messages: List.from(messages)));
     }
-  }
-*********/
+    }
+ *********/
 }

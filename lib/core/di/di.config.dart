@@ -83,6 +83,8 @@ import '../../presentation/meal/view_model/meal_details_cubit.dart' as _i360;
 import '../../presentation/meal/view_model/meals_view_model.dart' as _i448;
 import '../../presentation/online_coach/view_model/smart_coach_cubit.dart'
     as _i721;
+import '../../presentation/profile/change_password/view_model/change_password_view_model.dart'
+    as _i971;
 import '../../presentation/profile/view_model/profile_cubit.dart' as _i821;
 import '../api/dio/dio_factory.dart' as _i763;
 import '../api/dio/dio_module.dart' as _i223;
@@ -137,6 +139,8 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i117.HomeRepositoryImpl(gh<_i753.HomeRemoteDataSource>()));
     gh.factory<_i721.GeminiCubit>(
         () => _i721.GeminiCubit(gh<_i265.ProfileRepository>()));
+    gh.factory<_i971.ChangePasswordViewModel>(
+        () => _i971.ChangePasswordViewModel(gh<_i265.ProfileRepository>()));
     gh.factory<_i168.ExerciseUseCase>(
         () => _i168.ExerciseUseCase(gh<_i97.HomeRepository>()));
     gh.factory<_i603.MuscleGroupByIdUseCase>(
@@ -194,6 +198,7 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i821.ProfileCubit>(() => _i821.ProfileCubit(
           gh<_i679.ProfileUseCase>(),
           gh<_i755.LogoutUseCase>(),
+          gh<_i659.UploadPhotoUseCase>(),
         ));
     gh.factory<_i140.SignUpCubit>(
         () => _i140.SignUpCubit(gh<_i322.SignupUseCase>()));

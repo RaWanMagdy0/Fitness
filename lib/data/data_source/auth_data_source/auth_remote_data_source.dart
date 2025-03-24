@@ -23,4 +23,5 @@ abstract class AuthRemoteDataSource {
   Future<Result<EditProfileResponseModel>> editProfile(
       EditProfileRequestModel requestModel);
   Future<Result<String?>> logout();
+
 }

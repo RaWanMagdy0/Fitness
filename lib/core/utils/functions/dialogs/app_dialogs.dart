@@ -1,4 +1,3 @@
-import 'package:fitness_app/presentation/auth/login/view/login_screen.dart';
 import 'package:fitness_app/presentation/profile/view_model/profile_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -19,7 +18,7 @@ class AppDialogs {
         return PopScope(
           canPop: false,
           child: Lottie.asset(
-            AppImages.loadingAnimation,
+            AppImages.fitLoad,
             height: 50.h,
             width: 20.w,
           ),

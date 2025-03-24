@@ -62,4 +62,5 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<Result<String?>> logout() {
     return authRemoteDataSource.logout();
   }
+
 }

@@ -45,7 +45,7 @@ class _MainProfileScreenState extends State<MainProfileScreen> {
             Navigator.pushNamedAndRemoveUntil(
               context,
               PageRouteName.login,
-                  (route) => false,
+              (route) => false,
             );
           } else if (state is LogoutErrorState) {
             AppDialogs.showHideDialog(context);
@@ -83,9 +83,9 @@ class _MainProfileScreenState extends State<MainProfileScreen> {
                           100.horizontalSpace,
                           Center(
                               child: Text(
-                                local.profile,
-                                style: AppFonts.font24WhiteWeight600,
-                              )),
+                            local.profile,
+                            style: AppFonts.font24WhiteWeight600,
+                          )),
                         ],
                       ),
                     ),
@@ -123,12 +123,17 @@ class _MainProfileScreenState extends State<MainProfileScreen> {
                         child: Divider(
                           color: AppColors.kGray,
                         )),
-                    CustomProfileRow(
-                        imagePath: AppImages.changeIcon,
-                        title: Text(
-                          local.change_password,
-                          style: AppFonts.font14WhiteWeight600,
-                        )),
+                    InkWell(
+                      onTap: (){
+                        Navigator.pushNamed(context, PageRouteName.changePassword);
+                      },
+                      child: CustomProfileRow(
+                          imagePath: AppImages.changeIcon,
+                          title: Text(
+                            local.change_password,
+                            style: AppFonts.font14WhiteWeight600,
+                          )),
+                    ),
                     SizedBox(
                         width: 350.0.w,
                         child: Divider(
@@ -161,34 +166,51 @@ class _MainProfileScreenState extends State<MainProfileScreen> {
                         child: Divider(
                           color: AppColors.kGray,
                         )),
-                    CustomProfileRow(
-                        imagePath: AppImages.securityIcon,
-                        title: Text(
-                          local.security,
-                          style: AppFonts.font14WhiteWeight600,
-                        )),
+                    InkWell(
+                      onTap: (){
+                        Navigator.pushNamed(context, PageRouteName.security);
+
+                      },
+                      child: CustomProfileRow(
+                          imagePath: AppImages.securityIcon,
+                          title: Text(
+                            local.security,
+                            style: AppFonts.font14WhiteWeight600,
+                          )),
+                    ),
                     SizedBox(
                         width: 350.0.w,
                         child: Divider(
                           color: AppColors.kGray,
                         )),
-                    CustomProfileRow(
-                        imagePath: AppImages.privacyIcon,
-                        title: Text(
-                          local.privacy_policy,
-                          style: AppFonts.font14WhiteWeight600,
-                        )),
+                    InkWell(
+                      onTap: () {
+                        Navigator.pushNamed(context, PageRouteName.privacyPolicyScreen);
+                      },
+                      child: CustomProfileRow(
+                          imagePath: AppImages.privacyIcon,
+                          title: Text(
+                            local.privacy_policy,
+                            style: AppFonts.font14WhiteWeight600,
+                          )),
+                    ),
                     SizedBox(
                         width: 350.0.w,
                         child: Divider(
                           color: AppColors.kGray,
                         )),
-                    CustomProfileRow(
-                        imagePath: AppImages.helpIcon,
-                        title: Text(
-                          local.help,
-                          style: AppFonts.font14WhiteWeight600,
-                        )),
+                    InkWell(
+                      onTap: (){
+                        Navigator.pushNamed(context, PageRouteName.help);
+
+                      },
+                      child: CustomProfileRow(
+                          imagePath: AppImages.helpIcon,
+                          title: Text(
+                            local.help,
+                            style: AppFonts.font14WhiteWeight600,
+                          )),
+                    ),
                     SizedBox(
                         width: 350.0.w,
                         child: Divider(
@@ -220,7 +242,8 @@ class _MainProfileScreenState extends State<MainProfileScreen> {
         });
   }
 
-  Widget _buildShimmerProfile(BuildContext context, S local, LocalProvider provider) {
+  Widget _buildShimmerProfile(
+      BuildContext context, S local, LocalProvider provider) {
     return CustomScaffold(
       backgroundImage: AppImages.splashBackG,
       enableBlur: true,
@@ -277,7 +300,7 @@ class _MainProfileScreenState extends State<MainProfileScreen> {
               child: Column(
                 children: List.generate(
                   7,
-                      (index) => Column(
+                  (index) => Column(
                     children: [
                       Row(
                         children: [

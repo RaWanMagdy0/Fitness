@@ -22,8 +22,6 @@ import '../../presentation/edit_profile/view/edit_profile_screen.dart'
 import '../../presentation/home/exercise_screen/view/exercise_screen.dart';
 import '../../presentation/home/exercise_screen/view_model/exercise_view_model.dart';
 import '../../presentation/home/home_screen/view/home_screen.dart';
-import '../../presentation/home/workout/view/workout_screen.dart';
-import '../../presentation/home/workout/view_model/workout_cubit.dart';
 import '../../presentation/layout/main_page.dart';
 import '../../presentation/edit_profile/view_model/edit_profile_cubit.dart'
     show EditProfileCubit;
@@ -32,13 +30,17 @@ import '../../presentation/meal/view/meal_details_screen.dart'
 import '../../presentation/meal/view/meals_screen.dart';
 import '../../presentation/meal/view_model/meal_details_cubit.dart'
     show MealDetailsCubit;
-import '../../presentation/layout/main_page.dart';
 import '../../presentation/edit_profile/view_model/edit_profile_cubit.dart';
 import '../../presentation/meal/view/meal_details_screen.dart';
 import '../../presentation/meal/view_model/meal_details_cubit.dart';
 import '../../presentation/online_coach/view/chat_screen.dart';
 import '../../presentation/online_coach/view/robot_screen.dart';
 import '../../presentation/online_coach/view_model/smart_coach_cubit.dart';
+import '../../presentation/profile/change_password/view/change_password_screen.dart';
+import '../../presentation/profile/change_password/view_model/change_password_view_model.dart';
+import '../../presentation/profile/view/widgets/help.dart';
+import '../../presentation/profile/view/widgets/privacy_policy.dart';
+import '../../presentation/profile/view/widgets/security.dart';
 import '../../presentation/profile/view_model/profile_cubit.dart';
 import '../../presentation/splash/onboarding.dart';
 import '../../presentation/splash/splash_screen.dart';
@@ -79,9 +81,19 @@ class AppRoutes {
           ),
         );
       case PageRouteName.verifyCode:
-        return _handleMaterialPageRoute(widget: VerifyCodeScreen());
+        return _handleMaterialPageRoute(
+          widget: BlocProvider(
+            create: (context) => getIt<ForgotPasswordCubit>(),
+            child: VerifyCodeScreen(),
+          ),
+        );
       case PageRouteName.resetPassword:
-        return _handleMaterialPageRoute(widget: ResetPasswordScreen());
+        return _handleMaterialPageRoute(
+          widget: BlocProvider(
+            create: (context) => getIt<ForgotPasswordCubit>(),
+            child: ResetPasswordScreen(),
+          ),
+        );
       case PageRouteName.chatScreen:
         final chatTitle = setting.arguments as String?;
         return MaterialPageRoute(
@@ -92,7 +104,6 @@ class AppRoutes {
         );
 
       case PageRouteName.weightScreen:
-      // Handle differently if coming from edit profile vs signup flow
         return MaterialPageRoute(
           settings: setting,
           builder: (context) => BlocProvider(
@@ -182,8 +193,22 @@ class AppRoutes {
 
       case PageRouteName.layoutScreen:
         return _handleMaterialPageRoute(widget: const MainPage());
+      case PageRouteName.privacyPolicyScreen:
+        return _handleMaterialPageRoute(widget: const PrivacyPolicyScreen());
 
+      case PageRouteName.help:
+        return _handleMaterialPageRoute(widget: const HelpAndSecurityScreen());
 
+      case PageRouteName.security:
+        return _handleMaterialPageRoute(widget: const SecurityScreen());
+
+      case PageRouteName.changePassword:
+        return MaterialPageRoute(
+          builder: (context) => BlocProvider(
+            create: (context) => getIt<ChangePasswordViewModel>(),
+            child: const ChangePasswordScreen(),
+          ),
+        );
       case PageRouteName.mealsScreen:
         return _handleMaterialPageRoute(widget: MealsScreen());
       default:

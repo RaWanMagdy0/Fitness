@@ -57,24 +57,29 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("Category", style: AppFonts.font18WhiteWeight400),
+                            Text("Category",
+                                style: AppFonts.font18WhiteWeight400),
                             const SizedBox(height: 10),
                             const CategorySection(),
                             const SizedBox(height: 20),
-                            Text("Recommendation Today", style: AppFonts.font18WhiteWeight400),
+                            Text("Recommendation Today",
+                                style: AppFonts.font18WhiteWeight400),
                             const RecommCard(),
                             const SizedBox(height: 20),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text("Upcoming Workouts", style: AppFonts.font18WhiteWeight400),
+                                Text("Upcoming Workouts",
+                                    style: AppFonts.font18WhiteWeight400),
                                 InkWell(
                                   onTap: () {
-                                    Navigator.pushReplacementNamed(context, PageRouteName.workoutScreen);
+                                    Navigator.pushReplacementNamed(
+                                        context, PageRouteName.workoutScreen);
                                   },
                                   child: Text(
                                     "See All",
-                                    style: AppFonts.font15OrangeWeight500.copyWith(
+                                    style:
+                                        AppFonts.font15OrangeWeight500.copyWith(
                                       decoration: TextDecoration.underline,
                                       decorationColor: AppColors.kOrange,
                                     ),
@@ -89,12 +94,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                   setState(() {
                                     selectedMuscleGroupId = muscleGroupId;
                                   });
-                                  viewModel.getMuscleGroupById(muscleGroupId); // ✅ استدعاء التحميل عند تغيير التاب
+                                  viewModel.getMuscleGroupById(muscleGroupId);
                                 }
                               },
                             ),
                             const SizedBox(height: 10),
-
                             if (selectedMuscleGroupId.isNotEmpty)
                               BlocBuilder<HomeCubit, HomeState>(
                                 bloc: viewModel,
@@ -102,18 +106,42 @@ class _HomeScreenState extends State<HomeScreen> {
                                   if (state is MuscleGroupIdLoading) {
                                     return _buildShimmerTabs();
                                   } else if (state is MuscleGroupIdError) {
-                                    return Center(child: Text("Error: ${state.errorMessage}"));
+                                    return Center(
+                                        child: Text(
+                                            "Error: ${state.errorMessage}"));
                                   } else if (state is MuscleGroupIdSuccess) {
-                                    return UpcomingCard(muscleGroupId: selectedMuscleGroupId);
+                                    return UpcomingCard(
+                                        muscleGroupId: selectedMuscleGroupId);
                                   }
                                   return Container();
                                 },
                               ),
                             const SizedBox(height: 20),
-                            Text("Recommendation For You", style: AppFonts.font18WhiteWeight400),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text("Recommendation For You",
+                                    style: AppFonts.font18WhiteWeight400),
+                                InkWell(
+                                  onTap: () {
+                                    Navigator.pushNamed(
+                                        context, PageRouteName.mealsScreen);
+                                  },
+                                  child: Text(
+                                    "See All",
+                                    style:
+                                        AppFonts.font15OrangeWeight500.copyWith(
+                                      decoration: TextDecoration.underline,
+                                      decorationColor: AppColors.kOrange,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                             const RecommFoodCard(),
                             const SizedBox(height: 30),
-                            Text("Popular Training", style: AppFonts.font18WhiteWeight400),
+                            Text("Popular Training",
+                                style: AppFonts.font18WhiteWeight400),
                             const PopularCard(),
                           ],
                         ),
@@ -128,6 +156,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+
   Widget _buildShimmerTabs() {
     return SizedBox(
       height: 110.h,
@@ -147,6 +176,4 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-
 }
-

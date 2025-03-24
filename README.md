@@ -1,45 +1,16 @@
-# 🏋️‍♂️ Fitness App 🚀
+# fitness_app
 
-## 📌 Overview
-This is a **comprehensive fitness app** designed to help users achieve their health goals. The app provides **personalized workouts, diet plans, AI-powered coaching, and user progress tracking.**
+A new Flutter project.
 
----
+## Getting Started
 
-## 🌟 Key Features
+This project is a starting point for a Flutter application.
 
-### 1️⃣ Onboarding
-- Smooth onboarding experience introducing users to the app’s features.
+A few resources to get you started if this is your first Flutter project:
 
-### 2️⃣ Authentication System 🔐
-- Full **login, sign-up, and password recovery system** for secure access.
+- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
+- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
 
-### 3️⃣ User Profile (Profile Management) 👤
-- Users can update their personal data, fitness goals, and preferences.
-
-### 4️⃣ 🏠 Home Screen
-- Displays **recommended workouts** based on user preferences.
-- **AI-Powered Training Coach (Gemini Integration)**:
-    - Users can interact with **Gemini AI** as a **virtual fitness coach**.
-    - AI tracks user workout history and provides insights.
-
-### 5️⃣ Workouts Page 🏃‍♂️
-- A dedicated section that provides:
-    - Different workout plans.
-    - Exercise details with instructions.
-
-### 6️⃣ Nutrition & Meal Plans 🍽️
-- A page that **recommends meals** based on user goals.
-- Includes **detailed recipes, nutritional facts, and videos**.
-
-### 7️⃣ Progress Tracking & Activity Dashboard 📊
-- Users can track their **weight, fitness progress, and activity levels**.
-
-
----
-
-## 📥 Installation
-```sh
-git clone https://github.com/yourusername/fitness-app.git
-cd fitness-app
-npm install   # Install dependencies
-npm start     # Run the app
+For help getting started with Flutter development, view the
+[online documentation](https://docs.flutter.dev/), which offers tutorials,
+samples, guidance on mobile development, and a full API reference.

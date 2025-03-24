@@ -44,5 +44,16 @@ class ProfileRepositoryImpl implements ProfileRepository {
         return Fail(exception: response.exception);
     }
   }
+  @override
+  Future<Result<String?>> changePassword({
+    required String currentPassword,
+    required String newPassword,
+  }) async {
+    return await profileRemoteDataSource.changePassword(
+      currentPassword: currentPassword,
+      newPassword: newPassword,
+    );
+  }
+
 }
 

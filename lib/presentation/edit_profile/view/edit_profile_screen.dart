@@ -204,10 +204,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             message: state.message,
             whenAnimationFinished: () {
               _clearSavedData();
-
               final profileCubit = context.read<ProfileCubit>();
               profileCubit.getUserData();
-
               Navigator.pop(context);
             },
           );
@@ -400,19 +398,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           ),
 
           SizedBox(height: 30.h),
-
-          // Profile image and name shimmer
           Center(
             child: Column(
               children: [
-                // Profile image shimmer
                 ShimmerLoadingWidget(
                   width: 100.w,
                   height: 100.h,
                   borderRadius: 50.r, // Circle shape
                 ),
                 SizedBox(height: 10.h),
-                // Name shimmer
                 ShimmerLoadingWidget(
                   width: 150.w,
                   height: 24.h,

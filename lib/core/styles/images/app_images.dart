@@ -11,6 +11,7 @@ class AppImages {
   static const pinkDoneAnimation =
       "assets/animations/flowery_success_animation.json";
   static const geminiAnimi = "assets/animations/gemini_animi.json";
+  static const fitLoad = "assets/animations/fit_load.json";
   static const loadingMess = "assets/animations/loading_mess.json";
   static const authBackground = "assets/images/auth_background.png";
   static const logoIcon = "assets/images/logoIcon.png";

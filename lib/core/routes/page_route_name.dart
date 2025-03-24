@@ -29,4 +29,8 @@ class PageRouteName {
   static const String categoryTabs = "categoryTabs";
   static const String recommFoodCard = "recommFoodCard";
   static const String upcomingCard = "upcomingCard";
+  static const String privacyPolicyScreen = "privacyPolicyScreen";
+  static const String help = "help";
+  static const String security = "security";
+  static const String changePassword = "changePassword";
 }

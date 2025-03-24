@@ -14,7 +14,7 @@ import 'package:objectbox/internal.dart'
 import 'package:objectbox/objectbox.dart' as obx;
 import 'package:objectbox_flutter_libs/objectbox_flutter_libs.dart';
 
-import 'domain/online_coach_enity.dart';
+import 'domain/entity/online_coach_enity.dart';
 
 export 'package:objectbox/objectbox.dart'; // so that callers only have to import this file
 
