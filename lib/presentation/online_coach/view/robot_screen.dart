@@ -1,3 +1,4 @@
+import 'package:fitness_app/core/di/di.dart';
 import 'package:fitness_app/core/routes/page_route_name.dart';
 import 'package:fitness_app/core/styles/fonts/app_fonts.dart';
 import 'package:fitness_app/core/styles/images/app_images.dart';
@@ -10,10 +11,27 @@ import '../../../core/styles/colors/app_colors.dart';
 import '../../../core/utils/widget/custom_arrow.dart';
 import '../../profile/view_model/profile_cubit.dart';
 import '../../profile/view_model/profile_state.dart';
+import '../view_model/smart_coach_cubit.dart';
 import '../widget/object_box.dart';
 
-class RobotScreen extends StatelessWidget {
+class RobotScreen extends StatefulWidget {
   const RobotScreen({super.key});
+
+  @override
+  State<RobotScreen> createState() => _RobotScreenState();
+}
+
+class _RobotScreenState extends State<RobotScreen> {
+  late ProfileCubit profileCubit;
+  late GeminiCubit viewModel;
+
+  @override
+  void initState() {
+    super.initState();
+    profileCubit = getIt.get<ProfileCubit>();
+    profileCubit.getUserData();
+    viewModel = getIt.get<GeminiCubit>();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,12 +55,10 @@ class RobotScreen extends StatelessWidget {
                 Column(
                   children: [
                     BlocBuilder<ProfileCubit, ProfileState>(
+                      bloc: profileCubit,
                       builder: (context, state) {
-                        final cubit = context.watch<ProfileCubit>();
-                        if (state is ProfileInitialState) {
-                          cubit.getUserData();
-                        }
-                        final userName = cubit.userName;
+                        if (state is ProfileInitialState) {}
+                        final userName = profileCubit.userName;
                         return Row(
                           children: [
                             Text("Hi", style: AppFonts.font16WhiteWeight500),
@@ -95,8 +111,7 @@ class RobotScreen extends StatelessWidget {
     showDialog(
       context: context,
       builder: (context) {
-        final objectBox = context.read<ObjectBox>();
-        List<String> previousConversations = objectBox.getChatTitles();
+        List<String> previousConversations = viewModel.getChatTitles();
         return Align(
           alignment: Alignment.centerRight,
           child: Material(

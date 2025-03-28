@@ -17,8 +17,8 @@ class GeminiCubit extends BaseViewModel<GeminiState> {
   final stt.SpeechToText _speech = stt.SpeechToText();
   bool isListening = false;
   String recordedText = "";
-  ObjectBox? objectBox;
   bool _isObjectBoxReady = false;
+  late ObjectBox objectBox;
 
   GeminiCubit(this.profileRepository) : super(GeminiInitialState()) {
     _initObjectBox();
@@ -26,8 +26,8 @@ class GeminiCubit extends BaseViewModel<GeminiState> {
   }
 
   Future<void> _initObjectBox() async {
-    objectBox ??= await ObjectBox.create();
-    _isObjectBoxReady = objectBox != null;
+    objectBox = await ObjectBox.create();
+    _isObjectBoxReady = true;
   }
 
   Future<void> sendMessage(String userMessage) async {
@@ -105,13 +105,13 @@ class GeminiCubit extends BaseViewModel<GeminiState> {
   void _saveMessageToObjectBox(String sender, String message) {
     if (_isObjectBoxReady) {
       var msg = Message(sender: sender, text: message);
-      objectBox!.saveMessage(msg);
+      objectBox.saveMessage(msg);
     }
   }
 
   List<String> getChatTitles() {
     if (!_isObjectBoxReady) return [];
-    return objectBox!.getChatTitles();
+    return objectBox.getChatTitles();
   }
 
   void saveChatToHistory() async {
@@ -150,7 +150,7 @@ class GeminiCubit extends BaseViewModel<GeminiState> {
     }
 
     print("🔍 Loading chat for title: $title");
-    ChatHistory? chatHistory = objectBox!.getChatHistoryByTitle(title);
+    ChatHistory? chatHistory = objectBox.getChatHistoryByTitle(title);
 
     if (chatHistory == null) {
       print("❌ No chat history found for: $title");

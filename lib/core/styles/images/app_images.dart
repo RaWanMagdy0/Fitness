@@ -45,4 +45,5 @@ class AppImages {
   static const trainerIcon = "assets/icon/trainerIcon.png";
   static const yogaIcon = "assets/icon/yogaIcon.png";
   static const runningImage = "assets/images/runningImage.jpg";
+  static const errorAnim = "assets/animations/error_anim.json";
 }

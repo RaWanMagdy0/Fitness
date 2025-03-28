@@ -9,6 +9,7 @@ import '../../../../core/di/di.dart';
 import '../../../../core/styles/colors/app_colors.dart';
 import '../../../../core/styles/images/app_images.dart';
 import '../../../../core/utils/widget/shimmer_loading_widget.dart';
+import '../../../profile/view_model/profile_cubit.dart';
 import '../view_model/home_cubit.dart';
 import '../view_model/home_state.dart';
 import '../widget/category_section.dart';
@@ -28,11 +29,13 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   String selectedMuscleGroupId = "";
   late HomeCubit viewModel;
+  late ProfileCubit profileCubit;
 
   @override
   void initState() {
     super.initState();
     viewModel = getIt.get<HomeCubit>();
+    profileCubit = getIt.get<ProfileCubit>();
   }
 
   @override
@@ -46,7 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
               overlayOpacity: 0.1,
               child: Column(
                 children: [
-                  HomeAppBar(),
+                  HomeAppBar(profileCubit: profileCubit),
                   10.verticalSpace,
                   Expanded(
                     child: SingleChildScrollView(
@@ -73,13 +76,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                     style: AppFonts.font18WhiteWeight400),
                                 InkWell(
                                   onTap: () {
-                                    Navigator.pushReplacementNamed(
+                                    Navigator.pushNamed(
                                         context, PageRouteName.workoutScreen);
                                   },
                                   child: Text(
                                     "See All",
                                     style:
-                                        AppFonts.font15OrangeWeight500.copyWith(
+                                    AppFonts.font15OrangeWeight500.copyWith(
                                       decoration: TextDecoration.underline,
                                       decorationColor: AppColors.kOrange,
                                     ),
@@ -130,7 +133,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   child: Text(
                                     "See All",
                                     style:
-                                        AppFonts.font15OrangeWeight500.copyWith(
+                                    AppFonts.font15OrangeWeight500.copyWith(
                                       decoration: TextDecoration.underline,
                                       decorationColor: AppColors.kOrange,
                                     ),
@@ -142,7 +145,12 @@ class _HomeScreenState extends State<HomeScreen> {
                             const SizedBox(height: 30),
                             Text("Popular Training",
                                 style: AppFonts.font18WhiteWeight400),
-                            const PopularCard(),
+                            InkWell(
+                                onTap: () {
+                                  Navigator.pushNamed(
+                                      context, PageRouteName.exerciseScreen);
+                                },
+                                child: const PopularCard()),
                           ],
                         ),
                       ),

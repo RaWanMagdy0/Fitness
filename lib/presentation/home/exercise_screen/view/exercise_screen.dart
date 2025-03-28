@@ -163,7 +163,6 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                       ),
                     ],
                   ),
-                  10.verticalSpace,
                   Expanded(
                     child: SingleChildScrollView(
                       child: TabBarSection(exercises: state.exercise),

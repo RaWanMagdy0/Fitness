@@ -1,5 +1,7 @@
 import 'package:fitness_app/core/routes/page_route_name.dart';
 import 'package:fitness_app/presentation/home/home_screen/view_model/home_cubit.dart';
+import 'package:fitness_app/presentation/home/workout/view/workout_screen.dart';
+import 'package:fitness_app/presentation/home/workout/view_model/workout_cubit.dart';
 import 'package:fitness_app/presentation/profile/view/main_profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -97,12 +99,24 @@ class AppRoutes {
       case PageRouteName.chatScreen:
         final chatTitle = setting.arguments as String?;
         return MaterialPageRoute(
-          builder: (context) => BlocProvider(
-            create: (context) => getIt<GeminiCubit>(),
+          builder: (context) => MultiBlocProvider(
+            providers: [
+              BlocProvider(create: (context) => getIt<GeminiCubit>()),
+              BlocProvider(create: (context) => getIt<ProfileCubit>()),
+            ],
             child: ChatScreen(title: chatTitle),
           ),
         );
-
+      case PageRouteName.robotScreen:
+        return MaterialPageRoute(
+          builder: (context) => MultiBlocProvider(
+            providers: [
+              BlocProvider(create: (context) => getIt<GeminiCubit>()),
+              BlocProvider(create: (context) => getIt<ProfileCubit>()),
+            ],
+            child: RobotScreen(),
+          ),
+        );
       case PageRouteName.weightScreen:
         return MaterialPageRoute(
           settings: setting,
@@ -159,18 +173,26 @@ class AppRoutes {
             child: ExerciseScreen(),
           ),
         );
-      case PageRouteName.homeScreen:
+      case PageRouteName.workoutScreen:
         return MaterialPageRoute(
           builder: (context) => BlocProvider(
-            create: (context) => getIt<HomeCubit>(),
+            create: (context) => getIt<WorkoutCubit>(),
+            child: WorkoutScreen(),
+          ),
+        );
+      case PageRouteName.homeScreen:
+        return MaterialPageRoute(
+          builder: (context) => MultiBlocProvider(
+            providers: [
+              BlocProvider(create: (context) => getIt<HomeCubit>()),
+              BlocProvider(create: (context) => getIt<ProfileCubit>()),
+            ],
             child: HomeScreen(),
           ),
         );
-
       case PageRouteName.onBoarding:
         return _handleMaterialPageRoute(widget: OnboardingScreen());
-      case PageRouteName.robotScreen:
-        return _handleMaterialPageRoute(widget: RobotScreen());
+
       case PageRouteName.mainProfileScreen:
         return MaterialPageRoute(
           builder: (context) => BlocProvider(

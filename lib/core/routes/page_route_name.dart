@@ -33,4 +33,5 @@ class PageRouteName {
   static const String help = "help";
   static const String security = "security";
   static const String changePassword = "changePassword";
+  static const String staticPage = "staticPage";
 }

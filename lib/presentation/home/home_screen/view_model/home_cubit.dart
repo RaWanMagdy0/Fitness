@@ -2,7 +2,9 @@ import 'package:injectable/injectable.dart';
 import '../../../../core/api/api_result.dart';
 import '../../../../core/base/base_view_model.dart';
 import '../../../../data/models/meal/meals_tabs_response_model.dart';
+import '../../../../domain/entity/exercise/exercise_entity.dart';
 import '../../../../domain/entity/home/random_muscle_entity.dart';
+import '../../../../domain/use_case/home/exercise_use_case.dart';
 import '../../../../domain/use_case/home/muscle_group_by_id.dart';
 import '../../../../domain/use_case/home/random_muscle_use_case.dart';
 import '../../../../domain/use_case/meal/meals_tabs_use_case.dart';
@@ -15,12 +17,14 @@ class HomeCubit extends BaseViewModel<HomeState> {
   final MealsTabsUseCase _mealsTabsUseCase;
   final RandomMuscleUseCase randomMuscleUseCase;
   final MuscleGroupByIdUseCase muscleGroupByIdUseCase;
+  final ExerciseUseCase exerciseUseCase;
+
 
   HomeCubit(
       this._getMuscleGroupsUseCase,
       this._mealsTabsUseCase,
       this.randomMuscleUseCase,
-      this.muscleGroupByIdUseCase,
+      this.muscleGroupByIdUseCase, this.exerciseUseCase,
       ) : super(WorkoutInitial());
 
   Future<void> fetchMealsTabs() async {
@@ -93,7 +97,7 @@ class HomeCubit extends BaseViewModel<HomeState> {
   }
 
   Future<void> getMuscleGroupById(String muscleGroupId) async {
-    emit(MuscleGroupIdLoading());  // ✅ تغيير الحالة إلى "تحميل"
+    emit(MuscleGroupIdLoading());
 
     try {
       var result = await muscleGroupByIdUseCase.invoke(muscleGroupId);
@@ -114,4 +118,21 @@ class HomeCubit extends BaseViewModel<HomeState> {
       emit(MuscleGroupIdError(errorMessage: "Unexpected error: ${e.toString()}"));
     }
   }
+
+  Future<void> getExercise({String? difficultyLevel}) async {
+    emit(HomeExerciseLoadingState());
+
+    var result = await exerciseUseCase.invoke();
+
+    switch (result) {
+      case Success():
+
+        emit(HomeExerciseSuccessState(exercise: result.data));
+
+      case Fail():
+        emit(HomeExerciseErrorState(
+            errorMessage: getErrorMassageFromException(result.exception)));
+    }
+  }
+
 }

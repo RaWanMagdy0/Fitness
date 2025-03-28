@@ -6,7 +6,9 @@ import 'exercise_list.dart';
 
 class TabBarSection extends StatelessWidget {
   final List<Exercise?> exercises;
+
   TabBarSection({super.key, required this.exercises});
+
   final List<String> levels = ["Beginner", "Intermediate", "Advanced"];
 
   @override
@@ -27,10 +29,12 @@ class TabBarSection extends StatelessWidget {
           ),
           10.verticalSpace,
           SizedBox(
-            height: 400,
+            height: 700.h,
             child: TabBarView(
               children: levels.map((level) {
-                final filteredExercises = exercises.where((e) => e?.difficultyLevel == level).toList();
+                final filteredExercises = exercises
+                    .where((e) => e?.difficultyLevel == level)
+                    .toList();
                 return ExerciseList(exercises: filteredExercises);
               }).toList(),
             ),

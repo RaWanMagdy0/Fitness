@@ -175,6 +175,13 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i11.EditProfileUseCase(gh<_i1056.AuthRepository>()));
     gh.factory<_i97.LoginCubit>(
         () => _i97.LoginCubit(gh<_i1056.AuthRepository>()));
+    gh.factory<_i915.HomeCubit>(() => _i915.HomeCubit(
+          gh<_i789.GetMuscleGroupsUseCase>(),
+          gh<_i954.MealsTabsUseCase>(),
+          gh<_i888.RandomMuscleUseCase>(),
+          gh<_i603.MuscleGroupByIdUseCase>(),
+          gh<_i168.ExerciseUseCase>(),
+        ));
     gh.factory<_i448.MealsViewModel>(() => _i448.MealsViewModel(
           gh<_i954.MealsTabsUseCase>(),
           gh<_i731.MealsUseCase>(),
@@ -187,12 +194,6 @@ extension GetItInjectableX on _i174.GetIt {
         ));
     gh.factory<_i360.MealDetailsCubit>(
         () => _i360.MealDetailsCubit(gh<_i893.MealDetailsUseCase>()));
-    gh.factory<_i915.HomeCubit>(() => _i915.HomeCubit(
-          gh<_i789.GetMuscleGroupsUseCase>(),
-          gh<_i954.MealsTabsUseCase>(),
-          gh<_i888.RandomMuscleUseCase>(),
-          gh<_i603.MuscleGroupByIdUseCase>(),
-        ));
     gh.factory<_i401.ForgotPasswordCubit>(() =>
         _i401.ForgotPasswordCubit(authRepository: gh<_i1056.AuthRepository>()));
     gh.factory<_i821.ProfileCubit>(() => _i821.ProfileCubit(

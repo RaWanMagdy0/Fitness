@@ -49,7 +49,7 @@ class _UpcomingCardState extends State<UpcomingCard> {
             );
           }
           return SizedBox(
-            width: 110.w,
+          //  width: 110.w,
             height: 110.h,
             child: ListView.separated(
               scrollDirection: Axis.horizontal,

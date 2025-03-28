@@ -59,16 +59,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   'Password updated successfully',
                   style: AppFonts.font14GreyWeight400,
                 ),
-                backgroundColor: AppColors.kBabyPink,
+                backgroundColor: AppColors.kOrange,
               ),
             );
-            getIt<AuthRepository>().logout().then((_) {
-              Navigator.pushNamedAndRemoveUntil(
-                context,
-                PageRouteName.splashscreen,
-                (route) => false,
-              );
-            });
           } else if (state is ChangePasswordError) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
@@ -129,13 +122,13 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   CustomTextFormField(
                     backgroundColor: Colors.white.withOpacity(0.1),
                     controller: _confirmPasswordController,
-                    hintText: "ConfirmPasswordHintText",
+                    hintText: "Confirm Password ",
                     isPassword: true,
                     keyBordType: TextInputType.text,
                     labelText: '',
                     validator: (value) {
                       if (value != _newPasswordController.text) {
-                        return "PasswordDontMatch";
+                        return "Password Dont Match";
                       }
                       return null;
                     },
@@ -143,7 +136,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   SizedBox(height: 32.h),
                   CustomButton(
                     text: state is ChangePasswordLoading
-                        ? "local.loadingText"
+                        ? "loading"
                         : "Update Text",
                     color: AppColors.kOrange,
                     onPressed: state is ChangePasswordLoading
