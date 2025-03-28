@@ -12,7 +12,6 @@ import '../../../core/utils/widget/custom_arrow.dart';
 import '../../profile/view_model/profile_cubit.dart';
 import '../../profile/view_model/profile_state.dart';
 import '../view_model/smart_coach_cubit.dart';
-import '../widget/object_box.dart';
 
 class RobotScreen extends StatefulWidget {
   const RobotScreen({super.key});

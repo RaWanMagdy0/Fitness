@@ -121,7 +121,7 @@ class GeminiCubit extends BaseViewModel<GeminiState> {
     int titleLength = min(30, fullText.length);
     String chatTitle = fullText.substring(0, titleLength).trim();
 
-    ChatHistory? existingChat = objectBox!.getChatHistoryByTitle(chatTitle);
+    ChatHistory? existingChat = objectBox.getChatHistoryByTitle(chatTitle);
 
     if (existingChat == null) {
       existingChat = ChatHistory(title: chatTitle);
@@ -133,10 +133,10 @@ class GeminiCubit extends BaseViewModel<GeminiState> {
       Message newMessage = Message(sender: msg['sender']!, text: msg['text']!);
       newMessage.chatHistory.target = existingChat;
       existingChat.messages.add(newMessage);
-      objectBox!.saveMessage(newMessage);
+      objectBox.saveMessage(newMessage);
     }
 
-    objectBox!.saveChatHistory(existingChat);
+    objectBox.saveChatHistory(existingChat);
   }
 
   void loadChatByTitle(String title) {

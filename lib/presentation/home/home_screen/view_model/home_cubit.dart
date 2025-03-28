@@ -2,7 +2,6 @@ import 'package:injectable/injectable.dart';
 import '../../../../core/api/api_result.dart';
 import '../../../../core/base/base_view_model.dart';
 import '../../../../data/models/meal/meals_tabs_response_model.dart';
-import '../../../../domain/entity/exercise/exercise_entity.dart';
 import '../../../../domain/entity/home/random_muscle_entity.dart';
 import '../../../../domain/use_case/home/exercise_use_case.dart';
 import '../../../../domain/use_case/home/muscle_group_by_id.dart';

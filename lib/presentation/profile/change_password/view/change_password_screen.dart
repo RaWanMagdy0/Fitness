@@ -3,16 +3,12 @@ import 'package:fitness_app/core/utils/widget/custom%20scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../../../../core/di/di.dart';
-import '../../../../../../core/routes/page_route_name.dart';
 import '../../../../../../core/styles/colors/app_colors.dart';
 import '../../../../../../core/utils/functions/validators/validators.dart';
 import '../../../../../../core/utils/widget/custom_button.dart';
 import '../../../../../../core/utils/widget/custom_text_form_field.dart';
 import '../../../../../../generated/l10n.dart';
 import '../../../../core/styles/fonts/app_fonts.dart';
-import '../../../../domain/repository/auth_repository/auth_repository.dart';
-import '../../view/widgets/custom_profile_row.dart';
 import '../view_model/change_password_state.dart';
 import '../view_model/change_password_view_model.dart';
 
