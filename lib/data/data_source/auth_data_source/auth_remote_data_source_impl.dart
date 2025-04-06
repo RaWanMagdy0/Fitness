@@ -30,27 +30,26 @@ import 'auth_remote_data_source.dart';
 @Injectable(as: AuthRemoteDataSource)
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   final AuthApiManager authApiManager;
-  final Dio _dio;  // Add direct dio access for editProfile
+  final Dio _dio;
 
   AuthRemoteDataSourceImpl({required this.authApiManager})
       : _dio = Dio(BaseOptions(
-    baseUrl: 'https://fitness.elevateegy.com/',
-    connectTimeout: Duration(seconds: 60),
-    receiveTimeout: Duration(seconds: 60),
-    headers: {
-      "Cache-Control": "no-cache",
-      "Pragma": "no-cache",
-    },
-  ));
+          baseUrl: 'https://fitness.elevateegy.com/',
+          connectTimeout: Duration(seconds: 60),
+          receiveTimeout: Duration(seconds: 60),
+          headers: {
+            "Cache-Control": "no-cache",
+            "Pragma": "no-cache",
+          },
+        ));
 
   @override
   Future<Result<String?>> signUp(SignupRequestBody signupRequestBody) {
     return executeApiCall<String?>(() async {
       final response = await authApiManager.signUp(signupRequestBody);
-      return response.message;
+      return response.message??"";
     });
   }
-
   @override
   Future<Result<String?>> login(LoginRequestModel loginRequestModel) {
     return executeApiCall<String?>(() async {

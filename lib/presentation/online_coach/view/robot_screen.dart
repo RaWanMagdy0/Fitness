@@ -11,26 +11,10 @@ import '../../../core/styles/colors/app_colors.dart';
 import '../../../core/utils/widget/custom_arrow.dart';
 import '../../profile/view_model/profile_cubit.dart';
 import '../../profile/view_model/profile_state.dart';
-import '../view_model/smart_coach_cubit.dart';
+import '../widget/object_box.dart';
 
-class RobotScreen extends StatefulWidget {
+class RobotScreen extends StatelessWidget {
   const RobotScreen({super.key});
-
-  @override
-  State<RobotScreen> createState() => _RobotScreenState();
-}
-
-class _RobotScreenState extends State<RobotScreen> {
-  late ProfileCubit profileCubit;
-  late GeminiCubit viewModel;
-
-  @override
-  void initState() {
-    super.initState();
-    profileCubit = getIt.get<ProfileCubit>();
-    profileCubit.getUserData();
-    viewModel = getIt.get<GeminiCubit>();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,10 +38,12 @@ class _RobotScreenState extends State<RobotScreen> {
                 Column(
                   children: [
                     BlocBuilder<ProfileCubit, ProfileState>(
-                      bloc: profileCubit,
                       builder: (context, state) {
-                        if (state is ProfileInitialState) {}
-                        final userName = profileCubit.userName;
+                        final cubit = context.watch<ProfileCubit>();
+                        if (state is ProfileInitialState) {
+                          cubit.getUserData();
+                        }
+                        final userName = cubit.userName;
                         return Row(
                           children: [
                             Text("Hi", style: AppFonts.font16WhiteWeight500),
@@ -110,7 +96,8 @@ class _RobotScreenState extends State<RobotScreen> {
     showDialog(
       context: context,
       builder: (context) {
-        List<String> previousConversations = viewModel.getChatTitles();
+        final objectBox = context.read<ObjectBox>();
+        List<String> previousConversations = objectBox.getChatTitles();
         return Align(
           alignment: Alignment.centerRight,
           child: Material(

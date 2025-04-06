@@ -1,4 +1,3 @@
-import 'package:fitness_app/core/di/di.dart';
 import 'package:fitness_app/core/routes/page_route_name.dart';
 import 'package:fitness_app/core/styles/colors/app_colors.dart';
 import 'package:fitness_app/core/utils/widget/custom%20scaffold.dart';
@@ -7,12 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
+import '../../../core/di/di.dart';
 import '../../../core/styles/fonts/app_fonts.dart';
 import '../../../core/styles/images/app_images.dart';
 import '../../../core/utils/widget/custom_arrow.dart';
 import '../../profile/view_model/profile_state.dart';
 import '../view_model/smart_coach_cubit.dart';
 import '../view_model/smart_coach_state.dart';
+import '../widget/object_box.dart';
 
 class ChatScreen extends StatefulWidget {
   final String? title;
@@ -29,33 +30,41 @@ class _ChatScreenState extends State<ChatScreen> {
   late GeminiCubit viewModel;
   late ProfileCubit profileCubit;
   bool showWelcomeMessage = true;
+  final ScrollController _scrollController = ScrollController();
+
 
   @override
   void initState() {
     super.initState();
-    viewModel = getIt.get<GeminiCubit>();
+    viewModel = context.read<GeminiCubit>();
     profileCubit = getIt.get<ProfileCubit>();
     profileCubit.getUserData();
-
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (widget.title != null && widget.title!.isNotEmpty) {
-        viewModel.loadChatByTitle(widget.title!);
-      }
+        context.read<GeminiCubit>().loadChatByTitle(widget.title!);
+      } else {}
       updateChatTitles();
     });
   }
-
+  void _scrollToBottom() {
+    Future.delayed(Duration(milliseconds: 100), () {
+      if (_scrollController.hasClients) {
+        _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent,
+          duration: Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        );
+      }
+    });
+  }
   void updateChatTitles() {
+    final objectBox = context.read<ObjectBox>();
     setState(() {
-      previousConversations = viewModel.getChatTitles();
+      previousConversations = objectBox.getChatTitles();
     });
   }
 
   void openPreviousChats() {
-    setState(() {
-      previousConversations = viewModel.getChatTitles();
-    });
-
     showDialog(
       context: context,
       builder: (context) {
@@ -179,6 +188,8 @@ class _ChatScreenState extends State<ChatScreen> {
                     ),
                   Expanded(
                     child: ListView.builder(
+                      controller: _scrollController,
+
                       shrinkWrap: true,
                       physics: const AlwaysScrollableScrollPhysics(),
                       itemCount: chatMessages.length + (isLoading ? 1 : 0),
@@ -252,39 +263,38 @@ class _ChatScreenState extends State<ChatScreen> {
                               8.horizontalSpace,
                               if (isSender)
                                 BlocBuilder<ProfileCubit, ProfileState>(
-                                  builder: (context, state) {
-                                    final userImage = profileCubit.userImage;
-                                    return CircleAvatar(
-                                      radius: 24,
-                                      backgroundColor: Colors.transparent,
-                                      child: ClipOval(
-                                        child: userImage != null &&
-                                                userImage.isNotEmpty
-                                            ? Image.network(
-                                                userImage,
-                                                fit: BoxFit.cover,
-                                                width: 48,
-                                                height: 48,
-                                                errorBuilder: (context, error,
-                                                    stackTrace) {
-                                                  return Image.asset(
-                                                    AppImages.person,
-                                                    fit: BoxFit.cover,
-                                                    width: 48,
-                                                    height: 48,
-                                                  );
-                                                },
-                                              )
-                                            : Image.asset(
-                                                AppImages.person,
-                                                fit: BoxFit.cover,
-                                                width: 48,
-                                                height: 48,
-                                              ),
-                                      ),
-                                    );
-                                  },
-                                ),
+                                    builder: (context, state) {
+                                  final userImage = profileCubit.userImage;
+                                  return CircleAvatar(
+                                    radius: 24,
+                                    backgroundColor: Colors.transparent,
+                                    child: ClipOval(
+                                      child: userImage != null &&
+                                              userImage.isNotEmpty
+                                          ? Image.network(
+                                              userImage,
+                                              fit: BoxFit.cover,
+                                              width: 48,
+                                              height: 48,
+                                              errorBuilder:
+                                                  (context, error, stackTrace) {
+                                                return Image.asset(
+                                                  AppImages.person,
+                                                  fit: BoxFit.cover,
+                                                  width: 48,
+                                                  height: 48,
+                                                );
+                                              },
+                                            )
+                                          : Image.asset(
+                                              AppImages.person,
+                                              fit: BoxFit.cover,
+                                              width: 48,
+                                              height: 48,
+                                            ),
+                                    ),
+                                  );
+                                })
                             ],
                           ),
                         );
@@ -341,6 +351,8 @@ class _ChatScreenState extends State<ChatScreen> {
                                 showWelcomeMessage = false;
                               });
                               updateChatTitles();
+                              _scrollToBottom();
+
                             }
                           },
                         ),
@@ -354,6 +366,7 @@ class _ChatScreenState extends State<ChatScreen> {
         },
       ),
     );
+
   }
 
   Widget _buildLoadingIndicator() {

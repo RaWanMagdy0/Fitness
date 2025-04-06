@@ -24,11 +24,11 @@ class ProfileRepositoryImpl implements ProfileRepository {
   }
 
   @override
-  Future<Result<User?>> uploadPhoto(File photo) async {
+  Future<Result<String?>> uploadPhoto(File photo) async {
     final response = await profileRemoteDataSource.uploadPhoto(photo);
     switch (response) {
       case Success():
-        return Success(data: response.data?.toEntity());
+        return Success(data: response.data);
       case Fail():
         return Fail(exception: response.exception);
     }

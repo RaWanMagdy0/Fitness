@@ -24,10 +24,17 @@ class AuthRepositoryImpl implements AuthRepository {
   final AuthRemoteDataSource authRemoteDataSource;
 
   AuthRepositoryImpl({required this.authRemoteDataSource});
+
   @override
-  Future<Result<String?>> signUp(SignupRequestBody signupRequestBody) {
-    final response = authRemoteDataSource.signUp(signupRequestBody);
-    return response;
+  Future<Result<String?>> signUp(SignupRequestBody signupRequestBody) async {
+    final response = await authRemoteDataSource.signUp(signupRequestBody);
+    if (response is Success<String>) {
+      return Success(data: response.data);
+    } else if (response is Fail<String>) {
+      return Fail(exception: response.exception);
+    } else {
+      return Fail(exception: Exception('Unknown response type'));
+    }
   }
 
   @override
@@ -62,5 +69,4 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<Result<String?>> logout() {
     return authRemoteDataSource.logout();
   }
-
 }

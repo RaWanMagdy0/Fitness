@@ -203,8 +203,10 @@ extension GetItInjectableX on _i174.GetIt {
         ));
     gh.factory<_i140.SignUpCubit>(
         () => _i140.SignUpCubit(gh<_i322.SignupUseCase>()));
-    gh.factory<_i236.EditProfileCubit>(
-        () => _i236.EditProfileCubit(gh<_i606.EditProfileUseCase>()));
+    gh.factory<_i236.EditProfileCubit>(() => _i236.EditProfileCubit(
+          gh<_i606.EditProfileUseCase>(),
+          gh<_i659.UploadPhotoUseCase>(),
+        ));
     return this;
   }
 }

@@ -4,11 +4,12 @@ import 'package:fitness_app/presentation/home/home_screen/view_model/home_state.
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:lottie/lottie.dart';
-
+import 'package:url_launcher/url_launcher.dart';
 import '../../../../core/di/di.dart';
+import '../../../../core/routes/page_route_name.dart';
 import '../../../../core/styles/images/app_images.dart';
 import '../../../../core/utils/widget/custom_cached_network_image.dart';
+import '../../../../core/utils/widget/shimmer_loading_widget.dart';
 import '../view_model/home_cubit.dart';
 
 class PopularCard extends StatefulWidget {
@@ -34,9 +35,7 @@ class _PopularCardState extends State<PopularCard> {
         bloc: viewModel,
         builder: (context, state) {
           if (state is HomeExerciseLoadingState) {
-            return Center(
-              child: Lottie.asset(AppImages.loadingAnimation),
-            );
+            return _buildShimmerTabs();
           } else if (state is HomeExerciseErrorState) {
             return Center(
               child: Text(
@@ -60,11 +59,14 @@ class _PopularCardState extends State<PopularCard> {
                     String? thumbnailUrl = getYoutubeThumbnail(
                         exercise?.shortYoutubeDemonstrationLink);
 
-                    return buildCardWidget(exercise?.exercise ?? "",
-                        thumbnailUrl!, exercise?.difficultyLevel ?? '');
+                    return buildCardWidget(context, exercise?.exercise ?? "",
+                        thumbnailUrl!, exercise?.difficultyLevel ?? '',exercise?.inDepthYoutubeExplanationLink??"",exercise?.bodyRegion??"",exercise?.primaryEquipment??"");
                   }
-                  return buildCardWidget("Exercises That Strengthen Your Chest",
-                      AppImages.runningImage, "Beginner");
+                  return buildCardWidget(
+                      context,
+                      "Exercises That Strengthen Your Chest",
+                      AppImages.runningImage,
+                      "Beginner","","","");
                 },
                 separatorBuilder: (BuildContext context, int index) {
                   return SizedBox(width: 15.w);
@@ -74,6 +76,26 @@ class _PopularCardState extends State<PopularCard> {
           }
           return Container();
         });
+  }
+
+  Widget _buildShimmerTabs() {
+    return SizedBox(
+      height: 110.h,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: 2,
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: EdgeInsets.symmetric(horizontal: 5.0),
+            child: ShimmerLoadingWidget(
+              width: 180.w,
+              height: 150.h,
+              borderRadius: 20.r,
+            ),
+          );
+        },
+      ),
+    );
   }
 
   String? getYoutubeThumbnail(String? url) {
@@ -91,67 +113,75 @@ class _PopularCardState extends State<PopularCard> {
   }
 }
 
-Widget buildCardWidget(String title, String imagePath, String level) {
-  return Container(
-    width: 180.w,
-    height: 150.h,
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(16),
-    ),
-    child: Stack(
-      alignment: Alignment.bottomCenter,
-      children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(20.r),
-          child: CustomCachedNetworkImage(
-            imageUrl: imagePath,
-            width: 180.w,
-            height: 150.h,
-            shimmerRadiusValue: 0,
-            fit: BoxFit.fitHeight,
-            shimmerHeight: 150.h,
-            shimmerWidth: 180.w,
-          ),
-        ),
-        Container(
-          width: double.infinity,
-          padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 10.w),
-          decoration: BoxDecoration(
-            color: Colors.black.withOpacity(0.6),
-            borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(20.r),
-              bottomRight: Radius.circular(20.r),
+Widget buildCardWidget(
+    BuildContext context, String title, String imagePath, String level,String url,String bodyRegion,String primaryEquipment) {
+  return InkWell(
+    onTap: () {
+      Navigator.pushNamed(context, PageRouteName.exerciseScreen,
+          arguments: {"title": title, "imagePath": imagePath, "level": level,"url":url,"bodyRegion":bodyRegion,"primaryEquipment":primaryEquipment});
+    },
+    child: Container(
+      width: 180.w,
+      height: 150.h,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Stack(
+        alignment: Alignment.bottomCenter,
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(20.r),
+            child: CustomCachedNetworkImage(
+              imageUrl: imagePath,
+              width: 180.w,
+              height: 150.h,
+              shimmerRadiusValue: 0,
+              fit: BoxFit.fitHeight,
+              shimmerHeight: 150.h,
+              shimmerWidth: 180.w,
             ),
           ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                title,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                ),
+          Container(
+            width: double.infinity,
+            padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 10.w),
+            decoration: BoxDecoration(
+              color: Colors.black.withOpacity(0.6),
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(20.r),
+                bottomRight: Radius.circular(20.r),
               ),
-              SizedBox(height: 5.h),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  _buildTag("10 Tasks", isOrange: true),
-                  _buildTag(
-                    level,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  title,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
                   ),
-                ],
-              ),
-            ],
+                ),
+                SizedBox(height: 5.h),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    _buildTag("10 Tasks", isOrange: true),
+                    _buildTag(
+                      level,
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     ),
   );
 }
+
 
 Widget _buildTag(String text, {bool isOrange = false}) {
   return Container(

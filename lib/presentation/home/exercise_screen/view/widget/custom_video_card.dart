@@ -7,11 +7,13 @@ import '../../../../../domain/entity/exercise/exercise_entity.dart';
 
 class CustomVideoCard extends StatelessWidget {
   final Exercise? exercise;
+
   const CustomVideoCard({super.key, required this.exercise});
 
   @override
   Widget build(BuildContext context) {
-    String? thumbnailUrl = getYoutubeThumbnail(exercise?.shortYoutubeDemonstrationLink);
+    String? thumbnailUrl =
+        getYoutubeThumbnail(exercise?.shortYoutubeDemonstrationLink);
     return Card(
       color: Colors.transparent,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -42,15 +44,18 @@ class CustomVideoCard extends StatelessWidget {
                 children: [
                   Text(
                     exercise?.exercise ?? "Exercise Name",
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+                    style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white),
                   ),
                   const SizedBox(height: 5),
                   Text(
-                    "3 Groups * 15 Times",
+                    "Body Region :${exercise?.bodyRegion} ",
                     style: const TextStyle(fontSize: 14, color: Colors.white70),
                   ),
                   Text(
-                    "Lorem Ipsum Dolor Sit Amet Consectetur. Tempus",
+                    "primary equipment for this exercise :${exercise?.primaryEquipment} ",
                     style: const TextStyle(fontSize: 14, color: Colors.white70),
                   ),
                 ],
@@ -84,22 +89,20 @@ class CustomVideoCard extends StatelessWidget {
     Uri uri = Uri.parse(url);
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri, mode: LaunchMode.externalApplication);
-    } else {
-    }
+    } else {}
   }
+
   String? getYoutubeThumbnail(String? url) {
     if (url == null) return null;
-      String? videoId;
-      if (url.contains("youtube.com/watch?v=")) {
-        videoId = Uri.parse(url).queryParameters['v'];
-      } else if (url.contains("youtu.be/")) {
-        videoId = url.split("youtu.be/")[1].split("?")[0];
-      } else if (url.contains("youtube.com/embed/")) {
-        videoId = url.split("embed/")[1].split("?")[0];
-      }
-      if (videoId == null || videoId.isEmpty) return null;
-      return 'https://img.youtube.com/vi/$videoId/0.jpg';
-
+    String? videoId;
+    if (url.contains("youtube.com/watch?v=")) {
+      videoId = Uri.parse(url).queryParameters['v'];
+    } else if (url.contains("youtu.be/")) {
+      videoId = url.split("youtu.be/")[1].split("?")[0];
+    } else if (url.contains("youtube.com/embed/")) {
+      videoId = url.split("embed/")[1].split("?")[0];
+    }
+    if (videoId == null || videoId.isEmpty) return null;
+    return 'https://img.youtube.com/vi/$videoId/0.jpg';
   }
-
 }

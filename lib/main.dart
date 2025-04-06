@@ -1,3 +1,5 @@
+import 'package:fitness_app/presentation/online_coach/widget/object_box.dart';
+import 'package:fitness_app/presentation/profile/view_model/profile_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -12,7 +14,6 @@ import 'core/theme/app_theme.dart';
 import 'core/utils/bloc_observer/app_bloc_observer.dart';
 import 'core/utils/functions/providers/local_provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-
 import 'generated/l10n.dart';
 
 void main() async {
@@ -23,11 +24,15 @@ void main() async {
   SignupProvider signupProvider = SignupProvider();
   await localProvider.loadSavedLanguage();
   await signupProvider.loadUserData();
+  final objectBox = await ObjectBox.create();
+
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => localProvider),
         ChangeNotifierProvider(create: (context) => signupProvider),
+        BlocProvider(create: (context) => getIt<ProfileCubit>()),
+        Provider<ObjectBox>.value(value: objectBox),
       ],
       child: const MyApp(),
     ),
@@ -49,6 +54,7 @@ class _MyAppState extends State<MyApp> {
     super.initState();
     initialConnectionCheck = InternetConnection().hasInternetAccess;
   }
+
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<LocalProvider>(context);
@@ -89,7 +95,7 @@ class _MyAppState extends State<MyApp> {
                         supportedLocales: S.delegate.supportedLocales,
                         debugShowCheckedModeBanner: false,
                         theme: AppTheme.appTheme,
-                        initialRoute: PageRouteName.layoutScreen,
+                        initialRoute: PageRouteName.login,
                         onGenerateRoute: AppRoutes.onGenerateRoute,
                       ),
                       if (!isConnected)

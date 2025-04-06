@@ -168,11 +168,13 @@ class AppRoutes {
         );
       case PageRouteName.exerciseScreen:
         return MaterialPageRoute(
+          settings: setting,
           builder: (context) => BlocProvider(
             create: (context) => getIt<ExerciseViewModel>(),
             child: ExerciseScreen(),
           ),
         );
+
       case PageRouteName.workoutScreen:
         return MaterialPageRoute(
           builder: (context) => BlocProvider(

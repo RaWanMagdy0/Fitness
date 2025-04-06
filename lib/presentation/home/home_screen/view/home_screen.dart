@@ -82,7 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   child: Text(
                                     "See All",
                                     style:
-                                    AppFonts.font15OrangeWeight500.copyWith(
+                                        AppFonts.font15OrangeWeight500.copyWith(
                                       decoration: TextDecoration.underline,
                                       decorationColor: AppColors.kOrange,
                                     ),
@@ -133,7 +133,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   child: Text(
                                     "See All",
                                     style:
-                                    AppFonts.font15OrangeWeight500.copyWith(
+                                        AppFonts.font15OrangeWeight500.copyWith(
                                       decoration: TextDecoration.underline,
                                       decorationColor: AppColors.kOrange,
                                     ),
@@ -145,12 +145,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             const SizedBox(height: 30),
                             Text("Popular Training",
                                 style: AppFonts.font18WhiteWeight400),
-                            InkWell(
-                                onTap: () {
-                                  Navigator.pushNamed(
-                                      context, PageRouteName.exerciseScreen);
-                                },
-                                child: const PopularCard()),
+                            const PopularCard()
                           ],
                         ),
                       ),

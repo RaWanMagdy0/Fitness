@@ -25,12 +25,14 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
     });
   }
   @override
-  Future<Result<UserModel?>> uploadPhoto(File photo) {
-    return executeApiCall<UserModel?>(() async {
-      final response = await profileApiManager.uploadPhoto(photo);
-      return null;
+  Future<Result<String?>> uploadPhoto(File photo) {
+    return executeApiCall(() async {
+      var token = await _getToken();
+      var response = await profileApiManager.uploadPhoto(token, photo);
+      return response;
     });
   }
+
   @override
   Future<Result<String?>> changePassword({
     required String currentPassword,

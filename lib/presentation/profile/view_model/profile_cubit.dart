@@ -43,11 +43,10 @@ class ProfileCubit extends BaseViewModel<ProfileState> {
     emit(UploadPhotoLoadingState());
     try {
       final result = await _uploadPhotoUseCase.invoke(photo);
-      if (result is Success<User?>) {
+      if (result is Success<String?>) {
         emit(UploadPhotoSuccessState(user: result.data));
-        // Refresh user data after successful upload
         getUserData();
-      } else if (result is Fail<User?>) {
+      } else if (result is Fail<String?>) {
         emit(UploadPhotoErrorState(
             errorMessage: getErrorMassageFromException(result.exception)));
       }

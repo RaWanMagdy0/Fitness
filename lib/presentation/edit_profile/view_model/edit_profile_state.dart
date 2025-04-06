@@ -17,3 +17,16 @@ class EditProfileError extends EditProfileState {
 
   EditProfileError(this.errorMessage);
 }
+class UploadPhotoLoadingState extends EditProfileState {}
+
+class UploadPhotoSuccessState extends EditProfileState {
+  final String? message;
+
+  UploadPhotoSuccessState({this.message});
+}
+
+class UploadPhotoErrorState extends EditProfileState {
+  final String? errorMessage;
+
+  UploadPhotoErrorState({this.errorMessage});
+}

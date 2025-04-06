@@ -124,7 +124,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     labelText: '',
                     validator: (value) {
                       if (value != _newPasswordController.text) {
-                        return "Password Dont Match";
+                        return "Password Don't Match";
                       }
                       return null;
                     },
@@ -133,7 +133,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   CustomButton(
                     text: state is ChangePasswordLoading
                         ? "loading"
-                        : "Update Text",
+                        : "Update",
                     color: AppColors.kOrange,
                     onPressed: state is ChangePasswordLoading
                         ? null

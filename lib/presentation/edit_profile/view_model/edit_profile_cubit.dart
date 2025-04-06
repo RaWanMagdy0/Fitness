@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:injectable/injectable.dart';
 import '../../../../domain/use_case/auth/edit_profile_use_case.dart';
 import '../../../core/api/api_result.dart';
@@ -5,14 +7,16 @@ import '../../../core/base/base_view_model.dart';
 import '../../../core/local/token_manger.dart';
 import '../../../data/models/edit_profile/edit_profile_request_model.dart';
 import '../../../data/models/edit_profile/edit_profile_response_model.dart';
+import '../../../domain/use_case/profile/upload_photo_use_case.dart';
 
 part 'edit_profile_state.dart';
 
 @injectable
 class EditProfileCubit extends BaseViewModel<EditProfileState> {
   final EditProfileUseCase _editProfileUseCase;
+  final UploadPhotoUseCase uploadPhotoUseCase;
 
-  EditProfileCubit(this._editProfileUseCase) : super(EditProfileInitial());
+  EditProfileCubit(this._editProfileUseCase, this.uploadPhotoUseCase) : super(EditProfileInitial());
 
   Future<void> editProfile({
     String? firstName,
@@ -26,6 +30,7 @@ class EditProfileCubit extends BaseViewModel<EditProfileState> {
     int? age,
     String? goal,
     String? activityLevel,
+
   }) async {
     emit(EditProfileLoading());
 
@@ -66,6 +71,17 @@ class EditProfileCubit extends BaseViewModel<EditProfileState> {
       } else {
         emit(EditProfileError(errorMsg));
       }
+    }
+  }
+  Future<void> uploadPhoto(File photo) async {
+    emit(UploadPhotoLoadingState());
+    var result = await uploadPhotoUseCase.invoke(photo);
+    if (result is Success<String?>) {
+      emit(UploadPhotoSuccessState(message: result.data));
+      await editProfile();
+    } else if (result is Fail<String?>) {
+      emit(UploadPhotoErrorState(
+          errorMessage: getErrorMassageFromException(result.exception)));
     }
   }
 }

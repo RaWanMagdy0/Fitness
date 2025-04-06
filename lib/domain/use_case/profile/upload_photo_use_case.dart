@@ -10,7 +10,7 @@ class UploadPhotoUseCase {
 
   UploadPhotoUseCase(this._profileRepository);
 
-  Future<Result<User?>> invoke(File photo) {
+  Future<Result<String?>> invoke(File photo) {
     return _profileRepository.uploadPhoto(photo);
   }
 }
