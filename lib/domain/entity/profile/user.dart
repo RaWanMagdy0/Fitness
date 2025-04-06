@@ -1,21 +1,22 @@
 class User {
   User({
-      this.id, 
-      this.firstName, 
-      this.lastName, 
-      this.email, 
-      this.gender, 
-      this.age, 
-      this.weight, 
-      this.height, 
-      this.activityLevel, 
-      this.goal, 
-      this.photo, 
-      this.createdAt, 
-      this.passwordResetCode, 
-      this.passwordResetExpires, 
-      this.resetCodeVerified, 
-      this.passwordChangedAt,});
+    this.id,
+    this.firstName,
+    this.lastName,
+    this.email,
+    this.gender,
+    this.age,
+    this.weight,
+    this.height,
+    this.activityLevel,
+    this.goal,
+    this.photo,
+    this.createdAt,
+    this.passwordResetCode,
+    this.passwordResetExpires,
+    this.resetCodeVerified,
+    this.passwordChangedAt,
+  });
 
   String? id;
   String? firstName;
@@ -33,5 +34,4 @@ class User {
   String? passwordResetExpires;
   bool? resetCodeVerified;
   String? passwordChangedAt;
-  
 }
