@@ -47,7 +47,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<Result<String?>> signUp(SignupRequestBody signupRequestBody) {
     return executeApiCall<String?>(() async {
       final response = await authApiManager.signUp(signupRequestBody);
-      return response.message??"";
+      return response.message ?? "";
     });
   }
   @override

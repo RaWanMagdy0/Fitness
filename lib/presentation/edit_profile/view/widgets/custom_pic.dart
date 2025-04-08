@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
@@ -9,13 +8,10 @@ import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
-
 import '../../../../core/styles/colors/app_colors.dart';
 import '../../../../core/styles/images/app_images.dart';
 import '../../../../core/utils/functions/dialogs/app_dialogs.dart';
-import '../../../../domain/entity/profile/user.dart';
 import '../../view_model/edit_profile_cubit.dart';
-import '../edit_profile_screen.dart';
 
 class CustomProfilePic extends StatefulWidget {
   const CustomProfilePic({super.key, required this.userImage});
@@ -47,7 +43,6 @@ class _CustomProfilePicState extends State<CustomProfilePic> {
             switch (state) {
               case UploadPhotoLoadingState():
                 AppDialogs.showLoading(context: context);
-
               case UploadPhotoSuccessState():
                 Navigator.pop(context);
                 AppDialogs.showSuccessDialog(
@@ -104,29 +99,9 @@ class _CustomProfilePicState extends State<CustomProfilePic> {
                     size: 30.sp,
                     Icons.edit_outlined,
                     color: AppColors.kOrange,
-
                   ),
                 )),
           ]),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildCameraButton() {
-    return GestureDetector(
-      onTap: () => _pickAndUploadImage(),
-      child: Container(
-        height: 24.h,
-        width: 24.w,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(5.r),
-          color: AppColors.kBabyPink,
-        ),
-        child: Icon(
-          Icons.camera_alt_outlined,
-          size: 15.sp,
-          color: AppColors.kGray,
         ),
       ),
     );

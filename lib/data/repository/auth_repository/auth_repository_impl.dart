@@ -27,14 +27,7 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<Result<String?>> signUp(SignupRequestBody signupRequestBody) async {
-    final response = await authRemoteDataSource.signUp(signupRequestBody);
-    if (response is Success<String>) {
-      return Success(data: response.data);
-    } else if (response is Fail<String>) {
-      return Fail(exception: response.exception);
-    } else {
-      return Fail(exception: Exception('Unknown response type'));
-    }
+    return await authRemoteDataSource.signUp(signupRequestBody);
   }
 
   @override

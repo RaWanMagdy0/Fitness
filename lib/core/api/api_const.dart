@@ -15,7 +15,6 @@ class ApiConstants {
   static const String baseFood = "https://www.themealdb.com/api/json/v1/1/";
   static const String mealByCategory = "filter.php?c=";
   static const String randomMuscle = "api/v1/muscles/random";
-
   static const String changePassword = "api/v1/auth/change-password";
   static const String muscleGroupById = "api/v1/musclesGroup/by-muscle-group";
 }

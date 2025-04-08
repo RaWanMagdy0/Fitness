@@ -95,7 +95,7 @@ class _MyAppState extends State<MyApp> {
                         supportedLocales: S.delegate.supportedLocales,
                         debugShowCheckedModeBanner: false,
                         theme: AppTheme.appTheme,
-                        initialRoute: PageRouteName.login,
+                        initialRoute: PageRouteName.onBoarding,
                         onGenerateRoute: AppRoutes.onGenerateRoute,
                       ),
                       if (!isConnected)
