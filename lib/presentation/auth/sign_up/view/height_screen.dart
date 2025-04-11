@@ -29,11 +29,13 @@ class _HeightScreenState extends State<HeightScreen> {
   void initState() {
     super.initState();
     final signupProvider = context.read<SignupProvider>();
-    selectedHeight = int.tryParse(signupProvider.getData("height") ?? '') ?? 170;
+    selectedHeight =
+        int.tryParse(signupProvider.getData("height") ?? '') ?? 170;
   }
+
   @override
   Widget build(BuildContext context) {
-    final local=S.of(context);
+    final local = S.of(context);
 
     final signupProvider = context.read<SignupProvider>();
     return CustomScaffold(
@@ -81,11 +83,9 @@ class _HeightScreenState extends State<HeightScreen> {
                   color: Colors.transparent,
                   borderRadius: BorderRadius.circular(50.r),
                 ),
-                child: Text(
-                   local.cm,
-                    style: AppFonts.font12OrangeWeight400
-                ),
-              ),),
+                child: Text(local.cm, style: AppFonts.font12OrangeWeight400),
+              ),
+            ),
             5.verticalSpace,
             Stack(
               alignment: Alignment.center,
@@ -125,7 +125,7 @@ class _HeightScreenState extends State<HeightScreen> {
                 Positioned(
                   bottom: -10,
                   child: Icon(Icons.arrow_drop_up,
-                      color:  AppColors.kOrange, size: 24),
+                      color: AppColors.kOrange, size: 24),
                 ),
               ],
             ),

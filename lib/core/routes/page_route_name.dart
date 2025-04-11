@@ -34,4 +34,7 @@ class PageRouteName {
   static const String security = "security";
   static const String changePassword = "changePassword";
   static const String staticPage = "staticPage";
+  static const String editProfileActivityScreen = "editProfileActivityScreen";
+  static const String editProfileGoalScreen = "editProfileGoalScreen";
+  static const String editProfileWeightScreen = "editProfileWeightScreen";
 }

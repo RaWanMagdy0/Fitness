@@ -1,4 +1,6 @@
 import 'package:fitness_app/core/routes/page_route_name.dart';
+import 'package:fitness_app/presentation/auth/sign_up/view/activity/activity_screen.dart';
+import 'package:fitness_app/presentation/edit_profile/view/screens/edit_profile_activity_screen.dart';
 import 'package:fitness_app/presentation/home/home_screen/view_model/home_cubit.dart';
 import 'package:fitness_app/presentation/home/workout/view/workout_screen.dart';
 import 'package:fitness_app/presentation/home/workout/view_model/workout_cubit.dart';
@@ -11,7 +13,6 @@ import '../../presentation/auth/forgot_password/view/reset_password_screen.dart'
 import '../../presentation/auth/forgot_password/view/verify_code_screen.dart';
 import '../../presentation/auth/login/view/login_screen.dart' show LoginScreen;
 import '../../presentation/auth/login/view_model/login_cubit.dart';
-import '../../presentation/auth/sign_up/view/actvity_screen.dart';
 import '../../presentation/auth/sign_up/view/age_screen.dart';
 import '../../presentation/auth/sign_up/view/gender_screen.dart';
 import '../../presentation/auth/sign_up/view/goal_screen.dart';
@@ -19,8 +20,10 @@ import '../../presentation/auth/sign_up/view/height_screen.dart';
 import '../../presentation/auth/sign_up/view/main_sign_up_screen.dart';
 import '../../presentation/auth/sign_up/view/weight_screen.dart';
 import '../../presentation/auth/sign_up/view_model/sign_up_cubit.dart';
-import '../../presentation/edit_profile/view/edit_profile_screen.dart'
+import '../../presentation/edit_profile/view/screens/edit_profile_goal_screen.dart';
+import '../../presentation/edit_profile/view/screens/edit_profile_screen.dart'
     show EditProfileScreen;
+import '../../presentation/edit_profile/view/screens/edit_profile_weight_screen.dart';
 import '../../presentation/home/exercise_screen/view/exercise_screen.dart';
 import '../../presentation/home/exercise_screen/view_model/exercise_view_model.dart';
 import '../../presentation/home/home_screen/view/home_screen.dart';
@@ -125,7 +128,18 @@ class AppRoutes {
             child: WeightScreen(),
           ),
         );
-
+      case PageRouteName.editProfileActivityScreen:
+        return MaterialPageRoute(
+          builder: (context) => EditProfileActivityScreen(),
+        );
+      case PageRouteName.editProfileGoalScreen:
+        return MaterialPageRoute(
+          builder: (context) => EditProfileGoalScreen(),
+        );
+      case PageRouteName.editProfileWeightScreen:
+        return MaterialPageRoute(
+          builder: (context) => EditProfileWeightScreen(),
+        );
       case PageRouteName.heightScreen:
         return MaterialPageRoute(
           settings: setting,
@@ -155,6 +169,13 @@ class AppRoutes {
           builder: (context) => BlocProvider(
             create: (context) => getIt<SignUpCubit>(),
             child: ActivityScreen(),
+          ),
+        );
+      case PageRouteName.editProfileActivityScreen:
+        return MaterialPageRoute(
+          builder: (context) => BlocProvider(
+            create: (context) => getIt<SignUpCubit>(),
+            child: EditProfileActivityScreen(),
           ),
         );
       case PageRouteName.mealDetailsScreen:
