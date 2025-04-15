@@ -50,7 +50,7 @@ class _GenderScreenState extends State<GenderScreen> {
       blurHeight: blurHeight,
       blurWidth: 370.0.w,
       borderRadius: 50.0,
-      blurStartPosition: MediaQuery.of(context).size.height * 0.36,
+      blurStartPosition: MediaQuery.of(context).size.height * 0.32,
       child: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: 24.w),
         child: Column(
@@ -109,6 +109,7 @@ class _GenderScreenState extends State<GenderScreen> {
                     child:
                         Text(local.next, style: AppFonts.font14WhiteWeight800),
                   ),
+                20.verticalSpace,
               ],
             ),
           ],

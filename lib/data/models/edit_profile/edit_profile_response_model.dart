@@ -1,4 +1,4 @@
-import '../sign_up/response/user_model.dart' show UserModel;
+import '../profile/user_model.dart';
 
 class EditProfileResponseModel {
   String? message;

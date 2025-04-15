@@ -1,5 +1,4 @@
 import 'package:fitness_app/core/routes/page_route_name.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 

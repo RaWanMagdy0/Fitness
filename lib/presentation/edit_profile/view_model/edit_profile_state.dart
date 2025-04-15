@@ -7,7 +7,7 @@ class EditProfileInitial extends EditProfileState {}
 class EditProfileLoading extends EditProfileState {}
 
 class EditProfileSuccess extends EditProfileState {
-  final String message;
+  final String? message;
 
   EditProfileSuccess(this.message);
 }
@@ -15,5 +15,18 @@ class EditProfileSuccess extends EditProfileState {
 class EditProfileError extends EditProfileState {
   final String errorMessage;
 
-  EditProfileError(this.errorMessage);
+  EditProfileError({required this.errorMessage});
+}
+class UploadPhotoLoadingState extends EditProfileState {}
+
+class UploadPhotoSuccessState extends EditProfileState {
+  final String? message;
+
+  UploadPhotoSuccessState({this.message});
+}
+
+class UploadPhotoErrorState extends EditProfileState {
+  final String? errorMessage;
+
+  UploadPhotoErrorState({this.errorMessage});
 }

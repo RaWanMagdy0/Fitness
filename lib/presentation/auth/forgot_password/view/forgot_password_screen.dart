@@ -36,10 +36,10 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     return CustomScaffold(
       enableBlur: true,
       blurStrength: 5.0,
-      blurHeight: 200.0,
+      blurHeight: 170.0,
       blurWidth: 370.0.w,
       borderRadius: 50.0,
-      blurStartPosition: MediaQuery.of(context).size.height * 0.32,
+      blurStartPosition: MediaQuery.of(context).size.height * 0.28,
       backgroundImage: AppImages.authBackground,
       child: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: 24.w),
@@ -98,6 +98,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     child:
                         Text(local.sent_otp, style: AppFonts.font16WhiteWeight500),
                   ),
+                  20.verticalSpace
                 ],
               ),
             );

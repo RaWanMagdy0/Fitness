@@ -1,5 +1,6 @@
 import '../../../../data/models/meal/meals_tabs_response_model.dart';
 import '../../../../data/models/workout/muscle_model.dart';
+import '../../../../domain/entity/exercise/exercise_entity.dart';
 import '../../../../domain/entity/home/random_muscle_entity.dart';
 
 abstract class HomeState {}
@@ -76,5 +77,20 @@ class MuscleGroupIdError extends HomeState {
   final String errorMessage;
 
   MuscleGroupIdError({required this.errorMessage});
+}
+final class ProfileInitialState extends HomeState {}
+
+class HomeExerciseLoadingState extends HomeState {}
+
+class HomeExerciseSuccessState extends HomeState {
+  final List<Exercise?>? exercise;
+
+  HomeExerciseSuccessState({required this.exercise});
+}
+
+class HomeExerciseErrorState extends HomeState {
+  final String? errorMessage;
+
+  HomeExerciseErrorState({this.errorMessage});
 }
 

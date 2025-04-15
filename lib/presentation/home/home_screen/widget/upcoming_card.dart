@@ -1,3 +1,4 @@
+import 'package:fitness_app/core/routes/page_route_name.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -49,7 +50,7 @@ class _UpcomingCardState extends State<UpcomingCard> {
             );
           }
           return SizedBox(
-            width: 110.w,
+            //  width: 110.w,
             height: 110.h,
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
@@ -64,8 +65,10 @@ class _UpcomingCardState extends State<UpcomingCard> {
                   );
                 }
 
-                return buildCardWidget(muscle.name ?? "",
-                    muscle.image ?? "https://placehold.co/90x90");
+                return buildCardWidget(
+                    muscle.name ?? "",
+                    muscle.image ?? "https://placehold.co/90x90",
+                    muscle.id ?? "");
               },
               separatorBuilder: (BuildContext context, int index) {
                 return SizedBox(width: 15.w);
@@ -82,59 +85,68 @@ class _UpcomingCardState extends State<UpcomingCard> {
     );
   }
 
-  Widget buildCardWidget(String title, String imagePath) {
-    return Container(
-      width: 100,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Stack(
-        alignment: Alignment.bottomCenter,
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(20.r),
-            child: Image.network(
-              imagePath,
-              width: 90.w,
-              height: 110.h,
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) {
-                return ShimmerLoadingWidget(
-                  width: 90.w,
-                  height: 90.h,
-                  borderRadius: 20.r,
-                );
-              },
-            ),
-          ),
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(vertical: 8),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(20.r),
-                bottomRight: Radius.circular(20.r),
-              ),
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  AppColors.kMainColor.withOpacity(0.5),
-                  AppColors.kMainColor.withOpacity(0.8),
-                ],
+  Widget buildCardWidget(String title, String imagePath, String id) {
+    return InkWell(
+      onTap: () {
+        Navigator.pushNamed(context, PageRouteName.exerciseScreen, arguments: {
+          "id": id,
+          "imagePath": imagePath,
+          "title": title,
+        });
+      },
+      child: Container(
+        width: 100,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Stack(
+          alignment: Alignment.bottomCenter,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(20.r),
+              child: Image.network(
+                imagePath,
+                width: 90.w,
+                height: 110.h,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return ShimmerLoadingWidget(
+                    width: 90.w,
+                    height: 90.h,
+                    borderRadius: 20.r,
+                  );
+                },
               ),
             ),
-            child: Text(
-              title,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 12,
-                fontWeight: FontWeight.w500,
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(20.r),
+                  bottomRight: Radius.circular(20.r),
+                ),
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    AppColors.kMainColor.withOpacity(0.5),
+                    AppColors.kMainColor.withOpacity(0.8),
+                  ],
+                ),
+              ),
+              child: Text(
+                title,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

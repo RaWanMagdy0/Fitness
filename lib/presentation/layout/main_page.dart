@@ -1,9 +1,11 @@
 import 'package:fitness_app/presentation/profile/view/main_profile_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../home/home_screen/view/home_screen.dart';
 import '../home/workout/view/workout_screen.dart';
 import '../online_coach/view/robot_screen.dart';
+import '../profile/view_model/profile_cubit.dart';
 import 'home_layout.dart';
 
 class MainPage extends StatefulWidget {
@@ -24,10 +26,14 @@ class _MainPageState extends State<MainPage> {
   ];
 
   void _onItemTapped(int index) {
+    if (index == 1) {
+      context.read<ProfileCubit>().getUserData();
+    }
     setState(() {
       _currentIndex = index;
     });
   }
+
 
   @override
   Widget build(BuildContext context) {

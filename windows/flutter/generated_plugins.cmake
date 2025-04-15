@@ -3,7 +3,9 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
+  connectivity_plus
   file_selector_windows
+  flutter_inappwebview_windows
   flutter_localization
   flutter_secure_storage_windows
   objectbox_flutter_libs

@@ -1,12 +1,15 @@
-import 'package:fitness_app/presentation/auth/login/view_model/login_cubit.dart';
+
 import 'package:fitness_app/presentation/online_coach/widget/object_box.dart';
 import 'package:fitness_app/presentation/profile/view_model/profile_cubit.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:provider/provider.dart';
+import 'check_internet.dart';
 import 'core/di/di.dart';
+import 'core/local/secure_storage.dart';
 import 'core/local/sign_up_provider.dart';
 import 'core/routes/app_routes.dart';
 import 'core/routes/page_route_name.dart';
@@ -14,11 +17,13 @@ import 'core/theme/app_theme.dart';
 import 'core/utils/bloc_observer/app_bloc_observer.dart';
 import 'core/utils/functions/providers/local_provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'core/utils/widget/exit_confirmation_dialog.dart';
 import 'generated/l10n.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+
   configureDependencies();
   Bloc.observer = AppBlocObserver();
   LocalProvider localProvider = LocalProvider();
@@ -26,22 +31,40 @@ void main() async {
   await localProvider.loadSavedLanguage();
   await signupProvider.loadUserData();
   final objectBox = await ObjectBox.create();
+  final stayLoggedIn = await SecureStorageFactory.readData(key: 'stay_logged_in') ?? 'false';
+  final initialRoute = stayLoggedIn == 'true' ? PageRouteName.layoutScreen : PageRouteName.onBoarding;
+
+  FlutterNativeSplash.remove();
   runApp(
     MultiProvider(
       providers: [
-        BlocProvider(create: (context) => getIt<ProfileCubit>()),
-        BlocProvider(create: (context) => getIt<LoginCubit>()),
         ChangeNotifierProvider(create: (context) => localProvider),
         ChangeNotifierProvider(create: (context) => signupProvider),
+        BlocProvider(create: (context) => getIt<ProfileCubit>()),
         Provider<ObjectBox>.value(value: objectBox),
       ],
-      child: const MyApp(),
+      child: MyApp(initialRoute: initialRoute),
     ),
   );
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MyApp extends StatefulWidget {
+  final String initialRoute;
+
+  const MyApp({super.key, required this.initialRoute, });
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  Future<bool>? initialConnectionCheck;
+
+  @override
+  void initState() {
+    super.initState();
+    initialConnectionCheck = InternetConnection().hasInternetAccess;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,28 +74,48 @@ class MyApp extends StatelessWidget {
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (context, child) {
-        return WillPopScope(
-          onWillPop: () async {
-            final shouldExit = await ExitConfirmationDialog.show(context);
-            if (shouldExit) {
-              SystemNavigator.pop(); // Close the app
+        return FutureBuilder<bool>(
+          future: initialConnectionCheck,
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return const Center(child: CircularProgressIndicator());
             }
-            return false;
+            final bool initialConnection = snapshot.data ?? false;
+            return StreamBuilder<InternetStatus>(
+              stream: InternetConnection().onStatusChange,
+              initialData: initialConnection
+                  ? InternetStatus.connected
+                  : InternetStatus.disconnected,
+              builder: (context, snapshot) {
+                final bool isConnected =
+                    snapshot.data == InternetStatus.connected;
+
+                return Directionality(
+                  textDirection: TextDirection.rtl,
+                  child: Stack(
+                    children: [
+                      MaterialApp(
+                        locale: Locale(provider.locale),
+                        localizationsDelegates: const [
+                          S.delegate,
+                          GlobalMaterialLocalizations.delegate,
+                          GlobalWidgetsLocalizations.delegate,
+                          GlobalCupertinoLocalizations.delegate,
+                        ],
+                        supportedLocales: S.delegate.supportedLocales,
+                        debugShowCheckedModeBanner: false,
+                        theme: AppTheme.appTheme,
+                        initialRoute: widget.initialRoute,
+                        onGenerateRoute: AppRoutes.onGenerateRoute,
+                      ),
+                      if (!isConnected)
+                        Positioned.fill(child: const NoInternetScreen()),
+                    ],
+                  ),
+                );
+              },
+            );
           },
-          child: MaterialApp(
-            locale: Locale(provider.locale),
-            localizationsDelegates: const [
-              S.delegate,
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-            ],
-            supportedLocales: S.delegate.supportedLocales,
-            debugShowCheckedModeBanner: false,
-            theme: AppTheme.appTheme,
-            initialRoute: PageRouteName.onBoarding,
-            onGenerateRoute: AppRoutes.onGenerateRoute,
-          ),
         );
       },
     );

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../../../core/di/di.dart';
 import '../../../../core/local/sign_up_provider.dart';
 import '../../../../core/routes/page_route_name.dart';
@@ -28,7 +27,8 @@ class ActivityScreen extends StatefulWidget {
 }
 
 class _ActivityScreenState extends State<ActivityScreen> {
-  final ValueNotifier<String?> _selectedActivityLevel = ValueNotifier<String?>(null);
+  final ValueNotifier<String?> _selectedActivityLevel =
+      ValueNotifier<String?>(null);
   bool isFromEditProfile = false;
   bool isLoading = true;
 
@@ -45,7 +45,8 @@ class _ActivityScreenState extends State<ActivityScreen> {
   @override
   void initState() {
     super.initState();
-    _reverseActivityMap = Map.fromEntries(_activityMap.entries.map((e) => MapEntry(e.value, e.key)));
+    _reverseActivityMap = Map.fromEntries(
+        _activityMap.entries.map((e) => MapEntry(e.value, e.key)));
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _checkSourceAndLoadData();
@@ -87,7 +88,8 @@ class _ActivityScreenState extends State<ActivityScreen> {
           final state = profileCubit.state;
 
           if (state is GetUserDataSuccessState && state.user != null) {
-            _selectedActivityLevel.value = state.user?.activityLevel ?? 'level1';
+            _selectedActivityLevel.value =
+                state.user?.activityLevel ?? 'level1';
             setState(() {
               isLoading = false;
             });
@@ -99,7 +101,8 @@ class _ActivityScreenState extends State<ActivityScreen> {
 
           final newState = profileCubit.state;
           if (newState is GetUserDataSuccessState && newState.user != null) {
-            _selectedActivityLevel.value = newState.user?.activityLevel ?? 'level1';
+            _selectedActivityLevel.value =
+                newState.user?.activityLevel ?? 'level1';
             setState(() {
               isLoading = false;
             });
@@ -134,11 +137,11 @@ class _ActivityScreenState extends State<ActivityScreen> {
   Widget build(BuildContext context) {
     final local = S.of(context);
     final signupProvider = context.read<SignupProvider>();
-
     return WillPopScope(
       onWillPop: () async {
         if (isFromEditProfile && _selectedActivityLevel.value != null) {
-          final displayActivity = _activityMap[_selectedActivityLevel.value!] ?? 'Rookie';
+          final displayActivity =
+              _activityMap[_selectedActivityLevel.value!] ?? 'Rookie';
           final prefs = await SharedPreferences.getInstance();
           await prefs.setString('edit_profile_activity', displayActivity);
         }
@@ -147,159 +150,203 @@ class _ActivityScreenState extends State<ActivityScreen> {
       child: Builder(
         builder: (context) {
           Widget content = isLoading
-              ? Center(child: CircularProgressIndicator(color: AppColors.kOrange))
+              ? Center(
+                  child: CircularProgressIndicator(color: AppColors.kOrange))
               : SingleChildScrollView(
-            padding: EdgeInsets.symmetric(horizontal: 24.w),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                40.verticalSpace,
-                Row(
-                  children: [
-                    InkWell(
-                      onTap: () async {
-                        if (isFromEditProfile && _selectedActivityLevel.value != null) {
-                          final displayActivity = _activityMap[_selectedActivityLevel.value!] ?? 'Rookie';
-                          final prefs = await SharedPreferences.getInstance();
-                          await prefs.setString('edit_profile_activity', displayActivity);
-                        }
-                        Navigator.pop(context);
-                      },
-                      child: Image.asset(AppImages.back),
-                    ),
-                    100.horizontalSpace,
-                    Image.asset(AppImages.logoIcon),
-                  ],
-                ),
-                50.verticalSpace,
-                if (!isFromEditProfile)
-                  Center(child: ProgressIndicatorWidget(currentPage: 6, totalPages: 6)),
-                25.verticalSpace,
-                Text(
-                  local.your_regular_physical_activity_level,
-                  style: AppFonts.font20WhiteWeight800,
-                  textAlign: TextAlign.start,
-                ),
-                65.verticalSpace,
-                ValueListenableBuilder<String?>(
-                  valueListenable: _selectedActivityLevel,
-                  builder: (context, selectedValue, child) {
-                    return Column(
-                      children: [
-                        CustomRadioButton(
-                          label: local.level1,
-                          value: "level1",
-                          groupValue: selectedValue,
-                          onChanged: (value) {
-                            _selectedActivityLevel.value = value;
-                            if (!isFromEditProfile) {
-                              signupProvider.saveData("activityLevel", value);
-                            }
-                          },
-                        ),
-                        16.verticalSpace,
-                        CustomRadioButton(
-                          label: local.level2,
-                          value: "level2",
-                          groupValue: selectedValue,
-                          onChanged: (value) {
-                            _selectedActivityLevel.value = value;
-                            if (!isFromEditProfile) {
-                              signupProvider.saveData("activityLevel", value);
-                            }
-                          },
-                        ),
-                        16.verticalSpace,
-                        CustomRadioButton(
-                          label: local.level3,
-                          value: "level3",
-                          groupValue: selectedValue,
-                          onChanged: (value) {
-                            _selectedActivityLevel.value = value;
-                            if (!isFromEditProfile) {
-                              signupProvider.saveData("activityLevel", value);
-                            }
-                          },
-                        ),
-                        16.verticalSpace,
-                        CustomRadioButton(
-                          label: local.level4,
-                          value: "level4",
-                          groupValue: selectedValue,
-                          onChanged: (value) {
-                            _selectedActivityLevel.value = value;
-                            if (!isFromEditProfile) {
-                              signupProvider.saveData("activityLevel", value);
-                            }
-                          },
-                        ),
-                        16.verticalSpace,
-                        CustomRadioButton(
-                          label: local.level5,
-                          value: "level5",
-                          groupValue: selectedValue,
-                          onChanged: (value) {
-                            _selectedActivityLevel.value = value;
-                            if (!isFromEditProfile) {
-                              signupProvider.saveData("activityLevel", value);
-                            }
-                          },
-                        ),
-                      ],
-                    );
-                  },
-                ),
-                20.verticalSpace,
-                ValueListenableBuilder<String?>(
-                  valueListenable: _selectedActivityLevel,
-                  builder: (context, selectedValue, child) {
-                    return SizedBox(
-                      width: double.infinity,
-                      child: CustomButton(
-                        color: AppColors.kOrange,
-                        onPressed: selectedValue != null
-                            ? () async {
-                          if (isFromEditProfile) {
-                            final displayActivity = _activityMap[selectedValue] ?? 'Rookie';
-                            final prefs = await SharedPreferences.getInstance();
-                            await prefs.setString('edit_profile_activity', displayActivity);
-                            Navigator.pop(context);
-                          } else {
-                            try {
-                              final signUpCubit = context.read<SignUpCubit>();
-                              signupProvider.saveData("activityLevel", selectedValue);
-
-                              final requestBody = SignupRequestBody(
-                                firstName: signupProvider.getData("firstName"),
-                                lastName: signupProvider.getData("lastName"),
-                                email: signupProvider.getData("email"),
-                                password: signupProvider.getData("password"),
-                                rePassword: signupProvider.getData("rePassword"),
-                                height: int.tryParse(signupProvider.getData("height") ?? '') ?? 0,
-                                weight: int.tryParse(signupProvider.getData("weight") ?? '') ?? 0,
-                                age: int.tryParse(signupProvider.getData("age") ?? '') ?? 0,
-                                gender: signupProvider.getData("gender"),
-                                goal: signupProvider.getData("goal"),
-                                activityLevel: selectedValue,
-                              );
-                              signUpCubit.signUp(requestBody);
-                            } catch (e) {
-                              Navigator.pushNamed(context, PageRouteName.mainSignUp);
-                            }
-                          }
-                        }
-                            : null,
-                        child: Text(
-                          isFromEditProfile ? local.done : local.next,
-                          style: AppFonts.font14LightWhiteWeight500,
-                        ),
+                  padding: EdgeInsets.symmetric(horizontal: 24.w),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      40.verticalSpace,
+                      Row(
+                        children: [
+                          InkWell(
+                            onTap: () async {
+                              if (isFromEditProfile &&
+                                  _selectedActivityLevel.value != null) {
+                                final displayActivity = _activityMap[
+                                        _selectedActivityLevel.value!] ??
+                                    'Rookie';
+                                final prefs =
+                                    await SharedPreferences.getInstance();
+                                await prefs.setString(
+                                    'edit_profile_activity', displayActivity);
+                              }
+                              Navigator.pop(context);
+                            },
+                            child: Image.asset(AppImages.back),
+                          ),
+                          100.horizontalSpace,
+                          Image.asset(AppImages.logoIcon),
+                        ],
                       ),
-                    );
-                  },
-                ),
-              ],
-            ),
-          );
+                      50.verticalSpace,
+                      if (!isFromEditProfile)
+                        Center(
+                            child: ProgressIndicatorWidget(
+                                currentPage: 6, totalPages: 6)),
+                      25.verticalSpace,
+                      Text(
+                        local.your_regular_physical_activity_level,
+                        style: AppFonts.font20WhiteWeight800,
+                        textAlign: TextAlign.start,
+                      ),
+                      ValueListenableBuilder<String?>(
+                        valueListenable: _selectedActivityLevel,
+                        builder: (context, selectedValue, child) {
+                          return Column(
+                            children: [
+                              CustomRadioButton(
+                                label: local.level1,
+                                value: "level1",
+                                groupValue: selectedValue,
+                                onChanged: (value) {
+                                  _selectedActivityLevel.value = value;
+                                  if (!isFromEditProfile) {
+                                    signupProvider.saveData(
+                                        "activityLevel", value);
+                                  }
+                                },
+                              ),
+                              16.verticalSpace,
+                              CustomRadioButton(
+                                label: local.level2,
+                                value: "level2",
+                                groupValue: selectedValue,
+                                onChanged: (value) {
+                                  _selectedActivityLevel.value = value;
+                                  if (!isFromEditProfile) {
+                                    signupProvider.saveData(
+                                        "activityLevel", value);
+                                  }
+                                },
+                              ),
+                              16.verticalSpace,
+                              CustomRadioButton(
+                                label: local.level3,
+                                value: "level3",
+                                groupValue: selectedValue,
+                                onChanged: (value) {
+                                  _selectedActivityLevel.value = value;
+                                  if (!isFromEditProfile) {
+                                    signupProvider.saveData(
+                                        "activityLevel", value);
+                                  }
+                                },
+                              ),
+                              16.verticalSpace,
+                              CustomRadioButton(
+                                label: local.level4,
+                                value: "level4",
+                                groupValue: selectedValue,
+                                onChanged: (value) {
+                                  _selectedActivityLevel.value = value;
+                                  if (!isFromEditProfile) {
+                                    signupProvider.saveData(
+                                        "activityLevel", value);
+                                  }
+                                },
+                              ),
+                              16.verticalSpace,
+                              CustomRadioButton(
+                                label: local.level5,
+                                value: "level5",
+                                groupValue: selectedValue,
+                                onChanged: (value) {
+                                  _selectedActivityLevel.value = value;
+                                  if (!isFromEditProfile) {
+                                    signupProvider.saveData(
+                                        "activityLevel", value);
+                                  }
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      ),
+                      20.verticalSpace,
+                      ValueListenableBuilder<String?>(
+                        valueListenable: _selectedActivityLevel,
+                        builder: (context, selectedValue, child) {
+                          return Padding(
+                            padding: EdgeInsets.only(bottom: 30.0),
+                            child: Column(
+                              children: [
+                                SizedBox(
+                                  width: double.infinity,
+                                  child: CustomButton(
+                                    color: AppColors.kOrange,
+                                    onPressed: selectedValue != null
+                                        ? () async {
+                                            if (isFromEditProfile) {
+                                              final displayActivity =
+                                                  _activityMap[selectedValue] ??
+                                                      'Rookie';
+                                              final prefs = await SharedPreferences
+                                                  .getInstance();
+                                              await prefs.setString(
+                                                  'edit_profile_activity',
+                                                  displayActivity);
+                                              Navigator.pop(context);
+                                            } else {
+                                              try {
+                                                final signUpCubit =
+                                                    context.read<SignUpCubit>();
+                                                signupProvider.saveData(
+                                                    "activityLevel", selectedValue);
+
+                                                final requestBody = SignupRequestBody(
+                                                  firstName: signupProvider
+                                                      .getData("firstName"),
+                                                  lastName: signupProvider
+                                                      .getData("lastName"),
+                                                  email:
+                                                      signupProvider.getData("email"),
+                                                  password: signupProvider
+                                                      .getData("password"),
+                                                  rePassword: signupProvider
+                                                      .getData("rePassword"),
+                                                  height: int.tryParse(signupProvider
+                                                              .getData("height") ??
+                                                          '') ??
+                                                      0,
+                                                  weight: int.tryParse(signupProvider
+                                                              .getData("weight") ??
+                                                          '') ??
+                                                      0,
+                                                  age: int.tryParse(signupProvider
+                                                              .getData("age") ??
+                                                          '') ??
+                                                      0,
+                                                  gender: signupProvider
+                                                      .getData("gender"),
+                                                  goal:
+                                                      signupProvider.getData("goal"),
+                                                  activityLevel: selectedValue,
+                                                );
+                                                signUpCubit.signUp(requestBody);
+                                              } catch (e) {
+                                                Navigator.pushNamed(context,
+                                                    PageRouteName.mainSignUp);
+                                              }
+                                            }
+                                          }
+                                        : null,
+                                    child: Text(
+                                      isFromEditProfile ? local.done : local.next,
+                                      style: AppFonts.font14LightWhiteWeight500,
+                                    ),
+                                  ),
+                                ),
+                                40.verticalSpace
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                );
 
           // Choose the appropriate scaffold based on pathway
           if (!isFromEditProfile) {
@@ -322,17 +369,16 @@ class _ActivityScreenState extends State<ActivityScreen> {
                       AppDialogs.showHideDialog(context);
                       AppDialogs.showSuccessDialog(
                           context: context,
-                          message: "Create account successfully!! please login in"
-                      );
+                          message: "Create account successfully!! "
+                              "please login in");
                       Future.delayed(Duration(seconds: 2), () {
-                        Navigator.pushReplacementNamed(context, PageRouteName.login);
+                        Navigator.pushReplacementNamed(
+                            context, PageRouteName.login);
                       });
                     } else if (state is SignUpFail) {
                       AppDialogs.showHideDialog(context);
                       AppDialogs.showErrorDialog(
-                          context: context,
-                          errorMassage: state.errorMassage!
-                      );
+                          context: context, errorMassage: state.errorMassage!);
                     }
                   },
                   child: content,
@@ -348,7 +394,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
             backgroundImage: AppImages.authBackground,
             enableBlur: true,
             blurStrength: 5.0,
-            blurHeight: 385.0,
+            blurHeight: 400.0,
             blurWidth: 370.0.w,
             borderRadius: 50.0,
             blurStartPosition: MediaQuery.of(context).size.height * 0.38,

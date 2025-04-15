@@ -24,6 +24,7 @@ class _AgeScreenState extends State<AgeScreen> {
   final int minAge = 14;
   final int maxAge = 100;
   final ScrollController _scrollController = ScrollController();
+
   @override
   void initState() {
     super.initState();
@@ -34,9 +35,7 @@ class _AgeScreenState extends State<AgeScreen> {
   @override
   Widget build(BuildContext context) {
     final local = S.of(context);
-
     final signupProvider = context.read<SignupProvider>();
-
     return CustomScaffold(
       backgroundImage: AppImages.authBackground,
       enableBlur: true,
@@ -44,7 +43,7 @@ class _AgeScreenState extends State<AgeScreen> {
       blurHeight: 230,
       blurWidth: 430,
       borderRadius: 50.0,
-      blurStartPosition: MediaQuery.of(context).size.height * 0.36,
+      blurStartPosition: MediaQuery.of(context).size.height * 0.31,
       child: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: 24.w),
         child: Column(
@@ -138,7 +137,8 @@ class _AgeScreenState extends State<AgeScreen> {
                     context, PageRouteName.weightScreen);
               },
               color: AppColors.kOrange,
-            )
+            ),
+            30.verticalSpace,
           ],
         ),
       ),

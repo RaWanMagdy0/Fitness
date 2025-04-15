@@ -8,6 +8,7 @@ import 'package:fitness_app/data/models/profile/user_model.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../core/local/token_manger.dart';
+import '../../models/profile/change_password_request_model.dart';
 
 @Injectable(as: ProfileRemoteDataSource)
 class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
@@ -24,12 +25,32 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
     });
   }
   @override
-  Future<Result<UserModel?>> uploadPhoto(File photo) {
-    return executeApiCall<UserModel?>(() async {
-      final response = await profileApiManager.uploadPhoto(photo);
-      return null;
+  Future<Result<String?>> uploadPhoto(File photo) {
+    return executeApiCall(() async {
+      var token = await _getToken();
+      var response = await profileApiManager.uploadPhoto(token, photo);
+      return response;
     });
   }
+
+  @override
+  Future<Result<String?>> changePassword({
+    required String currentPassword,
+    required String newPassword,
+  }) {
+    return executeApiCall<String?>(() async {
+      final token = await TokenManager.getToken();
+      final request = ChangePasswordRequestModel(
+        password: currentPassword,
+        newPassword: newPassword,
+      );
+      return await profileApiManager.changePassword(
+        request,
+        'Bearer $token',
+      );
+    });
+  }
+
 
   Future<String> _getToken() async {
     var token = await TokenManager.getToken();

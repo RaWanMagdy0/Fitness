@@ -1,83 +1,180 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:fitness_app/core/routes/page_route_name.dart';
+import 'package:fitness_app/presentation/home/workout/view_model/workout_state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
+import '../../../../../core/di/di.dart';
 import '../../../../../core/styles/colors/app_colors.dart';
-import '../../../../../core/styles/fonts/app_fonts.dart';
 import '../../../../../core/utils/widget/shimmer_loading_widget.dart';
+import '../../view_model/workout_cubit.dart';
 
-class MuscleCard extends StatelessWidget {
-  final String title;
-  final String imagePath;
-  final VoidCallback onTap;
+class MuscleCard extends StatefulWidget {
+  const MuscleCard({super.key, required this.muscleGroupId});
 
-  const MuscleCard({
-    super.key,
-    required this.title,
-    required this.imagePath,
-    required this.onTap,
-  });
+  final String muscleGroupId;
+
+  @override
+  State<MuscleCard> createState() => _UpcomingCardState();
+}
+
+class _UpcomingCardState extends State<MuscleCard> {
+  late WorkoutCubit viewModel;
+
+  @override
+  void initState() {
+    super.initState();
+    viewModel = getIt.get<WorkoutCubit>();
+    viewModel.getMuscleGroupDetails(widget.muscleGroupId);
+  }
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
+    return BlocBuilder<WorkoutCubit, WorkoutState>(
+      bloc: viewModel,
+      builder: (context, state) {
+        if (state is GetMuscleDetailsLoading) {
+          return _buildShimmerTabs();
+        } else if (state is GetMuscleDetailsError) {
+          return Center(
+            child: Text("Error: ${state.errorMessage}",
+                style: TextStyle(color: AppColors.kWhite)),
+          );
+        } else if (state is GetMuscleDetailsSuccess) {
+          final muscleDetails = state.response.muscles;
+          return SizedBox(
+            height: 650.h,
+            child: (muscleDetails == null || muscleDetails.isEmpty)
+                ? Center(
+                    child: Text(
+                      "No Data Available",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  )
+                : GridView.builder(
+                    padding: EdgeInsets.symmetric(horizontal: 8.w),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 12.w,
+                      mainAxisSpacing: 15.h,
+                      childAspectRatio: 1.1,
+                    ),
+                    itemCount: muscleDetails.length,
+                    itemBuilder: (context, index) {
+                      final muscle = muscleDetails[index];
+
+                      if (muscle.name == null ||
+                          muscle.image == null) {
+                        return Center(
+                          child: Text(
+                            "No Data Available",
+                            style:
+                                TextStyle(color: Colors.white, fontSize: 14.sp),
+                          ),
+                        );
+                      }
+
+                      return buildCardWidget(muscle.name!, muscle.image!,muscle.id!);
+                    },
+                  ),
+          );
+        }
+
+        return Center(
+          child: Text("Waiting for data...",
+              style: TextStyle(color: AppColors.kWhite)),
+        );
+      },
+    );
+  }
+
+  Widget buildCardWidget(String title, String imagePath,String id) {
+    return InkWell(
+      onTap: (){
+        Navigator.pushNamed(context, PageRouteName.exerciseScreen, arguments: {
+          "id":id,
+          "imagePath":imagePath,
+          "title":title,
+        });
+      },
       child: Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16.r),
-          color: AppColors.kBlackBG.withOpacity(0.7),
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 6,
+              spreadRadius: 2,
+            ),
+          ],
         ),
-        clipBehavior: Clip.antiAlias,
         child: Stack(
-          fit: StackFit.expand,
           children: [
-            // Background Image
-            CachedNetworkImage(
-              imageUrl: imagePath,
-              fit: BoxFit.cover,
-              placeholder: (context, url) => ShimmerLoadingWidget(
+            ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: Image.network(
+                imagePath,
                 width: double.infinity,
-                height: double.infinity,
-              ),
-              errorWidget: (context, url, error) => Container(
-                color: AppColors.kGray.withOpacity(0.3),
-                child: Icon(
-                  Icons.fitness_center,
-                  color: AppColors.kLightGrey,
-                  size: 50.sp,
-                ),
-              ),
-            ),
-
-            // Gradient Overlay
-            Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Colors.transparent,
-                    Colors.black.withOpacity(0.7),
-                  ],
-                ),
+                height: 160.h,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return ShimmerLoadingWidget(
+                    width: double.infinity,
+                    height: 160.h,
+                    borderRadius: 16.r,
+                  );
+                },
               ),
             ),
-
-            // Title at the bottom
             Positioned(
-              bottom: 12.h,
-              left: 12.w,
-              right: 12.w,
-              child: Text(
-                title,
-                style: AppFonts.font14WhiteWeight600,
-                textAlign: TextAlign.center,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: 10.h),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(16),
+                    bottomRight: Radius.circular(16),
+                  ),
+                  color: Colors.black.withOpacity(0.6),
+                ),
+                child: Text(
+                  title,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
               ),
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildShimmerTabs() {
+    return SizedBox(
+      height: 170.h,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: 2,
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: EdgeInsets.symmetric(horizontal: 5.0),
+            child: ShimmerLoadingWidget(
+              width: 170.w,
+              height: 170.h,
+              borderRadius: 20.r,
+            ),
+          );
+        },
       ),
     );
   }

@@ -43,27 +43,35 @@ class CustomScaffold extends StatelessWidget {
           Positioned.fill(
             child: Container(color: Colors.black.withOpacity(overlayOpacity)),
           ),
-          if (enableBlur)
-            Positioned(
-              top: blurStartPosition,
-              left: (MediaQuery.of(context).size.width - blurWidth) / 2,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(borderRadius),
-                child: BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: blurStrength, sigmaY: blurStrength),
-                  child: Container(
-                    width: blurWidth,
-                    height: blurHeight,
-                    decoration: BoxDecoration(
-                      color:color?? Colors.white.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(borderRadius),
-                    ),
-                  ),
+          Positioned.fill(
+            child: SafeArea(
+              child: SingleChildScrollView(
+                child: Stack(
+                  children: [
+                    if (enableBlur)
+                      Positioned(
+                        top: blurStartPosition,
+                        left: (MediaQuery.of(context).size.width - blurWidth) / 2,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(borderRadius),
+                          child: BackdropFilter(
+                            filter: ImageFilter.blur(sigmaX: blurStrength, sigmaY: blurStrength),
+                            child: Container(
+                              width: blurWidth,
+                              height: blurHeight,
+                              decoration: BoxDecoration(
+                                color:color?? Colors.white.withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(borderRadius),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    child,
+                  ],
                 ),
               ),
             ),
-          Positioned.fill(
-            child: SafeArea(child: child),
           ),
         ],
       ),

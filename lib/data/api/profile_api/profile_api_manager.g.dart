@@ -90,19 +90,24 @@ class _ProfileApiManager implements ProfileApiManager {
   }
 
   @override
-  Future<EditProfileResponseModel> uploadPhoto(File photo) async {
+  Future<String?> uploadPhoto(
+    String token,
+    File photo,
+  ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'Authorization': token};
+    _headers.removeWhere((k, v) => v == null);
     final _data = FormData();
     _data.files.add(MapEntry(
       'photo',
       MultipartFile.fromFileSync(
         photo.path,
         filename: photo.path.split(Platform.pathSeparator).last,
+        contentType: DioMediaType.parse('image/jpeg'),
       ),
     ));
-    final _options = _setStreamType<EditProfileResponseModel>(Options(
+    final _options = _setStreamType<String>(Options(
       method: 'PUT',
       headers: _headers,
       extra: _extra,
@@ -119,10 +124,48 @@ class _ProfileApiManager implements ProfileApiManager {
           _dio.options.baseUrl,
           baseUrl,
         )));
-    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late EditProfileResponseModel _value;
+    final _result = await _dio.fetch<String>(_options);
+    late String? _value;
     try {
-      _value = EditProfileResponseModel.fromJson(_result.data!);
+      _value = _result.data;
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<String?> changePassword(
+    ChangePasswordRequestModel request,
+    String token,
+  ) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'Authorization': token};
+    _headers.removeWhere((k, v) => v == null);
+    final _data = <String, dynamic>{};
+    _data.addAll(request.toJson());
+    final _options = _setStreamType<String>(Options(
+      method: 'PATCH',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          'api/v1/auth/change-password',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<String>(_options);
+    late String? _value;
+    try {
+      _value = _result.data;
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;

@@ -6,7 +6,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import '../../../core/api/api_result.dart';
 import '../../../core/base/base_view_model.dart';
-import '../../../domain/online_coach_enity.dart';
+import '../../../domain/entity/online_coach_enity.dart';
 import '../../../domain/repository/profile_repository/profile_repository.dart';
 import '../widget/object_box.dart';
 
@@ -22,7 +22,7 @@ class GeminiCubit extends BaseViewModel<GeminiState> {
 
   GeminiCubit(this.profileRepository) : super(GeminiInitialState()) {
     _initObjectBox();
-   // sendWelcomeMessage();
+    // sendWelcomeMessage();
   }
 
   Future<void> _initObjectBox() async {
@@ -226,15 +226,15 @@ class GeminiCubit extends BaseViewModel<GeminiState> {
     _speech.stop();
     emit(GeminiRecordingState(isListening: false, recordedText: recordedText));
   }
-  /*********
-  void sendWelcomeMessage() {
+/*********
+    void sendWelcomeMessage() {
     if (messages.isEmpty) {
-      messages.add({
-        "sender": "gemini",
-        "text": "Hello! I'm Gemini, your fitness assistant. How can I help you today?"
-      });
-      emit(GeminiSuccessState(messages: List.from(messages)));
+    messages.add({
+    "sender": "gemini",
+    "text": "Hello! I'm Gemini, your fitness assistant. How can I help you today?"
+    });
+    emit(GeminiSuccessState(messages: List.from(messages)));
     }
-  }
-*********/
+    }
+ *********/
 }

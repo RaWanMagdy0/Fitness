@@ -49,10 +49,10 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
     return CustomScaffold(
       enableBlur: true,
       blurStrength: 5.0,
-      blurHeight: 200.0,
+      blurHeight: 180.0,
       blurWidth: 370.0.w,
       borderRadius: 50.0,
-      blurStartPosition: MediaQuery.of(context).size.height * 0.32,
+      blurStartPosition: MediaQuery.of(context).size.height * 0.27,
       backgroundImage: AppImages.authBackground,
       child: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: 24.w),
@@ -63,7 +63,7 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
             } else if (state is ForgotPasswordError) {
               AppDialogs.showErrorDialog(
                 context: context,
-                errorMassage: state.message,
+                errorMassage: "Wrong OTP Code",
               );
             } else if (state is ForgotPasswordLoading) {
               AppDialogs.showLoading(
@@ -140,6 +140,7 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
                   onPressed: _onCodeComplete,
                   child: Text(local.confirm, style: AppFonts.font16WhiteWeight500),
                 ),
+                30.verticalSpace
               ],
             );
           },

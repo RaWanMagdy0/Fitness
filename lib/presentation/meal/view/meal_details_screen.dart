@@ -1,6 +1,5 @@
 import 'package:fitness_app/core/styles/colors/app_colors.dart';
 import 'package:fitness_app/core/styles/fonts/app_fonts.dart';
-import 'package:fitness_app/core/utils/widget/custom%20scaffold.dart';
 import 'package:fitness_app/core/utils/widget/custom_arrow.dart';
 import 'package:fitness_app/core/utils/widget/shimmer_loading_widget.dart';
 import 'package:fitness_app/presentation/meal/view_model/meal_details_cubit.dart';
@@ -8,6 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+
+import '../../../core/styles/images/app_images.dart';
 
 class MealDetailsScreen extends StatefulWidget {
   final String mealId;
@@ -21,7 +23,8 @@ class MealDetailsScreen extends StatefulWidget {
   State<MealDetailsScreen> createState() => _MealDetailsScreenState();
 }
 
-class _MealDetailsScreenState extends State<MealDetailsScreen> with SingleTickerProviderStateMixin {
+class _MealDetailsScreenState extends State<MealDetailsScreen>
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
   @override
@@ -39,9 +42,20 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> with SingleTicker
 
   @override
   Widget build(BuildContext context) {
-    return CustomScaffold(
-      backgroundImage: "assets/images/home_background.png",
-      child: BlocBuilder<MealDetailsCubit, MealDetailsState>(
+    return Scaffold(
+        body: Stack(children: [
+      Positioned.fill(
+        child: Image.asset(
+          AppImages.backgroundRobot,
+          fit: BoxFit.cover,
+        ),
+      ),
+      Positioned.fill(
+        child: Container(
+          color: Colors.black.withOpacity(0.5),
+        ),
+      ),
+      BlocBuilder<MealDetailsCubit, MealDetailsState>(
         builder: (context, state) {
           if (state is MealDetailsLoading) {
             return _buildLoadingShimmer();
@@ -66,7 +80,7 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> with SingleTicker
                     // Meal Image
                     SizedBox(
                       width: double.infinity,
-                      height: 250.h,
+                      height: 300.h,
                       child: ClipRRect(
                         borderRadius: BorderRadius.only(
                           bottomLeft: Radius.circular(30.r),
@@ -77,22 +91,22 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> with SingleTicker
                           fit: BoxFit.cover,
                           errorBuilder: (context, error, stackTrace) =>
                               Container(
-                                color: AppColors.kGray,
-                                child: Center(
-                                  child: Icon(
-                                    Icons.image_not_supported,
-                                    color: AppColors.kWhite,
-                                    size: 50.sp,
-                                  ),
-                                ),
+                            color: AppColors.kGray,
+                            child: Center(
+                              child: Icon(
+                                Icons.image_not_supported,
+                                color: AppColors.kWhite,
+                                size: 50.sp,
                               ),
+                            ),
+                          ),
                         ),
                       ),
                     ),
 
                     // Back button
                     Positioned(
-                      top: 16.h,
+                      top: 40.h,
                       left: 16.w,
                       child: GestureDetector(
                         onTap: () => Navigator.pop(context),
@@ -176,35 +190,6 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> with SingleTicker
                 ),
 
                 16.verticalSpace,
-
-                // Difficulty level tabs
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16.w),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      _buildDifficultyTab(
-                        "Beginner",
-                        state.selectedDifficulty == DifficultyLevel.beginner,
-                            () => context.read<MealDetailsCubit>().selectDifficultyLevel(DifficultyLevel.beginner),
-                      ),
-                      _buildDifficultyTab(
-                        "Intermediate",
-                        state.selectedDifficulty == DifficultyLevel.intermediate,
-                            () => context.read<MealDetailsCubit>().selectDifficultyLevel(DifficultyLevel.intermediate),
-                      ),
-                      _buildDifficultyTab(
-                        "Advanced",
-                        state.selectedDifficulty == DifficultyLevel.advanced,
-                            () => context.read<MealDetailsCubit>().selectDifficultyLevel(DifficultyLevel.advanced),
-                      ),
-                    ],
-                  ),
-                ),
-
-                16.verticalSpace,
-
-                // Content tabs
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16.w),
                   child: TabBar(
@@ -246,14 +231,13 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> with SingleTicker
           return const SizedBox();
         },
       ),
-    );
+    ]));
   }
 
   Widget _buildLoadingShimmer() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Header image shimmer
         Stack(
           children: [
             // Image shimmer
@@ -307,7 +291,7 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> with SingleTicker
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: List.generate(
               4,
-                  (index) => ShimmerLoadingWidget(
+              (index) => ShimmerLoadingWidget(
                 width: 70.w,
                 height: 50.h,
                 borderRadius: 20.r,
@@ -325,7 +309,7 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> with SingleTicker
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: List.generate(
               3,
-                  (index) => ShimmerLoadingWidget(
+              (index) => ShimmerLoadingWidget(
                 width: 100.w,
                 height: 35.h,
                 borderRadius: 20.r,
@@ -393,28 +377,6 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> with SingleTicker
     );
   }
 
-  Widget _buildDifficultyTab(String text, bool isSelected, VoidCallback onTap) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-        decoration: BoxDecoration(
-          color: isSelected ? AppColors.kOrange : Colors.transparent,
-          borderRadius: BorderRadius.circular(20.r),
-          border: Border.all(
-            color: isSelected ? AppColors.kOrange : AppColors.kLightGrey,
-          ),
-        ),
-        child: Text(
-          text,
-          style: AppFonts.font14WhiteWeight400.copyWith(
-            color: isSelected ? AppColors.kWhite : AppColors.kLightGrey,
-          ),
-        ),
-      ),
-    );
-  }
-
   Widget _buildDescriptionTab(final meal) {
     return SingleChildScrollView(
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
@@ -446,60 +408,112 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> with SingleTicker
         ),
       );
     }
+    final String embeddedVideoHtml = '''
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+          body { margin: 0; padding: 0; background-color: #000; overflow: hidden; }
+          #player { position: absolute; width: 100%; height: 100%; top: 0; left: 0; }
+        </style>
+      </head>
+      <body>
+        <div id="player"></div>
+        <script>
+          var tag = document.createElement('script');
+          tag.src = "https://www.youtube.com/iframe_api";
+          var firstScriptTag = document.getElementsByTagName('script')[0];
+          firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+          
+          var player;
+          function onYouTubeIframeAPIReady() {
+            player = new YT.Player('player', {
+              videoId: '$videoId',
+              playerVars: {
+                'autoplay': 1,
+                'playsinline': 1,
+                'rel': 0,
+                'showinfo': 0,
+                'controls': 1,
+                'modestbranding': 1
+              },
+              events: {
+                'onReady': onPlayerReady
+              }
+            });
+          }
+          
+          function onPlayerReady(event) {
+            event.target.playVideo();
+          }
+        </script>
+      </body>
+    </html>
+  ''';
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // Video thumbnail with play button
-          Stack(
-            alignment: Alignment.center,
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(16.r),
-                child: AspectRatio(
-                  aspectRatio: 16 / 9,
-                  child: Image.network(
-                    'https://img.youtube.com/vi/$videoId/hqdefault.jpg',
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) => Container(
-                      color: AppColors.kBlackBG,
-                      child: Center(
-                        child: Icon(
-                          Icons.image_not_supported,
-                          color: AppColors.kWhite,
-                          size: 50.sp,
-                        ),
-                      ),
-                    ),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(16.r),
+            child: SizedBox(
+              height: 270.h,
+              child: InAppWebView(
+                initialData: InAppWebViewInitialData(
+                  data: embeddedVideoHtml,
+                  mimeType: 'text/html',
+                  encoding: 'utf-8',
+                ),
+                initialOptions: InAppWebViewGroupOptions(
+                  crossPlatform: InAppWebViewOptions(
+                    mediaPlaybackRequiresUserGesture: false,
+                    useOnLoadResource: true,
+                    javaScriptEnabled: true,
+                    useShouldOverrideUrlLoading: true,
                   ),
                 ),
+                shouldOverrideUrlLoading: (controller, navigationAction) async {
+                  final uri = navigationAction.request.url;
+                  final host = uri?.host ?? '';
+
+                  if (host.contains('youtube.com') ||
+                      host.contains('youtu.be')) {
+                    return NavigationActionPolicy.CANCEL;
+                  }
+
+                  return NavigationActionPolicy.ALLOW;
+                },
+                androidOnPermissionRequest:
+                    (controller, origin, resources) async {
+                  return PermissionRequestResponse(
+                    resources: resources,
+                    action: PermissionRequestResponseAction.GRANT,
+                  );
+                },
               ),
-              Container(
-                width: 60.w,
-                height: 60.h,
-                decoration: BoxDecoration(
-                  color: AppColors.kOrange,
-                  shape: BoxShape.circle,
-                ),
-                child: IconButton(
-                  icon: Icon(
-                    Icons.play_arrow,
-                    color: AppColors.kWhite,
-                    size: 36.sp,
-                  ),
-                  onPressed: () {
-                    _openYoutubeVideo(videoId);
-                  },
-                ),
-              ),
-            ],
+            ),
           ),
-          16.verticalSpace,
-          Text(
-            'Tap to watch the video tutorial',
-            style: AppFonts.font14WhiteWeight400,
+          10.verticalSpace,
+          ElevatedButton.icon(
+            onPressed: () => _openYoutubeVideo(videoId),
+            icon: Icon(
+              Icons.play_circle_outline,
+              color: AppColors.kWhite,
+            ),
+            label: Text(
+              'Watch On YouTube',
+              style: TextStyle(color: AppColors.kWhite),
+            ),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.kOrange,
+              padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12.r),
+              ),
+            ),
           ),
         ],
       ),
@@ -507,11 +521,10 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> with SingleTicker
   }
 
   void _openYoutubeVideo(String videoId) async {
-    // Try these different URL formats in this order
     final urls = [
-      'youtube://www.youtube.com/watch?v=$videoId',   // YouTube app
-      'https://www.youtube.com/watch?v=$videoId',     // HTTPS
-      'https://youtu.be/$videoId',                    // Short URL
+      'youtube://www.youtube.com/watch?v=$videoId', // YouTube app
+      'https://www.youtube.com/watch?v=$videoId', // HTTPS
+      'https://youtu.be/$videoId',
     ];
 
     bool launched = false;
@@ -527,8 +540,6 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> with SingleTicker
         print('Error launching $url: $e');
       }
     }
-
-    // Final fallback - in-app browser
     if (!launched) {
       try {
         final Uri uri = Uri.parse('https://www.youtube.com/watch?v=$videoId');
@@ -543,7 +554,8 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> with SingleTicker
       } catch (e) {
         print('Final fallback error: $e');
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Could not open video. Please try again later.')),
+          SnackBar(
+              content: Text('Could not open video. Please try again later.')),
         );
       }
     }
@@ -582,7 +594,8 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> with SingleTicker
             children: [
               Text(
                 ingredient.ingredient,
-                style: AppFonts.font12BlackWeight400,
+                style: AppFonts.font14LightOrangeWeight400
+                    .copyWith(color: AppColors.kLightGrey),
               ),
               Text(
                 ingredient.measure,

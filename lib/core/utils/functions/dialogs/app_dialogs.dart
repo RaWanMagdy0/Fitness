@@ -1,4 +1,3 @@
-import 'package:fitness_app/presentation/auth/login/view/login_screen.dart';
 import 'package:fitness_app/presentation/profile/view_model/profile_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -7,6 +6,7 @@ import '../../../routes/page_route_name.dart';
 import '../../../styles/colors/app_colors.dart';
 import '../../../styles/fonts/app_fonts.dart';
 import '../../../styles/images/app_images.dart';
+import '../../widget/custom_button.dart';
 
 class AppDialogs {
   static Future<void> showLoading({
@@ -19,7 +19,7 @@ class AppDialogs {
         return PopScope(
           canPop: false,
           child: Lottie.asset(
-            AppImages.loadingAnimation,
+            AppImages.fitLoad,
             height: 50.h,
             width: 20.w,
           ),
@@ -62,7 +62,7 @@ class AppDialogs {
           onLoaded: (composition) {
             Future.delayed(
               composition.duration,
-                  () {
+              () {
                 if (context.mounted) {
                   Navigator.of(context).pop();
                   if (whenAnimationFinished != null) {
@@ -95,79 +95,82 @@ class AppDialogs {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: AppColors.kWhite,
-          content: Container(
-            width: 260.w,
-            height: 150.h,
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Container(
+            width: 300.w,
+            padding: EdgeInsets.all(16.r),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
+              color: AppColors.kMainColor.withOpacity(0.9),
+              borderRadius: BorderRadius.circular(20.r),
             ),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
               children: [
-                15.verticalSpace,
+                5.verticalSpace,
+
                 Text(
                   'LOGOUT',
-                  style: AppFonts.font18BlackWeight500
+                  style: AppFonts.font18WhiteWeight400
                       .copyWith(fontWeight: FontWeight.w600),
                 ),
-                5.verticalSpace,
+                10.verticalSpace,
                 Text(
-                  'Confirm Logout!',
-                  style: AppFonts.font16BlackWeight500
-                      .copyWith(fontWeight: FontWeight.w400),
+                  'Confirm Logout !',
+                  style: AppFonts.font15WhiteWeight500
+                      .copyWith(fontWeight: FontWeight.w600),
                 ),
-                24.verticalSpace,
+                20.verticalSpace,
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        minimumSize: Size(105.w, 40.h),
-                        backgroundColor: AppColors.kWhite,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(50.r),
-                          side: BorderSide(color: Colors.grey, width: 1.w),
+                    Expanded(
+                      child: CustomButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        color: Colors.grey,
+                        child: Text(
+                          "Cancel",
+                          style: AppFonts.font16WhiteWeight500,
                         ),
                       ),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: Text(
-                        'cancel',
-                        style: AppFonts.font14GreyWeight400,
-                      ),
                     ),
-                    SizedBox(width: 15.w),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        minimumSize: Size(105.w, 40.h),
-                        backgroundColor: AppColors.kOrange,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(50.r),
-                          side:
-                          BorderSide(color: Colors.transparent, width: 1.w),
+                    10.horizontalSpace,
+
+                    Expanded(
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          minimumSize: Size(105.w, 40.h),
+                          backgroundColor: AppColors.kOrange,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(50.r),
+                            side: BorderSide(
+                                color: Colors.transparent, width: 1.w),
+                          ),
+                        ),
+                        onPressed: () {
+                          Navigator.pop(context);
+                          showLoading(context: context);
+                          profileCubit.logout().then((_) {
+                            showHideDialog(context);
+                            Navigator.pushNamedAndRemoveUntil(
+                              context,
+                              PageRouteName.login,
+                                  (route) => false,
+                            );
+                          });
+                        },
+                        child: Text(
+                          'Logout',
+                          style: AppFonts.font15WhiteWeight500
+                              .copyWith(fontWeight: FontWeight.w400),
                         ),
                       ),
-                      onPressed: () {
-                        Navigator.pop(context);
-                        showLoading(context: context);
-                        profileCubit.logout().then((_) {
-                          showHideDialog(context);
-                          Navigator.pushNamedAndRemoveUntil(
-                            context,
-                            PageRouteName.login,
-                                (route) => false,
-                          );
-                        });
-                      },
-                      child: Text(
-                        'Logout',
-                        style: AppFonts.font15WhiteWeight500
-                            .copyWith(fontWeight: FontWeight.w400),
-                      ),
                     ),
+
                   ],
                 ),
               ],

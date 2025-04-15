@@ -25,25 +25,27 @@ class _HeightScreenState extends State<HeightScreen> {
 
   int selectedHeight = 90;
   final ScrollController _scrollController = ScrollController();
+
   @override
   void initState() {
     super.initState();
     final signupProvider = context.read<SignupProvider>();
-    selectedHeight = int.tryParse(signupProvider.getData("height") ?? '') ?? 170;
+    selectedHeight =
+        int.tryParse(signupProvider.getData("height") ?? '') ?? 170;
   }
+
   @override
   Widget build(BuildContext context) {
-    final local=S.of(context);
-
+    final local = S.of(context);
     final signupProvider = context.read<SignupProvider>();
     return CustomScaffold(
       backgroundImage: AppImages.authBackground,
       enableBlur: true,
       blurStrength: 5.0,
-      blurHeight: 230,
+      blurHeight: 220,
       blurWidth: 430,
       borderRadius: 50.0,
-      blurStartPosition: MediaQuery.of(context).size.height * 0.36,
+      blurStartPosition: MediaQuery.of(context).size.height * 0.31,
       child: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: 24.w),
         child: Column(
@@ -81,11 +83,9 @@ class _HeightScreenState extends State<HeightScreen> {
                   color: Colors.transparent,
                   borderRadius: BorderRadius.circular(50.r),
                 ),
-                child: Text(
-                   local.cm,
-                    style: AppFonts.font12OrangeWeight400
-                ),
-              ),),
+                child: Text(local.cm, style: AppFonts.font12OrangeWeight400),
+              ),
+            ),
             5.verticalSpace,
             Stack(
               alignment: Alignment.center,
@@ -125,11 +125,11 @@ class _HeightScreenState extends State<HeightScreen> {
                 Positioned(
                   bottom: -10,
                   child: Icon(Icons.arrow_drop_up,
-                      color:  AppColors.kOrange, size: 24),
+                      color: AppColors.kOrange, size: 24),
                 ),
               ],
             ),
-            40.verticalSpace,
+            30.verticalSpace,
             CustomButton(
               text: local.next,
               onPressed: () {
@@ -139,7 +139,8 @@ class _HeightScreenState extends State<HeightScreen> {
                     context, PageRouteName.goalScreen);
               },
               color: AppColors.kOrange,
-            )
+            ),
+            40.verticalSpace,
           ],
         ),
       ),

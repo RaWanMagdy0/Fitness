@@ -11,9 +11,11 @@ class AppImages {
   static const pinkDoneAnimation =
       "assets/animations/flowery_success_animation.json";
   static const geminiAnimi = "assets/animations/gemini_animi.json";
+  static const fitLoad = "assets/animations/fit_load.json";
   static const loadingMess = "assets/animations/loading_mess.json";
   static const authBackground = "assets/images/auth_background.png";
   static const logoIcon = "assets/images/logoIcon.png";
+  static const splash2 = "assets/images/splash2.png";
   static const maleIcon = "assets/images/maleIcon.png";
   static const femaleIcon = "assets/images/femaleIcon.png";
   static const back = "assets/images/back.png";
@@ -44,4 +46,5 @@ class AppImages {
   static const trainerIcon = "assets/icon/trainerIcon.png";
   static const yogaIcon = "assets/icon/yogaIcon.png";
   static const runningImage = "assets/images/runningImage.jpg";
+  static const errorAnim = "assets/animations/error_anim.json";
 }

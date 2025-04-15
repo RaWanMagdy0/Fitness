@@ -32,11 +32,13 @@ class LoginScreen extends StatelessWidget {
         if (state is LoginLoading) {
           AppDialogs.showLoading(context: context);
         } else if (state is LoginSuccess) {
+
           AppDialogs.showHideDialog(context);
           AppDialogs.showSuccessDialog(
             context: context,
             message: "Login Successfully",
           );
+
           Future.delayed(Duration(seconds: 2), () {
             Navigator.pushReplacementNamed(context, PageRouteName.layoutScreen);
           });
@@ -53,10 +55,10 @@ class LoginScreen extends StatelessWidget {
           backgroundImage: AppImages.authBackground,
           enableBlur: true,
           blurStrength: 5.0,
-          blurHeight: 350.0,
+          blurHeight: 340.0,
           blurWidth: 350.0,
           borderRadius: 30.0,
-          blurStartPosition: MediaQuery.of(context).size.height * 0.3,
+          blurStartPosition: MediaQuery.of(context).size.height * 0.25,
           child: SingleChildScrollView(
             padding: EdgeInsets.symmetric(horizontal: 24.w),
             child: Column(
@@ -115,7 +117,7 @@ class LoginScreen extends StatelessWidget {
                           ),
                         ],
                       ),
-                      10.verticalSpace,
+                      5.verticalSpace,
                       SizedBox(
                         width: double.infinity,
                         child: CustomButton(
@@ -154,6 +156,7 @@ class LoginScreen extends StatelessWidget {
                           ),
                         ],
                       ),
+                      30.verticalSpace
                     ],
                   ),
                 ),

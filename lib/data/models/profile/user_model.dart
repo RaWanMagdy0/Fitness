@@ -38,6 +38,7 @@ class UserModel {
     resetCodeVerified = json['resetCodeVerified'];
     passwordChangedAt = json['passwordChangedAt'];
   }
+
   String? id;
   String? firstName;
   String? lastName;
@@ -93,6 +94,7 @@ class UserModel {
         passwordChangedAt: passwordChangedAt,
         passwordResetCode: passwordResetCode,
         passwordResetExpires: passwordResetExpires,
-        resetCodeVerified: resetCodeVerified);
+        resetCodeVerified: resetCodeVerified
+    );
   }
 }

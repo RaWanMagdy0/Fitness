@@ -1,6 +1,18 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
+import 'package:fitness_app/core/styles/images/app_images.dart';
+import 'package:fitness_app/core/utils/functions/dialogs/app_dialogs.dart';
+import 'package:fitness_app/presentation/edit_profile/view/widgets/custom_pic.dart';
 import 'package:fitness_app/presentation/edit_profile/view/widgets/custom_profile_field.dart';
+import 'package:fitness_app/presentation/edit_profile/view_model/edit_profile_cubit.dart';
+import 'package:fitness_app/presentation/profile/view_model/profile_cubit.dart';
+import 'package:fitness_app/presentation/profile/view_model/profile_state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/styles/fonts/app_fonts.dart';
 import '../../../../core/utils/widget/custom_button.dart';
@@ -8,16 +20,11 @@ import '../../../../core/utils/widget/custom_text_form_field.dart';
 import '../../../../core/utils/widget/custom scaffold.dart';
 import '../../../../core/utils/widget/shimmer_loading_widget.dart';
 import '../../../../core/routes/page_route_name.dart';
-import '../../../core/styles/images/app_images.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../core/utils/functions/dialogs/app_dialogs.dart';
-import '../view_model/edit_profile_cubit.dart';
-import '../../profile/view_model/profile_cubit.dart';
-import '../../profile/view_model/profile_state.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({super.key});
+
   @override
   State<EditProfileScreen> createState() => _EditProfileScreenState();
 }
@@ -33,10 +40,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   String _activityLevel = 'Rookie';
   bool _dataLoaded = false;
   String _profileImageUrl = '';
+  final ImagePicker _picker = ImagePicker();
+  File? _selectedImage;
+  late EditProfileCubit editProfileCubit;
 
   @override
   void initState() {
     super.initState();
+    editProfileCubit = context.read<EditProfileCubit>();
     _loadUserData();
   }
 
@@ -116,7 +127,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           _goal = prefs.getString('edit_profile_goal') ?? _goal;
         }
         if (prefs.getString('edit_profile_activity') != null) {
-          _activityLevel = prefs.getString('edit_profile_activity') ?? _activityLevel;
+          _activityLevel =
+              prefs.getString('edit_profile_activity') ?? _activityLevel;
         }
       });
     }
@@ -140,13 +152,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     String? formattedActivity = _convertActivityToApiFormat(_activityLevel);
 
     context.read<EditProfileCubit>().editProfile(
-      firstName: firstName.isNotEmpty ? firstName : null,
-      lastName: lastName.isNotEmpty ? lastName : null,
-      email: email.isNotEmpty ? email : null,
-      weight: weightValue,
-      goal: formattedGoal,
-      activityLevel: formattedActivity,
-    );
+          firstName: firstName.isNotEmpty ? firstName : null,
+          lastName: lastName.isNotEmpty ? lastName : null,
+          email: email.isNotEmpty ? email : null,
+          weight: weightValue,
+          goal: formattedGoal,
+          activityLevel: formattedActivity,
+        );
   }
 
   String? _convertGoalToApiFormat(String displayGoal) {
@@ -201,14 +213,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           AppDialogs.showHideDialog(context);
           AppDialogs.showSuccessDialog(
             context: context,
-            message: state.message,
+            message: "Edit Profile Successfully",
             whenAnimationFinished: () {
               _clearSavedData();
-
               final profileCubit = context.read<ProfileCubit>();
               profileCubit.getUserData();
-
-              Navigator.pop(context);
+              Navigator.pop(context,true);
             },
           );
         } else if (state is EditProfileError) {
@@ -229,149 +239,133 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             enableBlur: false,
             child: _dataLoaded
                 ? SingleChildScrollView(
-              child: Padding(
-                padding: EdgeInsets.all(24.w),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        InkWell(
-                          onTap: () => Navigator.pop(context),
-                          child: Image.asset(AppImages.back),
-                        ),
-                        SizedBox(width: 85.w),
-                        Text(
-                          "Edit Profile",
-                          style: AppFonts.font24WhiteWeight600,
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 30.h),
-                    Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(24.w),
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          ClipOval(
-                            child: _profileImageUrl.isNotEmpty
-                                ? CachedNetworkImage(
-                              imageUrl: _profileImageUrl,
-                              fit: BoxFit.cover,
-                              height: 100.h,
-                              width: 100.w,
-                              placeholder: (context, url) => CircularProgressIndicator(),
-                              errorWidget: (context, url, error) => Image.asset(
-                                AppImages.person,
-                                height: 100.h,
-                                width: 100.w,
-                                fit: BoxFit.cover,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              InkWell(
+                                onTap: () => Navigator.pop(context),
+                                child: Image.asset(AppImages.back),
                               ),
-                            )
-                                : Image.asset(
-                              AppImages.person,
-                              height: 100.h,
-                              width: 100.w,
-                              fit: BoxFit.cover,
+                              SizedBox(width: 85.w),
+                              Text(
+                                "Edit Profile",
+                                style: AppFonts.font24WhiteWeight600,
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 15.h),
+                          Center(
+                            child: Column(
+                              children: [
+                                CustomProfilePic(
+                                  userImage: _profileImageUrl,
+                                ),
+                                SizedBox(height: 10.h),
+                                Text(
+                                  "${_firstNameController.text} ${_lastNameController.text}",
+                                  style: AppFonts.font20WhiteWeight800,
+                                )
+                              ],
                             ),
                           ),
-                          SizedBox(height: 10.h),
-                          Text(
-                            "${_firstNameController.text} ${_lastNameController.text}",
-                            style: AppFonts.font20WhiteWeight800,
-                          )
+                          SizedBox(height: 15.h),
+                          Form(
+                            key: _formKey,
+                            child: Column(
+                              children: [
+                                CustomTextFormField(
+                                  controller: _firstNameController,
+                                  hintText: "First Name",
+                                  prefixIcon: Icon(Icons.person_outline),
+                                  backgroundColor:
+                                      Colors.white.withOpacity(0.1),
+                                ),
+                                SizedBox(height: 16.h),
+                                CustomTextFormField(
+                                  controller: _lastNameController,
+                                  hintText: "Last Name",
+                                  prefixIcon: Icon(Icons.person_outline),
+                                  backgroundColor:
+                                      Colors.white.withOpacity(0.1),
+                                ),
+                                SizedBox(height: 16.h),
+                                CustomTextFormField(
+                                  controller: _emailController,
+                                  hintText: "Email",
+                                  prefixIcon: Icon(Icons.email_outlined),
+                                  backgroundColor:
+                                      Colors.white.withOpacity(0.1),
+                                ),
+                                SizedBox(height: 30.h),
+                                CustomProfileField(
+                                  title: 'Your Weight',
+                                  value: _weight,
+                                  onTap: () async {
+                                    await _saveCurrentValues();
+
+                                    // Changed to use the dedicated EditProfileWeightScreen
+                                    Navigator.pushNamed(
+                                            context,
+                                            PageRouteName
+                                                .editProfileWeightScreen)
+                                        .then((_) async {
+                                      await _loadUserPreferences();
+                                    });
+                                  },
+                                ),
+                                SizedBox(height: 5.h),
+                                CustomProfileField(
+                                  title: 'Your Goal',
+                                  value: _goal,
+                                  onTap: () async {
+                                    await _saveCurrentValues();
+
+                                    // Changed to use the dedicated EditProfileGoalScreen
+                                    Navigator.pushNamed(context,
+                                            PageRouteName.editProfileGoalScreen)
+                                        .then((_) async {
+                                      await _loadUserPreferences();
+                                    });
+                                  },
+                                ),
+                                SizedBox(height: 5.h),
+                                CustomProfileField(
+                                  title: 'Your activity level',
+                                  value: _activityLevel,
+                                  onTap: () async {
+                                    await _saveCurrentValues();
+
+                                    // Changed to use the new EditProfileActivityScreen
+                                    Navigator.pushNamed(
+                                            context,
+                                            PageRouteName
+                                                .editProfileActivityScreen)
+                                        .then((_) async {
+                                      await _loadUserPreferences();
+                                    });
+                                  },
+                                ),
+                                CustomButton(
+                                  onPressed: () {
+                                    if (_formKey.currentState!.validate()) {
+                                      _submitEditProfile();
+                                    }
+                                  },
+                                  text: "Save",
+                                  textStyle: AppFonts.font16WhiteWeight500,
+                                ),
+                              ],
+                            ),
+                          ),
                         ],
                       ),
                     ),
-                    SizedBox(height: 30.h),
-                    Form(
-                      key: _formKey,
-                      child: Column(
-                        children: [
-                          CustomTextFormField(
-                            controller: _firstNameController,
-                            hintText: "First Name",
-                            prefixIcon: Icon(Icons.person_outline),
-                            backgroundColor: Colors.white.withOpacity(0.1),
-                          ),
-                          SizedBox(height: 16.h),
-                          CustomTextFormField(
-                            controller: _lastNameController,
-                            hintText: "Last Name",
-                            prefixIcon: Icon(Icons.person_outline),
-                            backgroundColor: Colors.white.withOpacity(0.1),
-                          ),
-                          SizedBox(height: 16.h),
-                          CustomTextFormField(
-                            controller: _emailController,
-                            hintText: "Email",
-                            prefixIcon: Icon(Icons.email_outlined),
-                            backgroundColor: Colors.white.withOpacity(0.1),
-                          ),
-                          SizedBox(height: 50.h),
-                          CustomProfileField(
-                            title: 'Your Weight',
-                            value: _weight,
-                            onTap: () async {
-                              await _saveCurrentValues();
-
-                              Navigator.pushNamed(
-                                  context,
-                                  PageRouteName.weightScreen,
-                                  arguments: {'isFromEdit': true}
-                              ).then((_) async {
-                                await _loadUserPreferences();
-                              });
-                            },
-                          ),
-                          SizedBox(height: 8.h),
-                          CustomProfileField(
-                            title: 'Your Goal',
-                            value: _goal,
-                            onTap: () async {
-                              await _saveCurrentValues();
-
-                              Navigator.pushNamed(
-                                  context,
-                                  PageRouteName.goalScreen,
-                                  arguments: {'isFromEdit': true}
-                              ).then((_) async {
-                                await _loadUserPreferences();
-                              });
-                            },
-                          ),
-                          SizedBox(height: 8.h),
-                          CustomProfileField(
-                            title: 'Your activity level',
-                            value: _activityLevel,
-                            onTap: () async {
-                              await _saveCurrentValues();
-
-                              Navigator.pushNamed(
-                                  context,
-                                  PageRouteName.activityScreen,
-                                  arguments: {'isFromEdit': true}
-                              ).then((_) async {
-                                await _loadUserPreferences();
-                              });
-                            },
-                          ),
-                          SizedBox(height: 32.h),
-                          CustomButton(
-                            onPressed: () {
-                              if (_formKey.currentState!.validate()) {
-                                _submitEditProfile();
-                              }
-                            },
-                            text: "Save",
-                            textStyle: AppFonts.font16WhiteWeight500,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            )
+                  )
                 : _buildShimmerLoading(),
           ),
         );
@@ -400,19 +394,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           ),
 
           SizedBox(height: 30.h),
-
-          // Profile image and name shimmer
           Center(
             child: Column(
               children: [
-                // Profile image shimmer
                 ShimmerLoadingWidget(
                   width: 100.w,
                   height: 100.h,
                   borderRadius: 50.r, // Circle shape
                 ),
                 SizedBox(height: 10.h),
-                // Name shimmer
                 ShimmerLoadingWidget(
                   width: 150.w,
                   height: 24.h,

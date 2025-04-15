@@ -1,5 +1,4 @@
 import 'package:fitness_app/core/styles/colors/app_colors.dart';
-import 'package:fitness_app/presentation/home/home_screen/widget/upcoming_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -55,7 +54,7 @@ class _CategoryTabsState extends State<CategoryTabs> {
             Future.microtask(() {
               widget.onTabSelected(muscleGroups[0].id ?? "");
             });
-            isFirstLoad = false; // ✅ منع التكرار
+            isFirstLoad = false;
           }
 
           return Column(

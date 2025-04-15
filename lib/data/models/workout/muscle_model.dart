@@ -38,7 +38,6 @@ class MuscleGroup {
       'عضلة شبه المنحرفة': 'Trapezius',
       'عضلات الصدر': 'Chest',
       'العضلات المُبعِدة': 'Abductors',
-      'عضلات الساق': 'Calves',
       'عضلات البطن': 'Abs',
       'عضلات الأرداف': 'Glutes',
       'عضلات الكتف': 'Shoulder',

@@ -24,10 +24,10 @@ class AuthRepositoryImpl implements AuthRepository {
   final AuthRemoteDataSource authRemoteDataSource;
 
   AuthRepositoryImpl({required this.authRemoteDataSource});
+
   @override
-  Future<Result<String?>> signUp(SignupRequestBody signupRequestBody) {
-    final response = authRemoteDataSource.signUp(signupRequestBody);
-    return response;
+  Future<Result<String?>> signUp(SignupRequestBody signupRequestBody) async {
+    return await authRemoteDataSource.signUp(signupRequestBody);
   }
 
   @override
@@ -36,7 +36,7 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<Result<EditProfileResponseModel>> editProfile(
+  Future<Result<String?>> editProfile(
       EditProfileRequestModel requestModel) {
     return authRemoteDataSource.editProfile(requestModel);
   }
