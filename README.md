@@ -77,11 +77,11 @@ A proprietary **Flutter-based fitness application** designed to help users track
   <img src="assets/screenshots/photo_9_2025-04-15_17-06-09.jpg" width="150"/>
   <img src="assets/screenshots/photo_10_2025-04-15_17-06-09.jpg" width="150"/>
   <img src="assets/screenshots/photo_11_2025-04-15_17-06-09.jpg" width="150"/>
-  <img src="assets/screenshots/photo_12_2025-04-15_17-06-09.jpg" width="150"/>
+  <img src="assets/screenshots/photo_12_2025-04-15_17-06-09.jpg" width="100"/>
 </p>
 
 <p align="center">
-  <img src="assets/screenshots/photo_13_2025-04-15_17-06-09.jpg" width="150"/>
+  <img src="assets/screenshots/photo_13_2025-04-15_17-06-09.jpg" width="100"/>
   <img src="assets/screenshots/photo_14_2025-04-15_17-06-09.jpg" width="150"/>
   <img src="assets/screenshots/photo_15_2025-04-15_17-06-09.jpg" width="150"/>
   <img src="assets/screenshots/photo_16_2025-04-15_17-06-09.jpg" width="150"/>
@@ -113,7 +113,7 @@ A proprietary **Flutter-based fitness application** designed to help users track
   <img src="assets/screenshots/photo_33_2025-04-15_17-06-09.jpg" width="150"/>
   <img src="assets/screenshots/photo_34_2025-04-15_17-06-09.jpg" width="150"/>
   <img src="assets/screenshots/photo_35_2025-04-15_17-06-09.jpg" width="150"/>
-  <img src="assets/screenshots/photo_36_2025-04-15_17-06-09.jpg" width="150"/>
+  <img src="assets/screenshots/photo_36_2025-04-15_17-06-09.jpg" width="100"/>
 </p>
 
 <p align="center">
