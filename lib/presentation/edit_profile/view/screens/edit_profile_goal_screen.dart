@@ -4,7 +4,6 @@ import 'package:fitness_app/core/styles/images/app_images.dart';
 import 'package:fitness_app/core/utils/widget/custom_button.dart';
 import 'package:fitness_app/core/utils/widget/custom_radio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -120,10 +119,10 @@ class _EditProfileGoalScreenState extends State<EditProfileGoalScreen> {
         backgroundImage: AppImages.authBackground,
         enableBlur: true,
         blurStrength: 5.0,
-        blurHeight: 385.0.h,
+        blurHeight: 400.0.h,
         blurWidth: 370.0.w,
         borderRadius: 50.0.r,
-        blurStartPosition: MediaQuery.of(context).size.height * 0.38,
+        blurStartPosition: MediaQuery.of(context).size.height * 0.33,
         child: isLoading
             ? Center(child: CircularProgressIndicator(color: AppColors.kOrange))
             : SingleChildScrollView(

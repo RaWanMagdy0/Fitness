@@ -1,12 +1,15 @@
+
 import 'package:fitness_app/presentation/online_coach/widget/object_box.dart';
 import 'package:fitness_app/presentation/profile/view_model/profile_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:provider/provider.dart';
 import 'check_internet.dart';
 import 'core/di/di.dart';
+import 'core/local/secure_storage.dart';
 import 'core/local/sign_up_provider.dart';
 import 'core/routes/app_routes.dart';
 import 'core/routes/page_route_name.dart';
@@ -18,6 +21,9 @@ import 'generated/l10n.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+
   configureDependencies();
   Bloc.observer = AppBlocObserver();
   LocalProvider localProvider = LocalProvider();
@@ -25,7 +31,10 @@ void main() async {
   await localProvider.loadSavedLanguage();
   await signupProvider.loadUserData();
   final objectBox = await ObjectBox.create();
+  final stayLoggedIn = await SecureStorageFactory.readData(key: 'stay_logged_in') ?? 'false';
+  final initialRoute = stayLoggedIn == 'true' ? PageRouteName.layoutScreen : PageRouteName.onBoarding;
 
+  FlutterNativeSplash.remove();
   runApp(
     MultiProvider(
       providers: [
@@ -34,13 +43,15 @@ void main() async {
         BlocProvider(create: (context) => getIt<ProfileCubit>()),
         Provider<ObjectBox>.value(value: objectBox),
       ],
-      child: const MyApp(),
+      child: MyApp(initialRoute: initialRoute),
     ),
   );
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+  final String initialRoute;
+
+  const MyApp({super.key, required this.initialRoute, });
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -70,7 +81,6 @@ class _MyAppState extends State<MyApp> {
               return const Center(child: CircularProgressIndicator());
             }
             final bool initialConnection = snapshot.data ?? false;
-
             return StreamBuilder<InternetStatus>(
               stream: InternetConnection().onStatusChange,
               initialData: initialConnection
@@ -95,7 +105,7 @@ class _MyAppState extends State<MyApp> {
                         supportedLocales: S.delegate.supportedLocales,
                         debugShowCheckedModeBanner: false,
                         theme: AppTheme.appTheme,
-                        initialRoute: PageRouteName.onBoarding,
+                        initialRoute: widget.initialRoute,
                         onGenerateRoute: AppRoutes.onGenerateRoute,
                       ),
                       if (!isConnected)

@@ -17,16 +17,15 @@ class NoInternetScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Lottie.asset(
-                AppImages.errorAnim,
-              ),
+              30.verticalSpace,
+              Lottie.asset(AppImages.errorAnim,),
               Text(
                 "No Internet Connection",
-                style: TextStyle(fontSize: 20.sp,color: AppColors.kOrange),
+                style: TextStyle(fontSize: 20.sp, color: AppColors.kOrange),
               ),
               SizedBox(height: 10),
               Text(
-                "Please check your network and try again.",
+                "Please check your network and try again",
                 style: TextStyle(fontSize: 16.sp, color: Colors.grey),
                 textAlign: TextAlign.center,
               ),

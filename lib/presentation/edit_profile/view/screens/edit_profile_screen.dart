@@ -213,12 +213,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           AppDialogs.showHideDialog(context);
           AppDialogs.showSuccessDialog(
             context: context,
-            message: state.message,
+            message: "Edit Profile Successfully",
             whenAnimationFinished: () {
               _clearSavedData();
               final profileCubit = context.read<ProfileCubit>();
               profileCubit.getUserData();
-              Navigator.pop(context);
+              Navigator.pop(context,true);
             },
           );
         } else if (state is EditProfileError) {
@@ -258,7 +258,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               ),
                             ],
                           ),
-                          SizedBox(height: 30.h),
+                          SizedBox(height: 15.h),
                           Center(
                             child: Column(
                               children: [
@@ -273,7 +273,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               ],
                             ),
                           ),
-                          SizedBox(height: 30.h),
+                          SizedBox(height: 15.h),
                           Form(
                             key: _formKey,
                             child: Column(
@@ -301,7 +301,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                   backgroundColor:
                                       Colors.white.withOpacity(0.1),
                                 ),
-                                SizedBox(height: 50.h),
+                                SizedBox(height: 30.h),
                                 CustomProfileField(
                                   title: 'Your Weight',
                                   value: _weight,
@@ -318,7 +318,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                     });
                                   },
                                 ),
-                                SizedBox(height: 8.h),
+                                SizedBox(height: 5.h),
                                 CustomProfileField(
                                   title: 'Your Goal',
                                   value: _goal,
@@ -333,7 +333,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                     });
                                   },
                                 ),
-                                SizedBox(height: 8.h),
+                                SizedBox(height: 5.h),
                                 CustomProfileField(
                                   title: 'Your activity level',
                                   value: _activityLevel,
@@ -350,7 +350,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                     });
                                   },
                                 ),
-                                SizedBox(height: 32.h),
                                 CustomButton(
                                   onPressed: () {
                                     if (_formKey.currentState!.validate()) {
@@ -486,57 +485,5 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         ],
       ),
     );
-  }
-
-  Future<void> _pickAndUploadImage() async {
-    try {
-      final pickedFile = await _picker.pickImage(
-        source: ImageSource.gallery,
-        imageQuality: 80,
-      );
-      if (pickedFile != null) {
-        final fileExtension = pickedFile.path.split('.').last.toLowerCase();
-        if (fileExtension != 'jpg' &&
-            fileExtension != 'jpeg' &&
-            fileExtension != 'png' &&
-            fileExtension != 'webp') {
-          AppDialogs.showErrorDialog(
-            context: context,
-            errorMassage: 'Only JPG, JPEG,webp, and PNG images are allowed.',
-          );
-          return;
-        }
-        final compressedImage = await _compressImage(File(pickedFile.path));
-        setState(() {
-          _selectedImage = compressedImage;
-        });
-        await editProfileCubit.uploadPhoto(compressedImage);
-        if (mounted) {
-          Navigator.pop(context);
-        }
-      }
-    } catch (e) {
-      if (mounted) {
-        AppDialogs.showErrorDialog(
-          context: context,
-          errorMassage: e is DioException
-              ? e.response?.data['error'] ?? 'Upload failed'
-              : 'Image processing failed',
-        );
-      }
-    }
-  }
-
-  Future<File> _compressImage(File image) async {
-    final result = await FlutterImageCompress.compressAndGetFile(
-      image.absolute.path,
-      '${(await getTemporaryDirectory()).path}/compressed_image.jpg',
-      quality: 85,
-      minWidth: 1024,
-      minHeight: 1024,
-    );
-
-    if (result == null) throw Exception('Image compression failed');
-    return File(result.path);
   }
 }

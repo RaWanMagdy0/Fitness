@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
@@ -44,7 +43,7 @@ class _CustomProfilePicState extends State<CustomProfilePic> {
               case UploadPhotoLoadingState():
                 AppDialogs.showLoading(context: context);
               case UploadPhotoSuccessState():
-                Navigator.pop(context);
+               // context.read<ProfileCubit>().getUserData();
                 AppDialogs.showSuccessDialog(
                   context: context,
                   message: "Photo uploaded successfully",

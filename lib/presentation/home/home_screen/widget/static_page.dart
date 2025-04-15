@@ -17,38 +17,39 @@ class StaticPage extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          SizedBox(height: 150),
           Image.asset(
             iconPath,
             width: 200.w,
-            height: 200.h,
+            height: 300.h,
             fit: BoxFit.contain,
           ),
           SizedBox(height: 20),
           Text(
-            'Exciting Features Coming Soon!',
+            'Exciting features are coming soon!',
             style: TextStyle(
               color: Colors.white,
-              fontSize: 24,
+              fontSize: 22,
               fontWeight: FontWeight.bold,
             ),
             textAlign: TextAlign.center,
           ),
           SizedBox(height: 10),
           Text(
-            'Stay tuned for updates and new experiences.',
+            'While you wait, you can use Gemini AI to help you out',
             style: TextStyle(
               color: Colors.white70,
               fontSize: 16,
             ),
             textAlign: TextAlign.center,
           ),
-          SizedBox(height: 30),
+          SizedBox(height: 20),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.kOrange,
-              padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+              padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30),
+                borderRadius: BorderRadius.circular(30.r),
               ),
             ),
             onPressed: () {

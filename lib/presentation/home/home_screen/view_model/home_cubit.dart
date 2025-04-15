@@ -18,6 +18,7 @@ class HomeCubit extends BaseViewModel<HomeState> {
   final MuscleGroupByIdUseCase muscleGroupByIdUseCase;
   final ExerciseUseCase exerciseUseCase;
 
+  bool _isLoadingSequence = false;
 
   HomeCubit(
       this._getMuscleGroupsUseCase,
@@ -133,5 +134,7 @@ class HomeCubit extends BaseViewModel<HomeState> {
             errorMessage: getErrorMassageFromException(result.exception)));
     }
   }
+
+
 
 }

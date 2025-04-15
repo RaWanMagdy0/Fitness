@@ -1,4 +1,3 @@
-import 'package:fitness_app/core/di/di.dart';
 import 'package:fitness_app/core/routes/page_route_name.dart';
 import 'package:fitness_app/core/styles/fonts/app_fonts.dart';
 import 'package:fitness_app/core/styles/images/app_images.dart';
@@ -9,12 +8,46 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../core/styles/colors/app_colors.dart';
 import '../../../core/utils/widget/custom_arrow.dart';
+import '../../../core/utils/widget/shimmer_loading_widget.dart';
 import '../../profile/view_model/profile_cubit.dart';
-import '../../profile/view_model/profile_state.dart';
 import '../widget/object_box.dart';
 
-class RobotScreen extends StatelessWidget {
+class RobotScreen extends StatefulWidget {
   const RobotScreen({super.key});
+
+  @override
+  State<RobotScreen> createState() => _RobotScreenState();
+}
+
+class _RobotScreenState extends State<RobotScreen> {
+  late Future<void> _loadDataFuture;
+  bool _isDataLoaded = false;
+
+  @override
+  void initState() {
+    super.initState();
+    // نتحقق فقط من تحميل البيانات لأول مرة
+    if (!_isDataLoaded) {
+      _loadDataFuture = _loadData();
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // إذا كانت البيانات لم يتم تحميلها بعد، قم بتحميلها من هنا
+    if (!_isDataLoaded) {
+      _loadDataFuture = _loadData();
+    }
+  }
+
+  Future<void> _loadData() async {
+    final cubit = context.read<ProfileCubit>();
+    await cubit.getUserData();
+    setState(() {
+      _isDataLoaded = true; // تعيين المتغير بعد تحميل البيانات
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,10 +56,10 @@ class RobotScreen extends StatelessWidget {
       overlayOpacity: 0.1,
       enableBlur: true,
       blurStrength: 6.0,
-      blurHeight: 170.0.h,
+      blurHeight: 140.0.h,
       blurWidth: 350.0.w,
       borderRadius: 30.0.r,
-      blurStartPosition: MediaQuery.of(context).size.height * 0.65,
+      blurStartPosition: MediaQuery.of(context).size.height * 0.62,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -37,27 +70,30 @@ class RobotScreen extends StatelessWidget {
                 CustomArrow(),
                 Column(
                   children: [
-                    BlocBuilder<ProfileCubit, ProfileState>(
-                      builder: (context, state) {
-                        final cubit = context.watch<ProfileCubit>();
-                        if (state is ProfileInitialState) {
-                          cubit.getUserData();
+                    FutureBuilder(
+                      future: _loadDataFuture,
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return _buildShimmerTabs(); // عرض شيمر أثناء التحميل
+                        } else if (snapshot.hasError) {
+                          return Text("Error: ${snapshot.error}", style: AppFonts.font16WhiteWeight500);
+                        } else if (snapshot.connectionState == ConnectionState.done) {
+                          final cubit = context.watch<ProfileCubit>();
+                          final userName = cubit.userName;
+                          return Row(
+                            children: [
+                              Text("Hi", style: AppFonts.font16WhiteWeight500),
+                              2.horizontalSpace,
+                              Text(userName ?? "Rowan", style: AppFonts.font16WhiteWeight500),
+                              Text(",", style: AppFonts.font16WhiteWeight500),
+                            ],
+                          );
+                        } else {
+                          return Text("Unexpected state", style: AppFonts.font16WhiteWeight500);
                         }
-                        final userName = cubit.userName;
-                        return Row(
-                          children: [
-                            Text("Hi", style: AppFonts.font16WhiteWeight500),
-                            2.horizontalSpace,
-                            Text(userName ?? "Rowan",
-                                style: AppFonts.font16WhiteWeight500),
-                            Text(",", style: AppFonts.font16WhiteWeight500),
-                          ],
-                        );
                       },
                     ),
-                    Text("I Am Your Smart Coach",
-                        style: AppFonts.font16WhiteWeight500
-                            .copyWith(fontSize: 18.sp)),
+                    Text("I Am Your Smart Coach", style: AppFonts.font16WhiteWeight500.copyWith(fontSize: 18.sp)),
                   ],
                 ),
                 GestureDetector(
@@ -80,14 +116,25 @@ class RobotScreen extends StatelessWidget {
             CustomButton(
               width: 300.w,
               onPressed: () {
-                Navigator.pushReplacementNamed(
-                    context, PageRouteName.chatScreen);
+                Navigator.pushReplacementNamed(context, PageRouteName.chatScreen);
               },
               text: "Get Started",
               textStyle: AppFonts.font14WhiteWeight800,
-            )
+            ),
+            20.verticalSpace,
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildShimmerTabs() {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 5.0),
+      child: ShimmerLoadingWidget(
+        width: 80.w,
+        height: 25.h,
+        borderRadius: 25.r,
       ),
     );
   }
@@ -124,12 +171,10 @@ class RobotScreen extends StatelessWidget {
                   Expanded(
                     child: ListView.separated(
                       itemCount: previousConversations.length,
-                      separatorBuilder: (context, index) =>
-                          Divider(color: Colors.white24, thickness: 1),
+                      separatorBuilder: (context, index) => Divider(color: Colors.white24, thickness: 1),
                       itemBuilder: (context, index) {
                         return ListTile(
-                            leading: Icon(Icons.arrow_back_ios,
-                                color: AppColors.kOrange),
+                            leading: Icon(Icons.arrow_back_ios, color: AppColors.kOrange),
                             title: Text(
                               previousConversations[index],
                               style: TextStyle(color: Colors.white),

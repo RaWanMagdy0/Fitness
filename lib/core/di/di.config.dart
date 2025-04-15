@@ -56,7 +56,12 @@ import '../../domain/repository/workout_repository/workout_repository.dart'
 import '../../domain/use_case/auth/edit_profile_use_case.dart' as _i606;
 import '../../domain/use_case/auth/logout_use_case.dart' as _i755;
 import '../../domain/use_case/auth/sign_up_use_case.dart' as _i322;
+import '../../domain/use_case/home/exercise_by_muscle_and_level_use_case.dart'
+    as _i592;
 import '../../domain/use_case/home/exercise_use_case.dart' as _i168;
+import '../../domain/use_case/home/get_all_levels_by_muscle_id_use_case.dart'
+    as _i362;
+import '../../domain/use_case/home/get_all_levels_use_case.dart' as _i288;
 import '../../domain/use_case/home/muscle_group_by_id.dart' as _i603;
 import '../../domain/use_case/home/random_muscle_use_case.dart' as _i888;
 import '../../domain/use_case/meal/meal_details_use_case.dart' as _i893;
@@ -127,26 +132,37 @@ extension GetItInjectableX on _i174.GetIt {
         workoutRemoteDataSource: gh<_i1064.WorkoutRemoteDataSource>()));
     gh.factory<_i753.HomeRemoteDataSource>(
         () => _i1016.HomeRemoteDataSourceImpl(gh<_i968.HomeApiManager>()));
-    gh.factory<_i249.AuthRemoteDataSource>(() =>
-        _i1001.AuthRemoteDataSourceImpl(
-            authApiManager: gh<_i515.AuthApiManager>()));
     gh.factory<_i1034.MealRemoteDataSource>(() =>
         _i222.MealRemoteDataSourceImpl(
             mealApiManager: gh<_i1065.MealApiManager>()));
     gh.factory<_i265.ProfileRepository>(() => _i677.ProfileRepositoryImpl(
         profileRemoteDataSource: gh<_i2.ProfileRemoteDataSource>()));
+    gh.factory<_i249.AuthRemoteDataSource>(
+        () => _i1001.AuthRemoteDataSourceImpl(gh<_i515.AuthApiManager>()));
     gh.factory<_i97.HomeRepository>(
         () => _i117.HomeRepositoryImpl(gh<_i753.HomeRemoteDataSource>()));
     gh.factory<_i721.GeminiCubit>(
         () => _i721.GeminiCubit(gh<_i265.ProfileRepository>()));
     gh.factory<_i971.ChangePasswordViewModel>(
         () => _i971.ChangePasswordViewModel(gh<_i265.ProfileRepository>()));
+    gh.factory<_i592.ExerciseByMuscleAndLevelUseCase>(
+        () => _i592.ExerciseByMuscleAndLevelUseCase(gh<_i97.HomeRepository>()));
     gh.factory<_i168.ExerciseUseCase>(
         () => _i168.ExerciseUseCase(gh<_i97.HomeRepository>()));
+    gh.factory<_i362.GetAllLevelsByMuscleIdUseCase>(
+        () => _i362.GetAllLevelsByMuscleIdUseCase(gh<_i97.HomeRepository>()));
+    gh.factory<_i288.GetAllLevelsUseCase>(
+        () => _i288.GetAllLevelsUseCase(gh<_i97.HomeRepository>()));
     gh.factory<_i603.MuscleGroupByIdUseCase>(
         () => _i603.MuscleGroupByIdUseCase(gh<_i97.HomeRepository>()));
     gh.factory<_i888.RandomMuscleUseCase>(
         () => _i888.RandomMuscleUseCase(gh<_i97.HomeRepository>()));
+    gh.factory<_i810.ExerciseViewModel>(() => _i810.ExerciseViewModel(
+          gh<_i168.ExerciseUseCase>(),
+          gh<_i288.GetAllLevelsUseCase>(),
+          gh<_i362.GetAllLevelsByMuscleIdUseCase>(),
+          gh<_i592.ExerciseByMuscleAndLevelUseCase>(),
+        ));
     gh.factory<_i679.ProfileUseCase>(
         () => _i679.ProfileUseCase(gh<_i265.ProfileRepository>()));
     gh.factory<_i659.UploadPhotoUseCase>(
@@ -161,8 +177,6 @@ extension GetItInjectableX on _i174.GetIt {
         authRemoteDataSource: gh<_i249.AuthRemoteDataSource>()));
     gh.factory<_i893.MealDetailsUseCase>(
         () => _i893.MealDetailsUseCase(gh<_i453.MealRepository>()));
-    gh.factory<_i810.ExerciseViewModel>(
-        () => _i810.ExerciseViewModel(gh<_i168.ExerciseUseCase>()));
     gh.factory<_i954.MealsTabsUseCase>(
         () => _i954.MealsTabsUseCase(gh<_i453.MealRepository>()));
     gh.factory<_i731.MealsUseCase>(

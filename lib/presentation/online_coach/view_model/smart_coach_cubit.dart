@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:math';
 import 'package:fitness_app/presentation/online_coach/view_model/smart_coach_state.dart';
-import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;

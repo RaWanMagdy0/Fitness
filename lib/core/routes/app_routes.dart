@@ -1,6 +1,7 @@
 import 'package:fitness_app/core/routes/page_route_name.dart';
 import 'package:fitness_app/presentation/auth/sign_up/view/activity/activity_screen.dart';
 import 'package:fitness_app/presentation/edit_profile/view/screens/edit_profile_activity_screen.dart';
+import 'package:fitness_app/presentation/edit_profile/view/screens/edit_profile_screen.dart';
 import 'package:fitness_app/presentation/home/home_screen/view_model/home_cubit.dart';
 import 'package:fitness_app/presentation/home/workout/view/workout_screen.dart';
 import 'package:fitness_app/presentation/home/workout/view_model/workout_cubit.dart';
@@ -21,8 +22,6 @@ import '../../presentation/auth/sign_up/view/main_sign_up_screen.dart';
 import '../../presentation/auth/sign_up/view/weight_screen.dart';
 import '../../presentation/auth/sign_up/view_model/sign_up_cubit.dart';
 import '../../presentation/edit_profile/view/screens/edit_profile_goal_screen.dart';
-import '../../presentation/edit_profile/view/screens/edit_profile_screen.dart'
-    show EditProfileScreen;
 import '../../presentation/edit_profile/view/screens/edit_profile_weight_screen.dart';
 import '../../presentation/home/exercise_screen/view/exercise_screen.dart';
 import '../../presentation/home/exercise_screen/view_model/exercise_view_model.dart';
@@ -54,8 +53,7 @@ import '../di/di.dart';
 class AppRoutes {
   static Route<dynamic> onGenerateRoute(RouteSettings setting) {
     switch (setting.name) {
-      case PageRouteName.splashscreen:
-        return _handleMaterialPageRoute(widget: SplashScreen());
+
       case PageRouteName.login:
         return MaterialPageRoute(
           builder: (context) => BlocProvider(
@@ -190,10 +188,13 @@ class AppRoutes {
       case PageRouteName.exerciseScreen:
         return MaterialPageRoute(
           settings: setting,
-          builder: (context) => BlocProvider(
-            create: (context) => getIt<ExerciseViewModel>(),
-            child: ExerciseScreen(),
-          ),
+          builder: (context) {
+            final viewModel = getIt<ExerciseViewModel>();
+            return BlocProvider.value(
+              value: viewModel,
+              child: ExerciseScreen(),
+            );
+          },
         );
 
       case PageRouteName.workoutScreen:
@@ -256,6 +257,8 @@ class AppRoutes {
         );
       case PageRouteName.mealsScreen:
         return _handleMaterialPageRoute(widget: MealsScreen());
+      case PageRouteName.splashscreen:
+        return _handleMaterialPageRoute(widget: SplashScreen());
       default:
         return _handleMaterialPageRoute(
           widget: const Scaffold(

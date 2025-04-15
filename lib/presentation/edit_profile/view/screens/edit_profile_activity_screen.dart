@@ -109,7 +109,7 @@ class _EditProfileActivityScreenState extends State<EditProfileActivityScreen> {
         blurHeight: 385.0,
         blurWidth: 370.0.w,
         borderRadius: 50.0,
-        blurStartPosition: MediaQuery.of(context).size.height * 0.38,
+        blurStartPosition: MediaQuery.of(context).size.height * 0.33,
         child: _isLoading
             ? Center(child: CircularProgressIndicator(color: AppColors.kOrange))
             : _buildContent(context, local),
@@ -222,6 +222,7 @@ class _EditProfileActivityScreenState extends State<EditProfileActivityScreen> {
               );
             },
           ),
+          20.verticalSpace
         ],
       ),
     );

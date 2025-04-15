@@ -1,5 +1,10 @@
+import 'dart:developer';
+
+import 'package:fitness_app/core/routes/page_route_name.dart';
+import 'package:fitness_app/core/styles/images/app_images.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../core/local/secure_storage.dart';
+import '../../core/local/token_manger.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -8,50 +13,39 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _animation;
-
+class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
-      duration: const Duration(seconds: 2),
-      vsync: this,
-    );
-    _animation = Tween<double>(begin: 0.0, end: 1.0).animate(_controller);
-    _controller.forward();
-    _navigateToHome();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _checkLoginStatus();
+    });
   }
 
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
+  Future<void> _checkLoginStatus() async {
+    final stayLoggedIn =
+        await SecureStorageFactory.readData(key: 'stay_logged_in') ?? 'false';
+    log(stayLoggedIn, name: 'SplashScreen stayLoggedIn');
 
-  _navigateToHome() async {
-    await Future.delayed(const Duration(seconds: 3));
-    if (!mounted) return;
-    // Navigate to your home screen here
+    String route = PageRouteName.login;
+    if (stayLoggedIn == 'true') {
+      route = PageRouteName.layoutScreen;
+    } else {
+      TokenManager.deleteToken();
+    }
+
+    Navigator.of(context).pushReplacementNamed(route);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF1E1E1E),
-      body: Center(
-        child: FadeTransition(
-          opacity: _animation,
-          child: Image.asset(
-            'assets/images/new_splash_fit.png',
-            width: 200.w,
-            height: 200.w,
-            fit: BoxFit.contain,
-          ),
-        ),
-      ),
-    );
+        body: Column(
+      children: [
+        Image.asset(
+          AppImages.splash2,
+        )
+      ],
+    ));
   }
 }

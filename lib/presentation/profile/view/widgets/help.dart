@@ -30,45 +30,38 @@ class HelpAndSecurityScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        title: Text(
-          'Help',
-          style: TextStyle(
-            fontSize: 18.sp,
-            fontWeight: FontWeight.w600,
-            color: Colors.white,
-          ),
-        ),
-        centerTitle: true,
-      ),
       backgroundColor: Colors.black,
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.all(16.w),
-          child: Html(
-            data: _content,
-            style: {
-              "body": Style(
-                fontSize: FontSize(14.sp),
-                fontFamily: 'Roboto',
-                color: Colors.white,
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              80.verticalSpace,
+              Html(
+                data: _content,
+                style: {
+                  "body": Style(
+                    fontSize: FontSize(14.sp),
+                    fontFamily: 'Roboto',
+                    color: Colors.white,
+                  ),
+                  "h1": Style(
+                    fontSize: FontSize(24.sp),
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFFFF7300),
+                  ),
+                  "h2": Style(
+                    fontSize: FontSize(18.sp),
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xFFFF7300),
+                  ),
+                  "p": Style(
+                    fontSize: FontSize(14.sp),
+                    lineHeight: LineHeight(1.6),
+                  ),
+                },
               ),
-              "h1": Style(
-                fontSize: FontSize(24.sp),
-                fontWeight: FontWeight.bold,
-                color: Color(0xFFFF7300),
-              ),
-              "h2": Style(
-                fontSize: FontSize(18.sp),
-                fontWeight: FontWeight.w600,
-                color: Color(0xFFFF7300),
-              ),
-              "p": Style(
-                fontSize: FontSize(14.sp),
-                lineHeight: LineHeight(1.6),
-              ),
-            },
+            ],
           ),
         ),
       ),

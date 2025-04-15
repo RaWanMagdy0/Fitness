@@ -21,7 +21,7 @@ abstract class AuthRepository {
       ForgotPasswordRequestModel requestModel);
   Future<Result<String?>> verifyResetCode(VerifyCodeRequestModel requestModel);
   Future<Result<String?>> resetPassword(ResetPasswordRequestModel requestModel);
-  Future<Result<EditProfileResponseModel>> editProfile(
+  Future<Result<String?>> editProfile(
       EditProfileRequestModel requestModel);
   Future<Result<String?>> logout();
 }

@@ -10,7 +10,7 @@ class EditProfileUseCase {
 
   EditProfileUseCase(this._authRepository);
 
-  Future<Result<EditProfileResponseModel>> invoke(EditProfileRequestModel requestModel) {
+  Future<Result<String?>> invoke(EditProfileRequestModel requestModel) {
     return _authRepository.editProfile(requestModel);
   }
 }

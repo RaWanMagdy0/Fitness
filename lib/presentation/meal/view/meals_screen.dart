@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
-
 import '../../../core/styles/images/app_images.dart';
-import '../../../core/utils/widget/custom scaffold.dart';
 import '../../../core/utils/widget/shimmer_loading_widget.dart';
 import '../view_model/meal_details_cubit.dart';
 import '../view_model/meal_state.dart';
@@ -105,10 +103,20 @@ class _MealsScreenState extends State<MealsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScaffold(
-      backgroundImage: AppImages.homeBackG,
-      overlayOpacity: 0.1,
-      child: SafeArea(
+    return Scaffold(
+        body: Stack(children: [
+      Positioned.fill(
+        child: Image.asset(
+          AppImages.backgroundRobot,
+          fit: BoxFit.cover,
+        ),
+      ),
+      Positioned.fill(
+        child: Container(
+          color: Colors.black.withOpacity(0.5),
+        ),
+      ),
+      SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.w),
           child: Column(
@@ -265,6 +273,6 @@ class _MealsScreenState extends State<MealsScreen> {
           ),
         ),
       ),
-    );
+    ]));
   }
 }

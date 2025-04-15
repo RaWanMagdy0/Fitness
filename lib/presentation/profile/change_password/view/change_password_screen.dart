@@ -42,10 +42,10 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       backgroundImage: AppImages.backgroundRobot,
       enableBlur: true,
       blurStrength: 5.0,
-      blurHeight: 370.0,
+      blurHeight: 310.0,
       blurWidth: 350.0,
       borderRadius: 30.0,
-      blurStartPosition: MediaQuery.of(context).size.height * 0.3,
+      blurStartPosition: MediaQuery.of(context).size.height * 0.33,
       child: BlocConsumer<ChangePasswordViewModel, ChangePasswordState>(
         listener: (context, state) {
           if (state is ChangePasswordSuccess) {
@@ -94,7 +94,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     "Change Password",
                     style: AppFonts.font24WhiteWeight600,
                   )),
-                  SizedBox(height: 30.h),
+                  SizedBox(height: 40.h),
                   CustomTextFormField(
                     backgroundColor: Colors.white.withOpacity(0.1),
                     controller: _currentPasswordController,
@@ -151,6 +151,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                             }
                           },
                   ),
+                  SizedBox(height: 32.h),
+
                 ],
               ),
             ),

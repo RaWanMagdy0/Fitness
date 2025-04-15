@@ -42,7 +42,7 @@ Widget buildWidget(BuildContext context, String imagePath, String title) {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => StaticPage(iconPath: imagePath),
+          builder: (context) => StaticPage(iconPath: AppImages.icon1png),
         ),
       );
     },

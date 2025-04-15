@@ -60,10 +60,10 @@ class _SignUpPageState extends State<SignUpPage> {
       backgroundImage: AppImages.authBackground,
       enableBlur: true,
       blurStrength: 5.0,
-      blurHeight: 480.0,
+      blurHeight: 500.0,
       blurWidth: 370.0.w,
       borderRadius: 50.0,
-      blurStartPosition: MediaQuery.of(context).size.height * 0.32,
+      blurStartPosition: MediaQuery.of(context).size.height * 0.26,
       child: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(8.0),

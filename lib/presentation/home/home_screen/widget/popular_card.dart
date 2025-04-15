@@ -6,8 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../../core/di/di.dart';
-import '../../../../core/routes/page_route_name.dart';
-import '../../../../core/styles/images/app_images.dart';
 import '../../../../core/utils/widget/custom_cached_network_image.dart';
 import '../../../../core/utils/widget/shimmer_loading_widget.dart';
 import '../view_model/home_cubit.dart';
@@ -47,26 +45,28 @@ class _PopularCardState extends State<PopularCard> {
               ),
             );
           } else if (state is HomeExerciseSuccessState) {
+            // تصفية التمارين التي تحتوي على رابط فارغ أو null
+            final exercises = state.exercise?.where((exercise) {
+              // تجاهل التمارين التي تحتوي على رابط فارغ أو null
+              return exercise?.inDepthYoutubeExplanationLink?.isNotEmpty ?? false;
+            }).toList();
+
             return SizedBox(
               height: 160.h,
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
-                itemCount:
-                    state.exercise!.isNotEmpty ? state.exercise!.length : 4,
+                itemCount: exercises?.length ?? 0,
                 itemBuilder: (context, index) {
-                  if (state.exercise!.isNotEmpty) {
-                    final exercise = state.exercise![index];
-                    String? thumbnailUrl = getYoutubeThumbnail(
-                        exercise?.shortYoutubeDemonstrationLink);
+                  final exercise = exercises![index];
+                  String? thumbnailUrl = getYoutubeThumbnail(
+                      exercise?.shortYoutubeDemonstrationLink);
 
-                    return buildCardWidget(context, exercise?.exercise ?? "",
-                        thumbnailUrl!, exercise?.difficultyLevel ?? '',exercise?.inDepthYoutubeExplanationLink??"",exercise?.bodyRegion??"",exercise?.primaryEquipment??"");
-                  }
                   return buildCardWidget(
                       context,
-                      "Exercises That Strengthen Your Chest",
-                      AppImages.runningImage,
-                      "Beginner","","","");
+                      exercise?.exercise ?? "",
+                      thumbnailUrl ?? "",
+                      exercise?.difficultyLevel ?? "",
+                      exercise?.inDepthYoutubeExplanationLink ?? "");
                 },
                 separatorBuilder: (BuildContext context, int index) {
                   return SizedBox(width: 15.w);
@@ -88,7 +88,7 @@ class _PopularCardState extends State<PopularCard> {
           return Padding(
             padding: EdgeInsets.symmetric(horizontal: 5.0),
             child: ShimmerLoadingWidget(
-              width: 180.w,
+              width: 250.w,
               height: 150.h,
               borderRadius: 20.r,
             ),
@@ -98,31 +98,11 @@ class _PopularCardState extends State<PopularCard> {
     );
   }
 
-  String? getYoutubeThumbnail(String? url) {
-    if (url == null) return null;
-    String? videoId;
-    if (url.contains("youtube.com/watch?v=")) {
-      videoId = Uri.parse(url).queryParameters['v'];
-    } else if (url.contains("youtu.be/")) {
-      videoId = url.split("youtu.be/")[1].split("?")[0];
-    } else if (url.contains("youtube.com/embed/")) {
-      videoId = url.split("embed/")[1].split("?")[0];
-    }
-    if (videoId == null || videoId.isEmpty) return null;
-    return 'https://img.youtube.com/vi/$videoId/0.jpg';
-  }
-}
-
-Widget buildCardWidget(
-    BuildContext context, String title, String imagePath, String level,String url,String bodyRegion,String primaryEquipment) {
-  return InkWell(
-    onTap: () {
-      Navigator.pushNamed(context, PageRouteName.exerciseScreen,
-          arguments: {"title": title, "imagePath": imagePath, "level": level,"url":url,"bodyRegion":bodyRegion,"primaryEquipment":primaryEquipment});
-    },
-    child: Container(
-      width: 180.w,
-      height: 150.h,
+  Widget buildCardWidget(BuildContext context, String title, String imagePath,
+      String level, String inDepthYoutubeExplanationLink) {
+    return Container(
+      width: 250.w,
+      height: 400.h,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
       ),
@@ -133,16 +113,16 @@ Widget buildCardWidget(
             borderRadius: BorderRadius.circular(20.r),
             child: CustomCachedNetworkImage(
               imageUrl: imagePath,
-              width: 180.w,
-              height: 150.h,
+              height: 400.h,
+              width: 400.w,
               shimmerRadiusValue: 0,
-              fit: BoxFit.fitHeight,
-              shimmerHeight: 150.h,
-              shimmerWidth: 180.w,
+              fit: BoxFit.cover,
+              shimmerHeight: 360.h,
+              shimmerWidth: 400.w,
             ),
           ),
           Container(
-            width: double.infinity,
+            width:double.infinity,
             padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 10.w),
             decoration: BoxDecoration(
               color: Colors.black.withOpacity(0.6),
@@ -167,9 +147,36 @@ Widget buildCardWidget(
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    _buildTag("10 Tasks", isOrange: true),
-                    _buildTag(
-                      level,
+                    Container(
+                      padding:
+                      EdgeInsets.symmetric(vertical: 4.h, horizontal: 8.w),
+                      decoration: BoxDecoration(
+                        color: AppColors.kMainColor.withOpacity(0.9),
+                        borderRadius: BorderRadius.circular(20.r),
+                      ),
+                      child: Text(
+                        level,
+                        style: AppFonts.font12OrangeWeight400.copyWith(
+                          color: AppColors.kOrange,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () => _launchURL(inDepthYoutubeExplanationLink),
+                      borderRadius: BorderRadius.circular(25),
+                      child: Container(
+                        height: 35,
+                        width: 35,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(25),
+                          color: AppColors.kOrange,
+                        ),
+                        child: const Center(
+                          child: Icon(Icons.play_arrow,
+                              color: Colors.black, size: 30),
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -178,24 +185,43 @@ Widget buildCardWidget(
           ),
         ],
       ),
-    ),
-  );
-}
+    );
+  }
 
+  void _launchURL(String? url) async {
+    if (url == null || url.isEmpty) {
+      print("Error: URL is empty or null");
+      return;
+    }
 
-Widget _buildTag(String text, {bool isOrange = false}) {
-  return Container(
-    padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 8.w),
-    decoration: BoxDecoration(
-      color: AppColors.kMainColor.withOpacity(0.9),
-      borderRadius: BorderRadius.circular(20.r),
-    ),
-    child: Text(
-      text,
-      style: AppFonts.font12OrangeWeight400.copyWith(
-        color: isOrange ? AppColors.kWhite : AppColors.kOrange,
-        fontWeight: FontWeight.w500,
-      ),
-    ),
-  );
+    Uri uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } else {
+      print("Error: Cannot launch URL");
+    }
+  }
+
+  String? getYoutubeThumbnail(String? url) {
+    if (url == null || url.isEmpty) {
+      print("Error: YouTube URL is empty or null");
+      return null;
+    }
+
+    String? videoId;
+    if (url.contains("youtube.com/watch?v=")) {
+      videoId = Uri.parse(url).queryParameters['v'];
+    } else if (url.contains("youtu.be/")) {
+      videoId = url.split("youtu.be/")[1].split("?")[0];
+    } else if (url.contains("youtube.com/embed/")) {
+      videoId = url.split("embed/")[1].split("?")[0];
+    }
+
+    if (videoId == null || videoId.isEmpty) {
+      print("Error: Video ID extraction failed");
+      return null;
+    }
+
+    return 'https://img.youtube.com/vi/$videoId/0.jpg';
+  }
 }

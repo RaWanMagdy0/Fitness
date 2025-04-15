@@ -41,7 +41,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
       blurHeight: 230.0,
       blurWidth: 370.0.w,
       borderRadius: 50.0,
-      blurStartPosition: MediaQuery.of(context).size.height * 0.32,
+      blurStartPosition: MediaQuery.of(context).size.height * 0.27,
       backgroundImage: AppImages.authBackground,
       child: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: 24.w),
@@ -121,6 +121,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                       },
                       child: Text(local.done, style: AppFonts.font16WhiteWeight500),
                     ),
+                  20.verticalSpace
                 ],
               ),
             );

@@ -17,4 +17,7 @@ class ApiConstants {
   static const String randomMuscle = "api/v1/muscles/random";
   static const String changePassword = "api/v1/auth/change-password";
   static const String muscleGroupById = "api/v1/musclesGroup/by-muscle-group";
+  static const String levels = "api/v1/levels";
+  static const String levelByMuscle = "api/v1/levels/difficulty-levels/by-prime-mover";
+  static const String exerciseByMuscleAndDifficulty = "api/v1/exercises/by-muscle-difficulty";
 }

@@ -6,8 +6,6 @@ import 'package:retrofit/retrofit.dart';
 import '../../../core/api/api_const.dart';
 import '../../models/profile/change_password_request_model.dart';
 import '../../models/profile/profile_response_model.dart';
-import 'package:dio/dio.dart' hide DioMediaType;
-import 'package:dio/dio.dart';
 
 part 'profile_api_manager.g.dart';
 

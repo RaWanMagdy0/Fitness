@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../../../core/local/sign_up_provider.dart';
 import '../../../../core/routes/page_route_name.dart';
 import '../../../../core/styles/colors/app_colors.dart';
@@ -187,7 +185,9 @@ class _WeightScreenState extends State<WeightScreen> {
                             context, PageRouteName.heightScreen);
                       },
                       color: AppColors.kOrange,
-                    )
+                    ),
+                    30.verticalSpace,
+
                   ],
                 ),
               ),

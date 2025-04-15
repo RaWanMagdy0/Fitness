@@ -67,10 +67,11 @@ class _MainProfileScreenState extends State<MainProfileScreen> {
               backgroundImage: AppImages.splashBackG,
               enableBlur: true,
               blurStrength: 6.0,
-              blurHeight: 320.0.h,
+              blurHeight: 330.0.h,
               blurWidth: 350.0.w,
               borderRadius: 30.0,
-              overlayOpacity: 0.7,
+              overlayOpacity: 0.3,
+              blurStartPosition: MediaQuery.of(context).size.height * 0.35,
               color: Color(0xFF242424).withOpacity(0.6),
               child: SingleChildScrollView(
                 child: Column(
@@ -115,8 +116,16 @@ class _MainProfileScreenState extends State<MainProfileScreen> {
                         local.edit_profile,
                         style: AppFonts.font14WhiteWeight600,
                       ),
-                      onTap: () => Navigator.pushNamed(
-                          context, PageRouteName.editProfileScreen),
+                      onTap: () async {
+                        final result = await Navigator.pushNamed(
+                          context,
+                          PageRouteName.editProfileScreen,
+                        );
+
+                        if (result == true) {
+                          viewModel.getUserData();
+                        }
+                      },
                     ),
                     SizedBox(
                         width: 350.0.w,
@@ -124,8 +133,9 @@ class _MainProfileScreenState extends State<MainProfileScreen> {
                           color: AppColors.kGray,
                         )),
                     InkWell(
-                      onTap: (){
-                        Navigator.pushNamed(context, PageRouteName.changePassword);
+                      onTap: () {
+                        Navigator.pushNamed(
+                            context, PageRouteName.changePassword);
                       },
                       child: CustomProfileRow(
                           imagePath: AppImages.changeIcon,
@@ -167,9 +177,8 @@ class _MainProfileScreenState extends State<MainProfileScreen> {
                           color: AppColors.kGray,
                         )),
                     InkWell(
-                      onTap: (){
+                      onTap: () {
                         Navigator.pushNamed(context, PageRouteName.security);
-
                       },
                       child: CustomProfileRow(
                           imagePath: AppImages.securityIcon,
@@ -185,7 +194,8 @@ class _MainProfileScreenState extends State<MainProfileScreen> {
                         )),
                     InkWell(
                       onTap: () {
-                        Navigator.pushNamed(context, PageRouteName.privacyPolicyScreen);
+                        Navigator.pushNamed(
+                            context, PageRouteName.privacyPolicyScreen);
                       },
                       child: CustomProfileRow(
                           imagePath: AppImages.privacyIcon,
@@ -200,9 +210,8 @@ class _MainProfileScreenState extends State<MainProfileScreen> {
                           color: AppColors.kGray,
                         )),
                     InkWell(
-                      onTap: (){
+                      onTap: () {
                         Navigator.pushNamed(context, PageRouteName.help);
-
                       },
                       child: CustomProfileRow(
                           imagePath: AppImages.helpIcon,
@@ -233,6 +242,7 @@ class _MainProfileScreenState extends State<MainProfileScreen> {
                         child: Divider(
                           color: AppColors.kGray,
                         )),
+                    20.verticalSpace
                   ],
                 ),
               ),
@@ -272,8 +282,6 @@ class _MainProfileScreenState extends State<MainProfileScreen> {
                 ],
               ),
             ),
-
-            // Profile image and name shimmer
             Column(
               children: [
                 // Profile image shimmer

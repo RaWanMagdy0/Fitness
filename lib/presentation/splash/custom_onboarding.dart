@@ -35,27 +35,29 @@ class CustomOnboarding extends StatelessWidget {
       backgroundImage: AppImages.authBackground,
       enableBlur: true,
       blurStrength: 5.0,
-      blurHeight: 350.0,
+      blurHeight: 510.0,
       blurWidth: 370.0,
       borderRadius: 50.0,
-      blurStartPosition: MediaQuery.of(context).size.height * 0.65,
+      blurStartPosition: MediaQuery.of(context).size.height * 0.63,
       child: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: 24.w),
         child: Column(
           children: [
-            50.verticalSpace,
+            30.verticalSpace,
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 if (showBack && onBack != null)
-
-                InkWell(
-                  onTap: () => Navigator.pushReplacementNamed(context, PageRouteName.login),
-                  child: Text("SKIP", style: AppFonts.font14GreyWeight400),
-                ),
+                  InkWell(
+                    onTap: () => Navigator.pushReplacementNamed(
+                        context, PageRouteName.login),
+                    child: Text("SKIP", style: AppFonts.font14GreyWeight400),
+                  ),
               ],
             ),
+            10.verticalSpace,
             Image.asset(iconPath),
+            15.verticalSpace,
             Text(
               mainText,
               style: AppFonts.font24WhiteWeight800,
@@ -95,7 +97,7 @@ class CustomOnboarding extends StatelessWidget {
                 ),
               ],
             ),
-            24.verticalSpace,
+            50.verticalSpace,
           ],
         ),
       ),

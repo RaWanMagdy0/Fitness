@@ -120,7 +120,7 @@ class _EditProfileWeightScreenState extends State<EditProfileWeightScreen> {
         blurHeight: 230.h,
         blurWidth: 430.w,
         borderRadius: 50.r,
-        blurStartPosition: MediaQuery.of(context).size.height * 0.36,
+        blurStartPosition: MediaQuery.of(context).size.height * 0.32,
         child: _isLoading
             ? Center(child: CircularProgressIndicator(color: AppColors.kOrange))
             : SingleChildScrollView(
@@ -223,7 +223,8 @@ class _EditProfileWeightScreenState extends State<EditProfileWeightScreen> {
                   Navigator.pop(context);
                 },
                 color: AppColors.kOrange,
-              )
+              ),
+              30.verticalSpace,
             ],
           ),
         ),

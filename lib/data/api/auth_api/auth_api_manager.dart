@@ -62,6 +62,7 @@ abstract class AuthApiManager {
 
   @PUT(ApiConstants.editProfile)
   Future<EditProfileResponseModel> editProfile(
+    @Header("Authorization") String token,
     @Body() EditProfileRequestModel requestModel,
   );
 

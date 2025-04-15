@@ -36,7 +36,7 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<Result<EditProfileResponseModel>> editProfile(
+  Future<Result<String?>> editProfile(
       EditProfileRequestModel requestModel) {
     return authRemoteDataSource.editProfile(requestModel);
   }

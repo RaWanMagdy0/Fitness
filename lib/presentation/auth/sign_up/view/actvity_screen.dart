@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../../../core/di/di.dart';
 import '../../../../core/local/sign_up_provider.dart';
 import '../../../../core/routes/page_route_name.dart';
@@ -192,7 +191,6 @@ class _ActivityScreenState extends State<ActivityScreen> {
                         style: AppFonts.font20WhiteWeight800,
                         textAlign: TextAlign.start,
                       ),
-                      65.verticalSpace,
                       ValueListenableBuilder<String?>(
                         valueListenable: _selectedActivityLevel,
                         builder: (context, selectedValue, child) {
@@ -270,70 +268,78 @@ class _ActivityScreenState extends State<ActivityScreen> {
                       ValueListenableBuilder<String?>(
                         valueListenable: _selectedActivityLevel,
                         builder: (context, selectedValue, child) {
-                          return SizedBox(
-                            width: double.infinity,
-                            child: CustomButton(
-                              color: AppColors.kOrange,
-                              onPressed: selectedValue != null
-                                  ? () async {
-                                      if (isFromEditProfile) {
-                                        final displayActivity =
-                                            _activityMap[selectedValue] ??
-                                                'Rookie';
-                                        final prefs = await SharedPreferences
-                                            .getInstance();
-                                        await prefs.setString(
-                                            'edit_profile_activity',
-                                            displayActivity);
-                                        Navigator.pop(context);
-                                      } else {
-                                        try {
-                                          final signUpCubit =
-                                              context.read<SignUpCubit>();
-                                          signupProvider.saveData(
-                                              "activityLevel", selectedValue);
+                          return Padding(
+                            padding: EdgeInsets.only(bottom: 30.0),
+                            child: Column(
+                              children: [
+                                SizedBox(
+                                  width: double.infinity,
+                                  child: CustomButton(
+                                    color: AppColors.kOrange,
+                                    onPressed: selectedValue != null
+                                        ? () async {
+                                            if (isFromEditProfile) {
+                                              final displayActivity =
+                                                  _activityMap[selectedValue] ??
+                                                      'Rookie';
+                                              final prefs = await SharedPreferences
+                                                  .getInstance();
+                                              await prefs.setString(
+                                                  'edit_profile_activity',
+                                                  displayActivity);
+                                              Navigator.pop(context);
+                                            } else {
+                                              try {
+                                                final signUpCubit =
+                                                    context.read<SignUpCubit>();
+                                                signupProvider.saveData(
+                                                    "activityLevel", selectedValue);
 
-                                          final requestBody = SignupRequestBody(
-                                            firstName: signupProvider
-                                                .getData("firstName"),
-                                            lastName: signupProvider
-                                                .getData("lastName"),
-                                            email:
-                                                signupProvider.getData("email"),
-                                            password: signupProvider
-                                                .getData("password"),
-                                            rePassword: signupProvider
-                                                .getData("rePassword"),
-                                            height: int.tryParse(signupProvider
-                                                        .getData("height") ??
-                                                    '') ??
-                                                0,
-                                            weight: int.tryParse(signupProvider
-                                                        .getData("weight") ??
-                                                    '') ??
-                                                0,
-                                            age: int.tryParse(signupProvider
-                                                        .getData("age") ??
-                                                    '') ??
-                                                0,
-                                            gender: signupProvider
-                                                .getData("gender"),
-                                            goal:
-                                                signupProvider.getData("goal"),
-                                            activityLevel: selectedValue,
-                                          );
-                                          signUpCubit.signUp(requestBody);
-                                        } catch (e) {
-                                          Navigator.pushNamed(context,
-                                              PageRouteName.mainSignUp);
-                                        }
-                                      }
-                                    }
-                                  : null,
-                              child: Text(
-                                isFromEditProfile ? local.done : local.next,
-                                style: AppFonts.font14LightWhiteWeight500,
-                              ),
+                                                final requestBody = SignupRequestBody(
+                                                  firstName: signupProvider
+                                                      .getData("firstName"),
+                                                  lastName: signupProvider
+                                                      .getData("lastName"),
+                                                  email:
+                                                      signupProvider.getData("email"),
+                                                  password: signupProvider
+                                                      .getData("password"),
+                                                  rePassword: signupProvider
+                                                      .getData("rePassword"),
+                                                  height: int.tryParse(signupProvider
+                                                              .getData("height") ??
+                                                          '') ??
+                                                      0,
+                                                  weight: int.tryParse(signupProvider
+                                                              .getData("weight") ??
+                                                          '') ??
+                                                      0,
+                                                  age: int.tryParse(signupProvider
+                                                              .getData("age") ??
+                                                          '') ??
+                                                      0,
+                                                  gender: signupProvider
+                                                      .getData("gender"),
+                                                  goal:
+                                                      signupProvider.getData("goal"),
+                                                  activityLevel: selectedValue,
+                                                );
+                                                signUpCubit.signUp(requestBody);
+                                              } catch (e) {
+                                                Navigator.pushNamed(context,
+                                                    PageRouteName.mainSignUp);
+                                              }
+                                            }
+                                          }
+                                        : null,
+                                    child: Text(
+                                      isFromEditProfile ? local.done : local.next,
+                                      style: AppFonts.font14LightWhiteWeight500,
+                                    ),
+                                  ),
+                                ),
+                                40.verticalSpace
+                              ],
                             ),
                           );
                         },
@@ -363,9 +369,8 @@ class _ActivityScreenState extends State<ActivityScreen> {
                       AppDialogs.showHideDialog(context);
                       AppDialogs.showSuccessDialog(
                           context: context,
-                          message:
-                              "Create account successfully!! "
-                                  "please login in");
+                          message: "Create account successfully!! "
+                              "please login in");
                       Future.delayed(Duration(seconds: 2), () {
                         Navigator.pushReplacementNamed(
                             context, PageRouteName.login);
@@ -389,7 +394,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
             backgroundImage: AppImages.authBackground,
             enableBlur: true,
             blurStrength: 5.0,
-            blurHeight: 385.0,
+            blurHeight: 400.0,
             blurWidth: 370.0.w,
             borderRadius: 50.0,
             blurStartPosition: MediaQuery.of(context).size.height * 0.38,

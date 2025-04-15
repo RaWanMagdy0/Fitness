@@ -1,3 +1,4 @@
+import 'package:fitness_app/core/routes/page_route_name.dart';
 import 'package:fitness_app/presentation/home/workout/view_model/workout_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -76,7 +77,7 @@ class _UpcomingCardState extends State<MuscleCard> {
                         );
                       }
 
-                      return buildCardWidget(muscle.name!, muscle.image!);
+                      return buildCardWidget(muscle.name!, muscle.image!,muscle.id!);
                     },
                   ),
           );
@@ -90,61 +91,70 @@ class _UpcomingCardState extends State<MuscleCard> {
     );
   }
 
-  Widget buildCardWidget(String title, String imagePath) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 6,
-            spreadRadius: 2,
-          ),
-        ],
-      ),
-      child: Stack(
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(16),
-            child: Image.network(
-              imagePath,
-              width: double.infinity,
-              height: 160.h,
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) {
-                return ShimmerLoadingWidget(
-                  width: double.infinity,
-                  height: 160.h,
-                  borderRadius: 16.r,
-                );
-              },
+  Widget buildCardWidget(String title, String imagePath,String id) {
+    return InkWell(
+      onTap: (){
+        Navigator.pushNamed(context, PageRouteName.exerciseScreen, arguments: {
+          "id":id,
+          "imagePath":imagePath,
+          "title":title,
+        });
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 6,
+              spreadRadius: 2,
             ),
-          ),
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: Container(
-              padding: EdgeInsets.symmetric(vertical: 10.h),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(16),
-                  bottomRight: Radius.circular(16),
-                ),
-                color: Colors.black.withOpacity(0.6),
-              ),
-              child: Text(
-                title,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 14.sp,
-                  fontWeight: FontWeight.w600,
-                ),
+          ],
+        ),
+        child: Stack(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: Image.network(
+                imagePath,
+                width: double.infinity,
+                height: 160.h,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return ShimmerLoadingWidget(
+                    width: double.infinity,
+                    height: 160.h,
+                    borderRadius: 16.r,
+                  );
+                },
               ),
             ),
-          ),
-        ],
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: 10.h),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(16),
+                    bottomRight: Radius.circular(16),
+                  ),
+                  color: Colors.black.withOpacity(0.6),
+                ),
+                child: Text(
+                  title,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

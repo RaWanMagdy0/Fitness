@@ -133,10 +133,10 @@ class _GoalScreenState extends State<GoalScreen> {
         backgroundImage: AppImages.authBackground,
         enableBlur: true,
         blurStrength: 5.0,
-        blurHeight: 385.0.h,
+        blurHeight: 400.0.h,
         blurWidth: 370.0.w,
         borderRadius: 50.0.r,
-        blurStartPosition: MediaQuery.of(context).size.height * 0.38,
+        blurStartPosition: MediaQuery.of(context).size.height * 0.37,
         child: isLoading
             ? Center(child: CircularProgressIndicator(color: AppColors.kOrange))
             : SingleChildScrollView(

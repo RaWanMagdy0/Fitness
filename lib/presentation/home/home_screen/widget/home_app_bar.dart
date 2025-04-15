@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../../core/styles/fonts/app_fonts.dart';
 import '../../../../core/styles/images/app_images.dart';
+import '../../../../core/utils/widget/shimmer_loading_widget.dart';
 import '../../../profile/view_model/profile_cubit.dart';
 import '../../../profile/view_model/profile_state.dart';
 
@@ -85,16 +87,12 @@ class _HomeAppBarState extends State<HomeAppBar> {
   }
 
   Widget _buildShimmerEffect() {
-    return Shimmer.fromColors(
-      baseColor: Color(0xFFEEEEEE),
-      highlightColor: Color(0xFFD9D9D9),
-      child: Container(
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 1.0,vertical: 1.0),
+      child: ShimmerLoadingWidget(
         height: 60,
         width: 60,
-        decoration: BoxDecoration(
-          color: Colors.grey,
-          shape: BoxShape.circle,
-        ),
+        borderRadius: 50.r,
       ),
     );
   }

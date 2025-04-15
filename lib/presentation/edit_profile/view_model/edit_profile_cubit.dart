@@ -33,13 +33,6 @@ class EditProfileCubit extends BaseViewModel<EditProfileState> {
 
   }) async {
     emit(EditProfileLoading());
-
-    final token = await TokenManager.getToken();
-    if (token == null || token.isEmpty) {
-      emit(EditProfileError("Authorization token is missing. Please log in again."));
-      return;
-    }
-
     final requestModel = EditProfileRequestModel(
       firstName: firstName,
       lastName: lastName,
@@ -55,21 +48,12 @@ class EditProfileCubit extends BaseViewModel<EditProfileState> {
     );
 
     final result = await _editProfileUseCase.invoke(requestModel);
+    if (result is Success<String?>) {
+      emit(EditProfileSuccess(result.data ));
+    } else if (result is Fail<String?>) {
+      emit(EditProfileError(
+          errorMessage: getErrorMassageFromException(result.exception)));
 
-    if (result is Success<EditProfileResponseModel>) {
-      final data = (result).data;
-      emit(EditProfileSuccess(data?.message ?? "Profile updated successfully"));
-    } else if (result is Fail<EditProfileResponseModel>) {
-      final exception = (result).exception;
-      final errorMsg = getErrorMassageFromException(exception);
-
-      if (errorMsg.contains("token") ||
-          errorMsg.contains("unauthorized") ||
-          errorMsg.contains("Unauthorized")) {
-        emit(EditProfileError("Your session has expired. Please log in again."));
-      } else {
-        emit(EditProfileError(errorMsg));
-      }
     }
   }
   Future<void> uploadPhoto(File photo) async {
@@ -77,7 +61,6 @@ class EditProfileCubit extends BaseViewModel<EditProfileState> {
     var result = await uploadPhotoUseCase.invoke(photo);
     if (result is Success<String?>) {
       emit(UploadPhotoSuccessState(message: result.data));
-      await editProfile();
     } else if (result is Fail<String?>) {
       emit(UploadPhotoErrorState(
           errorMessage: getErrorMassageFromException(result.exception)));

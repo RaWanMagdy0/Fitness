@@ -15,6 +15,7 @@ class AppImages {
   static const loadingMess = "assets/animations/loading_mess.json";
   static const authBackground = "assets/images/auth_background.png";
   static const logoIcon = "assets/images/logoIcon.png";
+  static const splash2 = "assets/images/splash2.png";
   static const maleIcon = "assets/images/maleIcon.png";
   static const femaleIcon = "assets/images/femaleIcon.png";
   static const back = "assets/images/back.png";

@@ -1,6 +1,5 @@
 import 'package:fitness_app/core/routes/page_route_name.dart';
 import 'package:fitness_app/core/styles/colors/app_colors.dart';
-import 'package:fitness_app/core/utils/widget/custom%20scaffold.dart';
 import 'package:fitness_app/presentation/profile/view_model/profile_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -32,7 +31,6 @@ class _ChatScreenState extends State<ChatScreen> {
   bool showWelcomeMessage = true;
   final ScrollController _scrollController = ScrollController();
 
-
   @override
   void initState() {
     super.initState();
@@ -46,6 +44,7 @@ class _ChatScreenState extends State<ChatScreen> {
       updateChatTitles();
     });
   }
+
   void _scrollToBottom() {
     Future.delayed(Duration(milliseconds: 100), () {
       if (_scrollController.hasClients) {
@@ -57,6 +56,7 @@ class _ChatScreenState extends State<ChatScreen> {
       }
     });
   }
+
   void updateChatTitles() {
     final objectBox = context.read<ObjectBox>();
     setState(() {
@@ -76,7 +76,7 @@ class _ChatScreenState extends State<ChatScreen> {
               decoration: BoxDecoration(
                   color: AppColors.kMainColor.withOpacity(0.8),
                   borderRadius:
-                      BorderRadius.only(topLeft: Radius.circular(15.r))),
+                  BorderRadius.only(topLeft: Radius.circular(15.r))),
               width: MediaQuery.of(context).size.width * 0.7,
               height: double.infinity,
               padding: EdgeInsets.all(16),
@@ -136,237 +136,251 @@ class _ChatScreenState extends State<ChatScreen> {
               : List.from(cubit.messages);
           bool isLoading = state is GeminiLoadingState;
 
-          return CustomScaffold(
-            backgroundImage: AppImages.backgroundRobot,
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      InkWell(
-                          onTap: () {
-                            Navigator.pushReplacementNamed(
-                                context, PageRouteName.robotScreen);
-                          },
-                          child: CustomArrow()),
-                      Text(
-                        "Search Coach",
-                        style: AppFonts.font16WhiteWeight500
-                            .copyWith(fontSize: 18),
-                      ),
-                      GestureDetector(
-                        onTap: openPreviousChats,
-                        child: Image.asset(AppImages.menuIcon),
-                      ),
-                    ],
+          return Scaffold(
+            body: Stack(
+              children: [
+                Positioned.fill(
+                  child: Image.asset(
+                    AppImages.backgroundRobot,
+                    fit: BoxFit.cover,
                   ),
-                  50.verticalSpace,
-                  if (showWelcomeMessage && chatMessages.isEmpty && !isLoading)
-                    Expanded(
-                      child: Center(
-                        child: SingleChildScrollView(
-                          child: Column(
-                            children: [
-                              Lottie.asset(
-                                AppImages.geminiAnimi,
-                                height: 260.h,
-                              ),
-                              Text(
-                                "Hi How Can I Help You Today!",
-                                style: TextStyle(
-                                    color: AppColors.kWhite,
-                                    fontSize: 21.sp,
-                                    fontWeight: FontWeight.w500),
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
-                          ),
+                ),
+                Positioned.fill(
+                  child: Container(
+                    color: Colors.black.withOpacity(0.5),
+                  ),
+                ),
+                SafeArea(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            InkWell(
+                                onTap: () {
+                                  Navigator.pushReplacementNamed(
+                                      context, PageRouteName.robotScreen);
+                                },
+                                child: CustomArrow()),
+                            Text(
+                              "Search Coach",
+                              style: AppFonts.font16WhiteWeight500
+                                  .copyWith(fontSize: 18),
+                            ),
+                            GestureDetector(
+                              onTap: openPreviousChats,
+                              child: Image.asset(AppImages.menuIcon),
+                            ),
+                          ],
                         ),
-                      ),
-                    ),
-                  Expanded(
-                    child: ListView.builder(
-                      controller: _scrollController,
+                        50.verticalSpace,
 
-                      shrinkWrap: true,
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      itemCount: chatMessages.length + (isLoading ? 1 : 0),
-                      itemBuilder: (context, index) {
-                        if (isLoading && index == chatMessages.length) {
-                          return Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.center,
+                        // Chat content
+                        Expanded(
+                          child: showWelcomeMessage && chatMessages.isEmpty && !isLoading
+                              ? Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                CircleAvatar(
-                                  radius: 24.r,
-                                  backgroundColor: Colors.transparent,
-                                  child: ClipOval(
-                                    child: Image.asset(
-                                      AppImages.geminiImage,
-                                      fit: BoxFit.cover,
-                                      width: 48.w,
-                                      height: 48.h,
-                                    ),
-                                  ),
+                                Lottie.asset(
+                                  AppImages.geminiAnimi,
+                                  height: 260.h,
                                 ),
-                                16.horizontalSpace,
-                                _buildLoadingIndicator(),
+                                Text(
+                                  "Hi How Can I Help You Today!",
+                                  style: TextStyle(
+                                      color: AppColors.kWhite,
+                                      fontSize: 21.sp,
+                                      fontWeight: FontWeight.w500),
+                                  textAlign: TextAlign.center,
+                                ),
                               ],
                             ),
-                          );
-                        }
+                          )
+                              : ListView.builder(
+                            controller: _scrollController,
+                            shrinkWrap: true,
+                            physics: const AlwaysScrollableScrollPhysics(),
+                            itemCount: chatMessages.length + (isLoading ? 1 : 0),
+                            itemBuilder: (context, index) {
+                              if (isLoading && index == chatMessages.length) {
+                                return Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      CircleAvatar(
+                                        radius: 24.r,
+                                        backgroundColor: Colors.transparent,
+                                        child: ClipOval(
+                                          child: Image.asset(
+                                            AppImages.geminiImage,
+                                            fit: BoxFit.cover,
+                                            width: 48.w,
+                                            height: 48.h,
+                                          ),
+                                        ),
+                                      ),
+                                      16.horizontalSpace,
+                                      _buildLoadingIndicator(),
+                                    ],
+                                  ),
+                                );
+                              }
 
-                        final message = chatMessages[index];
-                        final isSender = message['sender'] == "user";
-                        return Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            mainAxisAlignment: isSender
-                                ? MainAxisAlignment.end
-                                : MainAxisAlignment.start,
-                            children: [
-                              if (!isSender)
-                                CircleAvatar(
-                                  radius: 24.r,
-                                  backgroundColor: Colors.transparent,
-                                  child: ClipOval(
-                                    child: Image.asset(
-                                      AppImages.geminiImage,
-                                      fit: BoxFit.cover,
-                                      width: 48.w,
-                                      height: 48.h,
+                              final message = chatMessages[index];
+                              final isSender = message['sender'] == "user";
+                              return Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Row(
+                                  mainAxisAlignment: isSender
+                                      ? MainAxisAlignment.end
+                                      : MainAxisAlignment.start,
+                                  children: [
+                                    if (!isSender)
+                                      CircleAvatar(
+                                        radius: 24.r,
+                                        backgroundColor: Colors.transparent,
+                                        child: ClipOval(
+                                          child: Image.asset(
+                                            AppImages.geminiImage,
+                                            fit: BoxFit.cover,
+                                            width: 48.w,
+                                            height: 48.h,
+                                          ),
+                                        ),
+                                      ),
+                                    8.horizontalSpace,
+                                    Flexible(
+                                      child: Container(
+                                        padding: EdgeInsets.all(10.0),
+                                        decoration: BoxDecoration(
+                                          color: isSender
+                                              ? AppColors.brownColor.withOpacity(0.5)
+                                              : AppColors.bottomNavColor
+                                              .withOpacity(0.9),
+                                          borderRadius: BorderRadius.circular(12.0),
+                                        ),
+                                        child: Text(
+                                          message['text'] ?? '',
+                                          style: const TextStyle(color: Colors.white),
+                                          softWrap: true,
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                ),
-                              8.horizontalSpace,
-                              Flexible(
-                                child: Container(
-                                  padding: EdgeInsets.all(10.0),
-                                  decoration: BoxDecoration(
-                                    color: isSender
-                                        ? AppColors.brownColor.withOpacity(0.5)
-                                        : AppColors.bottomNavColor
-                                            .withOpacity(0.9),
-                                    borderRadius: BorderRadius.circular(12.0),
-                                  ),
-                                  child: Text(
-                                    message['text'] ?? '',
-                                    style: const TextStyle(color: Colors.white),
-                                    softWrap: true,
-                                  ),
-                                ),
-                              ),
-                              8.horizontalSpace,
-                              if (isSender)
-                                BlocBuilder<ProfileCubit, ProfileState>(
-                                    builder: (context, state) {
-                                  final userImage = profileCubit.userImage;
-                                  return CircleAvatar(
-                                    radius: 24,
-                                    backgroundColor: Colors.transparent,
-                                    child: ClipOval(
-                                      child: userImage != null &&
-                                              userImage.isNotEmpty
-                                          ? Image.network(
-                                              userImage,
-                                              fit: BoxFit.cover,
-                                              width: 48,
-                                              height: 48,
-                                              errorBuilder:
-                                                  (context, error, stackTrace) {
-                                                return Image.asset(
+                                    8.horizontalSpace,
+                                    if (isSender)
+                                      BlocBuilder<ProfileCubit, ProfileState>(
+                                          builder: (context, state) {
+                                            final userImage = profileCubit.userImage;
+                                            return CircleAvatar(
+                                              radius: 24,
+                                              backgroundColor: Colors.transparent,
+                                              child: ClipOval(
+                                                child: userImage != null &&
+                                                    userImage.isNotEmpty
+                                                    ? Image.network(
+                                                  userImage,
+                                                  fit: BoxFit.cover,
+                                                  width: 48,
+                                                  height: 48,
+                                                  errorBuilder:
+                                                      (context, error, stackTrace) {
+                                                    return Image.asset(
+                                                      AppImages.person,
+                                                      fit: BoxFit.cover,
+                                                      width: 48,
+                                                      height: 48,
+                                                    );
+                                                  },
+                                                )
+                                                    : Image.asset(
                                                   AppImages.person,
                                                   fit: BoxFit.cover,
                                                   width: 48,
                                                   height: 48,
-                                                );
-                                              },
-                                            )
-                                          : Image.asset(
-                                              AppImages.person,
-                                              fit: BoxFit.cover,
-                                              width: 48,
-                                              height: 48,
-                                            ),
+                                                ),
+                                              ),
+                                            );
+                                          })
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+
+                        // Input field
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: TextField(
+                                  controller: _controller,
+                                  maxLines: null,
+                                  decoration: InputDecoration(
+                                    hintText: "Write your message...",
+                                    hintStyle: AppFonts.font14WhiteWeight400,
+                                    filled: true,
+                                    fillColor:
+                                    AppColors.bottomNavColor.withOpacity(0.5),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(25.0),
+                                      borderSide: BorderSide.none,
                                     ),
-                                  );
-                                })
+                                  ),
+                                  cursorColor: AppColors.kOrange,
+                                  style: AppFonts.font14WhiteWeight400,
+                                ),
+                              ),
+                              8.horizontalSpace,
+                              IconButton(
+                                icon: Icon(
+                                  cubit.isListening ? Icons.stop_circle : Icons.mic,
+                                  color: cubit.isListening
+                                      ? Colors.red
+                                      : AppColors.kWhite,
+                                  size: 28,
+                                ),
+                                onPressed: () {
+                                  if (!cubit.isListening) {
+                                    cubit.startListening();
+                                  } else {
+                                    cubit.stopListening();
+                                  }
+                                },
+                              ),
+                              IconButton(
+                                icon: Icon(Icons.send, color: AppColors.kWhite),
+                                onPressed: () {
+                                  if (_controller.text.trim().isNotEmpty) {
+                                    cubit.sendMessage(_controller.text);
+                                    _controller.clear();
+                                    setState(() {
+                                      showWelcomeMessage = false;
+                                    });
+                                    updateChatTitles();
+                                    _scrollToBottom();
+                                  }
+                                },
+                              ),
                             ],
                           ),
-                        );
-                      },
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: TextField(
-                            controller: _controller,
-                            maxLines: null,
-                            decoration: InputDecoration(
-                              hintText: "Write your message...",
-                              hintStyle: AppFonts.font14WhiteWeight400,
-                              filled: true,
-                              fillColor:
-                                  AppColors.bottomNavColor.withOpacity(0.5),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(25.0),
-                                borderSide: BorderSide.none,
-                              ),
-                            ),
-                            cursorColor: AppColors.kOrange,
-                            style: AppFonts.font14WhiteWeight400,
-                          ),
-                        ),
-                        8.horizontalSpace,
-                        IconButton(
-                          icon: Icon(
-                            cubit.isListening ? Icons.stop_circle : Icons.mic,
-                            color: cubit.isListening
-                                ? Colors.red
-                                : AppColors.kWhite,
-                            size: 28,
-                          ),
-                          onPressed: () {
-                            if (!cubit.isListening) {
-                              cubit.startListening();
-                            } else {
-                              cubit.stopListening();
-                            }
-                          },
-                        ),
-                        IconButton(
-                          icon: Icon(Icons.send, color: AppColors.kWhite),
-                          onPressed: () {
-                            if (_controller.text.trim().isNotEmpty) {
-                              cubit.sendMessage(_controller.text);
-                              _controller.clear();
-                              setState(() {
-                                showWelcomeMessage = false;
-                              });
-                              updateChatTitles();
-                              _scrollToBottom();
-
-                            }
-                          },
                         ),
                       ],
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           );
         },
       ),
     );
-
   }
 
   Widget _buildLoadingIndicator() {

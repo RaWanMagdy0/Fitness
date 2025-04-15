@@ -32,17 +32,3 @@ class LogoutErrorState extends ProfileState {
 
   LogoutErrorState(this.message);
 }
-class UploadPhotoLoadingState extends ProfileState {}
-
-class UploadPhotoSuccessState extends ProfileState {
-  final String? user;
-
-  UploadPhotoSuccessState({this.user});
-}
-
-class UploadPhotoErrorState extends ProfileState {
-  final String? errorMessage;
-
-  UploadPhotoErrorState({this.errorMessage});
-}
-
