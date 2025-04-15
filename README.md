@@ -77,15 +77,20 @@ goals, and maintain a healthy lifestyle.
   <img src="assets/screenshots/photo_36_2025-04-15_17-06-09.jpg" width="100"/>
   <img src="assets/screenshots/photo_37_2025-04-15_17-06-09.jpg" width="150"/>
   <img src="assets/screenshots/photo_8_2025-04-15_17-06-09.jpg" width="150"/>
-
   <img src="assets/screenshots/photo_9_2025-04-15_17-06-09.jpg" width="150"/>
   <img src="assets/screenshots/photo_4_2025-04-15_17-06-09.jpg" width="150"/>
   <img src="assets/screenshots/photo_5_2025-04-15_17-06-09.jpg" width="150"/>
+  <img src="assets/screenshots/photo_7_2025-04-15_17-06-09.jpg" width="150"/>
   <img src="assets/screenshots/photo_7_2025-04-15_17-06-09.jpg" width="150"/>
 
 </p>
 
 <p align="center">
+  <img src="assets/screenshots/photo_30_2025-04-15_17-06-09.jpg" width="150"/>
+  <img src="assets/screenshots/photo_32_2025-04-15_17-06-09.jpg" width="150"/>
+  <img src="assets/screenshots/photo_34_2025-04-15_17-06-09.jpg" width="150"/>
+  <img src="assets/screenshots/photo_35_2025-04-15_17-06-09.jpg" width="150"/>
+
   <img src="assets/screenshots/photo_15_2025-04-15_17-06-09.jpg" width="150"/>
   <img src="assets/screenshots/photo_23_2025-04-15_17-06-09.jpg" width="150"/>
 
@@ -119,13 +124,9 @@ goals, and maintain a healthy lifestyle.
   <img src="assets/screenshots/photo_26_2025-04-15_17-06-09.jpg" width="150"/>
   <img src="assets/screenshots/photo_27_2025-04-15_17-06-09.jpg" width="150"/>
   <img src="assets/screenshots/photo_28_2025-04-15_17-06-09.jpg" width="150"/>
-  <img src="assets/screenshots/photo_30_2025-04-15_17-06-09.jpg" width="150"/>
 </p>
 
 <p align="center">
-  <img src="assets/screenshots/photo_32_2025-04-15_17-06-09.jpg" width="150"/>
-  <img src="assets/screenshots/photo_34_2025-04-15_17-06-09.jpg" width="150"/>
-  <img src="assets/screenshots/photo_35_2025-04-15_17-06-09.jpg" width="150"/>
 </p>
 
 <p align="center">
