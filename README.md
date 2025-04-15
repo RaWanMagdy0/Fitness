@@ -93,7 +93,7 @@ A proprietary **Flutter-based fitness application** designed to help users track
   <img src="assets/screenshots/photo_19_2025-04-15_17-06-09.jpg" width="150"/>
   <img src="assets/screenshots/photo_20_2025-04-15_17-06-09.jpg" width="150"/>
   <img src="assets/screenshots/photo_21_2025-04-15_17-06-09.jpg" width="150"/>
-  <img src="assets/screenshots/photo_22_2025-04-15_17-06-09.jpg" width="150"/>
+  <img src="assets/screenshots/photo_22_2025-04-15_17-06-09.jpg" width="50"/>
   <img src="assets/screenshots/photo_23_2025-04-15_17-06-09.jpg" width="150"/>
   <img src="assets/screenshots/photo_24_2025-04-15_17-06-09.jpg" width="150"/>
 </p>
