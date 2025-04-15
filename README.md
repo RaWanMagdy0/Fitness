@@ -107,6 +107,8 @@ goals, and maintain a healthy lifestyle.
   <img src="assets/screenshots/photo_18_2025-04-15_17-06-09.jpg" width="150"/>
   <img src="assets/screenshots/photo_27_2025-04-15_17-06-09.jpg" width="150"/>
   <img src="assets/screenshots/photo_11_2025-04-15_17-06-09.jpg" width="150"/>
+  <img src="assets/screenshots/photo_40_2025-04-15_19-12-41.jpg" width="150"/>
+  <img src="assets/screenshots/photo_41_2025-04-15_19-12-41.jpg" width="150"/>
   <img src="assets/screenshots/photo_26_2025-04-15_17-06-09.jpg" width="150"/>
   <img src="assets/screenshots/photo_16_2025-04-15_17-06-09.jpg" width="150"/>
   <img src="assets/screenshots/photo_15_2025-04-15_17-06-09.jpg" width="150"/>
@@ -116,14 +118,3 @@ goals, and maintain a healthy lifestyle.
 
 </p>
 
-<p align="center">
-</p>
-
-<p align="center">
-</p>
-
-<p align="center">
-</p>
-
-<p align="center">
-</p>
