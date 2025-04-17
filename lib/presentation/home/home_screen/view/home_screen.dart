@@ -1,6 +1,5 @@
 import 'package:fitness_app/core/routes/page_route_name.dart';
 import 'package:fitness_app/core/styles/fonts/app_fonts.dart';
-import 'package:fitness_app/core/utils/widget/custom%20scaffold.dart';
 import 'package:fitness_app/presentation/home/home_screen/widget/home_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,7 +11,6 @@ import '../../../../core/styles/colors/app_colors.dart';
 import '../../../../core/styles/images/app_images.dart';
 import '../../../../core/utils/widget/custom_button.dart';
 import '../../../../core/utils/widget/shimmer_loading_widget.dart';
-import '../../../profile/view_model/profile_cubit.dart';
 import '../view_model/home_cubit.dart';
 import '../view_model/home_state.dart';
 import '../widget/category_section.dart';
@@ -32,30 +30,44 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   String selectedMuscleGroupId = "";
   late HomeCubit viewModel;
-  late ProfileCubit profileCubit;
   final FlutterSecureStorage secureStorage = FlutterSecureStorage();
+
+  bool _isInitialized = false;
 
   @override
   void initState() {
     super.initState();
     viewModel = getIt.get<HomeCubit>();
-    profileCubit = getIt.get<ProfileCubit>();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _checkAndShowLoginDialog();
-    });
+    _initialize();
   }
 
-  void _checkAndShowLoginDialog() async {
-    final hasShownDialog = await SecureStorageFactory.readData(key: 'has_shown_stay_logged_in_dialog') == 'true';
-    final isNewLogin = await SecureStorageFactory.readData(key: 'is_new_login') == 'true';
-    if (isNewLogin && !hasShownDialog) {
-      await SecureStorageFactory.writeData(key: 'is_new_login', value: 'false');
-      await SecureStorageFactory.writeData(key: 'has_shown_stay_logged_in_dialog', value: 'true');
-      _showStayLoggedInDialog();
+  Future<void> _initialize() async {
+     _checkAndShowLoginDialog();
+    if (mounted) {
+      setState(() {
+        _isInitialized = true;
+      });
     }
   }
 
-  void _showStayLoggedInDialog() {
+  void _checkAndShowLoginDialog() async {
+    try {
+      final hasShownDialog = await SecureStorageFactory.readData(
+          key: 'has_shown_stay_logged_in_dialog') ==
+          'true';
+      final isNewLogin =
+          await SecureStorageFactory.readData(key: 'is_new_login') == 'true';
+
+      if (isNewLogin && !hasShownDialog && mounted) {
+        await SecureStorageFactory.writeData(key: 'is_new_login', value: 'false');
+        await SecureStorageFactory.writeData(
+            key: 'has_shown_stay_logged_in_dialog', value: 'true');
+        _showStayLoggedInDialog();
+      }
+    } catch (e) {
+      debugPrint('Error checking login dialog: $e');
+    }
+  }  void _showStayLoggedInDialog() {
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -85,7 +97,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   style: AppFonts.font14WhiteWeight400,
                   textAlign: TextAlign.center,
                 ),
-
                 24.verticalSpace,
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -136,24 +147,42 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (!_isInitialized) {
+      return Scaffold(
+        body: Container(
+          color: AppColors.kMainColor,
+          child: Center(
+            child: CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(AppColors.kOrange),
+            ),
+          ),
+        ),
+      );
+    }
     return Scaffold(
       body: Stack(
         children: [
           Positioned.fill(
-            child: CustomScaffold(
-              backgroundImage: AppImages.homeBackG,
-              overlayOpacity: 0.1,
-              child: Column(
-                children: [
-                  HomeAppBar(profileCubit: profileCubit),
-                  10.verticalSpace,
-                  SingleChildScrollView(
+            child: Image.asset(
+              AppImages.homeBackG,
+              fit: BoxFit.cover,
+            ),
+          ),
+          Positioned.fill(
+            child: Container(color: Colors.black.withOpacity(0.1)),
+          ),
+          SafeArea(
+            child: Column(
+              children: [
+                HomeAppBar(),
+                10.verticalSpace,
+                Expanded(
+                  child: SingleChildScrollView(
                     physics: const BouncingScrollPhysics(),
                     padding: const EdgeInsets.only(bottom: 100),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: Column(
-                        mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text("Category",
@@ -206,8 +235,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                   return _buildShimmerTabs();
                                 } else if (state is MuscleGroupIdError) {
                                   return Center(
-                                      child:
-                                          Text("Error: ${state.errorMessage}"));
+                                      child: Text(
+                                          "Error: \${state.errorMessage}"));
                                 } else if (state is MuscleGroupIdSuccess) {
                                   return UpcomingCard(
                                       muscleGroupId: selectedMuscleGroupId);
@@ -241,13 +270,13 @@ class _HomeScreenState extends State<HomeScreen> {
                           const SizedBox(height: 30),
                           Text("Popular Training",
                               style: AppFonts.font18WhiteWeight400),
-                          SizedBox(child: const PopularCard())
+                          const PopularCard(),
                         ],
                       ),
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ],

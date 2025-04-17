@@ -12,13 +12,11 @@ import 'profile_state.dart';
 class ProfileCubit extends BaseViewModel<ProfileState> {
   final ProfileUseCase profileUseCase;
   final LogoutUseCase logoutUseCase;
-  final UploadPhotoUseCase _uploadPhotoUseCase;
   final FlutterSecureStorage secureStorage = FlutterSecureStorage();
 
   ProfileCubit(
     this.profileUseCase,
     this.logoutUseCase,
-    this._uploadPhotoUseCase,
   ) : super(ProfileInitialState());
 
   String? userImage;
@@ -44,7 +42,6 @@ class ProfileCubit extends BaseViewModel<ProfileState> {
     final response = await logoutUseCase.invoke();
     switch (response) {
       case Success<String?>():
-        await secureStorage.delete(key: 'token');
         emit(LogoutSuccessState(response.data));
       case Fail<String?>():
         emit(

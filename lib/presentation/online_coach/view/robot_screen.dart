@@ -26,26 +26,24 @@ class _RobotScreenState extends State<RobotScreen> {
   @override
   void initState() {
     super.initState();
-    // نتحقق فقط من تحميل البيانات لأول مرة
-    if (!_isDataLoaded) {
-      _loadDataFuture = _loadData();
-    }
+
+    _loadDataFuture = _loadData();
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // إذا كانت البيانات لم يتم تحميلها بعد، قم بتحميلها من هنا
     if (!_isDataLoaded) {
       _loadDataFuture = _loadData();
     }
+    precacheImage(AssetImage(AppImages.robot), context);
+    precacheImage(AssetImage(AppImages.backgroundRobot), context);
   }
-
   Future<void> _loadData() async {
     final cubit = context.read<ProfileCubit>();
     await cubit.getUserData();
     setState(() {
-      _isDataLoaded = true; // تعيين المتغير بعد تحميل البيانات
+      _isDataLoaded = true;
     });
   }
 
@@ -54,7 +52,7 @@ class _RobotScreenState extends State<RobotScreen> {
     return CustomScaffold(
       backgroundImage: AppImages.backgroundRobot,
       overlayOpacity: 0.1,
-      enableBlur: true,
+      enableBlur: false,
       blurStrength: 6.0,
       blurHeight: 140.0.h,
       blurWidth: 350.0.w,
@@ -73,27 +71,34 @@ class _RobotScreenState extends State<RobotScreen> {
                     FutureBuilder(
                       future: _loadDataFuture,
                       builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.waiting) {
-                          return _buildShimmerTabs(); // عرض شيمر أثناء التحميل
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return _buildShimmerTabs();
                         } else if (snapshot.hasError) {
-                          return Text("Error: ${snapshot.error}", style: AppFonts.font16WhiteWeight500);
-                        } else if (snapshot.connectionState == ConnectionState.done) {
+                          return Text("Error: ${snapshot.error}",
+                              style: AppFonts.font16WhiteWeight500);
+                        } else if (snapshot.connectionState ==
+                            ConnectionState.done) {
                           final cubit = context.watch<ProfileCubit>();
                           final userName = cubit.userName;
                           return Row(
                             children: [
                               Text("Hi", style: AppFonts.font16WhiteWeight500),
                               2.horizontalSpace,
-                              Text(userName ?? "Rowan", style: AppFonts.font16WhiteWeight500),
+                              Text(userName ?? "Rowan",
+                                  style: AppFonts.font16WhiteWeight500),
                               Text(",", style: AppFonts.font16WhiteWeight500),
                             ],
                           );
                         } else {
-                          return Text("Unexpected state", style: AppFonts.font16WhiteWeight500);
+                          return Text("Unexpected state",
+                              style: AppFonts.font16WhiteWeight500);
                         }
                       },
                     ),
-                    Text("I Am Your Smart Coach", style: AppFonts.font16WhiteWeight500.copyWith(fontSize: 18.sp)),
+                    Text("I Am Your Smart Coach",
+                        style: AppFonts.font16WhiteWeight500
+                            .copyWith(fontSize: 18.sp)),
                   ],
                 ),
                 GestureDetector(
@@ -105,7 +110,11 @@ class _RobotScreenState extends State<RobotScreen> {
               ],
             ),
             20.verticalSpace,
-            Image.asset(AppImages.robot),
+            Image.asset(
+              AppImages.robot,
+              fit: BoxFit.cover,
+              height: 500.h,
+            ),
             Center(
               child: Text(
                 "How Can I Assist You Today?",
@@ -116,7 +125,8 @@ class _RobotScreenState extends State<RobotScreen> {
             CustomButton(
               width: 300.w,
               onPressed: () {
-                Navigator.pushReplacementNamed(context, PageRouteName.chatScreen);
+                Navigator.pushReplacementNamed(
+                    context, PageRouteName.chatScreen);
               },
               text: "Get Started",
               textStyle: AppFonts.font14WhiteWeight800,
@@ -171,10 +181,12 @@ class _RobotScreenState extends State<RobotScreen> {
                   Expanded(
                     child: ListView.separated(
                       itemCount: previousConversations.length,
-                      separatorBuilder: (context, index) => Divider(color: Colors.white24, thickness: 1),
+                      separatorBuilder: (context, index) =>
+                          Divider(color: Colors.white24, thickness: 1),
                       itemBuilder: (context, index) {
                         return ListTile(
-                            leading: Icon(Icons.arrow_back_ios, color: AppColors.kOrange),
+                            leading: Icon(Icons.arrow_back_ios,
+                                color: AppColors.kOrange),
                             title: Text(
                               previousConversations[index],
                               style: TextStyle(color: Colors.white),

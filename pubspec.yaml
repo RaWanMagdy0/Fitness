@@ -76,12 +76,6 @@ dependencies:
   youtube_player_flutter: ^9.1.1
   flutter_inappwebview: ^6.1.5
 
-flutter_native_splash:
-  color: "#000000"
-  image: assets/images/splash2.png
-  android: true
-  ios: true
-  android_gravity: fill
 
 flutter_icons:
   android: true
@@ -93,7 +87,6 @@ flutter_icons:
   flutter_inappwebview: ^6.1.5
 
 
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -101,10 +94,6 @@ dev_dependencies:
   flutter_launcher_icons: ^0.14.3
   injectable_generator: ^2.6.0
   objectbox_generator: ^4.1.0
-
-
-
-
 
 
 

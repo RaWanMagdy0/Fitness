@@ -17,35 +17,42 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _checkLoginStatus();
-    });
+    _navigateToNextScreen();
   }
 
-  Future<void> _checkLoginStatus() async {
-    final stayLoggedIn =
-        await SecureStorageFactory.readData(key: 'stay_logged_in') ?? 'false';
-    log(stayLoggedIn, name: 'SplashScreen stayLoggedIn');
+  Future<void> _navigateToNextScreen() async {
+    await Future.delayed(const Duration(seconds: 2));
 
-    String route = PageRouteName.login;
+    if (!mounted) return;
+    final stayLoggedIn = await SecureStorageFactory.readData(key: 'stay_logged_in') ?? 'false';
+    log('SplashScreen stayLoggedIn: $stayLoggedIn', name: 'SplashScreen');
+
     if (stayLoggedIn == 'true') {
-      route = PageRouteName.layoutScreen;
+      Navigator.pushReplacementNamed(context, PageRouteName.layoutScreen);
     } else {
-      TokenManager.deleteToken();
-    }
+      final firstLaunch = await SecureStorageFactory.readData(key: 'first_launch') ?? 'true';
 
-    Navigator.of(context).pushReplacementNamed(route);
+      if (firstLaunch == 'true') {
+        await SecureStorageFactory.writeData(key: 'first_launch', value: 'false');
+        Navigator.pushReplacementNamed(context, PageRouteName.onBoarding);
+      } else {
+        await TokenManager.deleteToken();
+        Navigator.pushReplacementNamed(context, PageRouteName.login);
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Column(
-      children: [
-        Image.asset(
+      body: Center(
+        child: Image.asset(
           AppImages.splash2,
-        )
-      ],
-    ));
+          fit: BoxFit.cover,
+          width: double.infinity,
+         // height: double.infinity,
+        ),
+      ),
+    );
   }
 }

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shimmer/shimmer.dart';
 
+import '../../../../core/di/di.dart';
 import '../../../../core/styles/fonts/app_fonts.dart';
 import '../../../../core/styles/images/app_images.dart';
 import '../../../../core/utils/widget/shimmer_loading_widget.dart';
@@ -10,9 +11,9 @@ import '../../../profile/view_model/profile_cubit.dart';
 import '../../../profile/view_model/profile_state.dart';
 
 class HomeAppBar extends StatefulWidget {
-  final ProfileCubit profileCubit;
-
-  const HomeAppBar({super.key, required this.profileCubit});
+  const HomeAppBar({
+    super.key,
+  });
 
   @override
   State<HomeAppBar> createState() => _HomeAppBarState();
@@ -24,7 +25,7 @@ class _HomeAppBarState extends State<HomeAppBar> {
   @override
   void initState() {
     super.initState();
-    viewModel = widget.profileCubit;
+    viewModel = getIt.get<ProfileCubit>();
     viewModel.getUserData();
   }
 
@@ -35,7 +36,6 @@ class _HomeAppBarState extends State<HomeAppBar> {
       builder: (context, state) {
         final userName = viewModel.userName;
         final userImage = viewModel.userImage;
-
         return Padding(
           padding: const EdgeInsets.all(16.0),
           child: Row(
@@ -88,7 +88,7 @@ class _HomeAppBarState extends State<HomeAppBar> {
 
   Widget _buildShimmerEffect() {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 1.0,vertical: 1.0),
+      padding: EdgeInsets.symmetric(horizontal: 1.0, vertical: 1.0),
       child: ShimmerLoadingWidget(
         height: 60,
         width: 60,

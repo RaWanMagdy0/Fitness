@@ -45,12 +45,19 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         padding: EdgeInsets.symmetric(horizontal: 24.w),
         child: BlocConsumer<ForgotPasswordCubit, ForgotPasswordState>(
           listener: (context, state) {
-            if (state is ForgotPasswordEmailSent) {
-              Navigator.pushNamed(context, PageRouteName.verifyCode);
-            } else if (state is ForgotPasswordError) {
+            if (state is ForgotPasswordSuccess) {
+              AppDialogs.showSuccessDialog(
+                context: context,
+                message: "OTP sent successfully, please check your email!",
+                whenAnimationFinished: () {
+                  Navigator.pushNamed(context, PageRouteName.verifyCode);
+                },
+              );
+            }
+            else if (state is ForgotPasswordError) {
               AppDialogs.showErrorDialog(
                 context: context,
-                errorMassage: state.message,
+                errorMassage: state.errorMessage,
               );
             } else if (state is ForgotPasswordLoading) {
               AppDialogs.showLoading(

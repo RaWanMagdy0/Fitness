@@ -3,7 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/routes/page_route_name.dart' show PageRouteName;
 import '../../../../core/styles/fonts/app_fonts.dart';
-import '../../../../core/utils/functions/dialogs/app_dialogs.dart' show AppDialogs;
+import '../../../../core/utils/functions/dialogs/app_dialogs.dart'
+    show AppDialogs;
 import '../../../../core/utils/widget/custom scaffold.dart' show CustomScaffold;
 import '../../../../core/utils/widget/custom_button.dart';
 import '../../../../core/utils/widget/custom_text_form_field.dart';
@@ -47,7 +48,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
         padding: EdgeInsets.symmetric(horizontal: 24.w),
         child: BlocConsumer<ForgotPasswordCubit, ForgotPasswordState>(
           listener: (context, state) {
-            if (state is ForgotPasswordComplete) {
+            if (state is ResetPasswordSuccess) {
               AppDialogs.showSuccessDialog(
                 context: context,
                 message: "Password reset successfully",
@@ -55,14 +56,18 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   Navigator.pushNamedAndRemoveUntil(
                     context,
                     PageRouteName.login,
-                        (route) => false,
+                    (route) => false,
                   );
                 },
               );
-            } else if (state is ForgotPasswordError) {
+            } else if (state is ResetPasswordError) {
               AppDialogs.showErrorDialog(
                 context: context,
-                errorMassage: state.message,
+                errorMassage: state.errorMessage,
+              );
+            } else if (state is ResetPasswordLoading) {
+              AppDialogs.showLoading(
+                context: context,
               );
             }
           },
@@ -87,7 +92,6 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   40.verticalSpace,
                   CustomTextFormField(
                     backgroundColor: Colors.white.withOpacity(0.1),
-
                     controller: _passwordController,
                     hintText: local.enter_your_password,
                     isPassword: true,
@@ -97,12 +101,12 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   16.verticalSpace,
                   CustomTextFormField(
                     backgroundColor: Colors.white.withOpacity(0.1),
-
                     controller: _confirmPasswordController,
                     hintText: local.confirm_password,
                     isPassword: true,
                     prefixIcon: Icon(Icons.lock_outline, color: Colors.grey),
-                    validator: (value) => Validators.validatePasswordConfirmation(
+                    validator: (value) =>
+                        Validators.validatePasswordConfirmation(
                       password: _passwordController.text,
                       confirmPassword: value,
                     ),
@@ -115,11 +119,12 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
                           context.read<ForgotPasswordCubit>().resetPassword(
-                            _passwordController.text,
-                          );
+                                _passwordController.text,
+                              );
                         }
                       },
-                      child: Text(local.done, style: AppFonts.font16WhiteWeight500),
+                      child: Text(local.done,
+                          style: AppFonts.font16WhiteWeight500),
                     ),
                   20.verticalSpace
                 ],
