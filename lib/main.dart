@@ -21,8 +21,6 @@ import 'generated/l10n.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
   configureDependencies();
   Bloc.observer = AppBlocObserver();
@@ -31,10 +29,8 @@ void main() async {
   await localProvider.loadSavedLanguage();
   await signupProvider.loadUserData();
   final objectBox = await ObjectBox.create();
-  final stayLoggedIn = await SecureStorageFactory.readData(key: 'stay_logged_in') ?? 'false';
-  final initialRoute = stayLoggedIn == 'true' ? PageRouteName.layoutScreen : PageRouteName.onBoarding;
-
   FlutterNativeSplash.remove();
+
   runApp(
     MultiProvider(
       providers: [
@@ -43,15 +39,14 @@ void main() async {
         BlocProvider(create: (context) => getIt<ProfileCubit>()),
         Provider<ObjectBox>.value(value: objectBox),
       ],
-      child: MyApp(initialRoute: initialRoute),
+      child: MyApp(),
     ),
   );
 }
 
 class MyApp extends StatefulWidget {
-  final String initialRoute;
 
-  const MyApp({super.key, required this.initialRoute, });
+  const MyApp({super.key, });
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -105,7 +100,7 @@ class _MyAppState extends State<MyApp> {
                         supportedLocales: S.delegate.supportedLocales,
                         debugShowCheckedModeBanner: false,
                         theme: AppTheme.appTheme,
-                        initialRoute: widget.initialRoute,
+                        initialRoute: PageRouteName.splashscreen,
                         onGenerateRoute: AppRoutes.onGenerateRoute,
                       ),
                       if (!isConnected)

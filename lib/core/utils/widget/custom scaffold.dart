@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'dart:ui';
 
-
 class CustomScaffold extends StatelessWidget {
   final Widget child;
   final String backgroundImage;
@@ -51,23 +50,28 @@ class CustomScaffold extends StatelessWidget {
                     if (enableBlur)
                       Positioned(
                         top: blurStartPosition,
-                        left: (MediaQuery.of(context).size.width - blurWidth) / 2,
+                        left:
+                            (MediaQuery.of(context).size.width - blurWidth) / 2,
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(borderRadius),
                           child: BackdropFilter(
-                            filter: ImageFilter.blur(sigmaX: blurStrength, sigmaY: blurStrength),
+                            filter: ImageFilter.blur(
+                                sigmaX: blurStrength, sigmaY: blurStrength),
                             child: Container(
                               width: blurWidth,
                               height: blurHeight,
                               decoration: BoxDecoration(
-                                color:color?? Colors.white.withOpacity(0.1),
-                                borderRadius: BorderRadius.circular(borderRadius),
+                                color: color ?? Colors.white.withOpacity(0.1),
+                                borderRadius:
+                                    BorderRadius.circular(borderRadius),
                               ),
                             ),
                           ),
                         ),
                       ),
-                    child,
+                    Builder(
+                      builder: (context) => child,
+                    ),
                   ],
                 ),
               ),

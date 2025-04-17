@@ -58,14 +58,14 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
         padding: EdgeInsets.symmetric(horizontal: 24.w),
         child: BlocConsumer<ForgotPasswordCubit, ForgotPasswordState>(
           listener: (context, state) {
-            if (state is ForgotPasswordCodeVerified) {
+            if (state is VerifyCodePasswordSuccess) {
               Navigator.pushNamed(context, PageRouteName.resetPassword);
-            } else if (state is ForgotPasswordError) {
+            } else if (state is VerifyCodePasswordError) {
               AppDialogs.showErrorDialog(
                 context: context,
                 errorMassage: "Wrong OTP Code",
               );
-            } else if (state is ForgotPasswordLoading) {
+            } else if (state is VerifyCodePasswordLoading) {
               AppDialogs.showLoading(
                 context: context,
               );

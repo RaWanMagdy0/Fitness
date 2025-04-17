@@ -37,7 +37,7 @@ class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
       final _ = result as Success;
       startResendTimer();
       startOtpExpiryTimer();
-      emit(ForgotPasswordEmailSent());
+      emit(ForgotPasswordSuccess());
     } else if (result is Fail) {
       final failResult = result as Fail;
       emit(ForgotPasswordError(failResult.exception?.toString() ?? "Error sending email"));
@@ -45,7 +45,7 @@ class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
   }
 
   Future<void> verifyCode(String code) async {
-    emit(ForgotPasswordLoading());
+    emit(VerifyCodePasswordLoading());
 
     final result = await authRepository.verifyResetCode(
       VerifyCodeRequestModel(resetCode: code),
@@ -53,15 +53,15 @@ class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
 
     if (result is Success) {
       final _ = result as Success;
-      emit(ForgotPasswordCodeVerified());
+      emit(VerifyCodePasswordSuccess());
     } else if (result is Fail) {
       final failResult = result as Fail;
-      emit(ForgotPasswordError(failResult.exception?.toString() ?? "Invalid code"));
+      emit(VerifyCodePasswordError(failResult.exception?.toString() ?? "Invalid code"));
     }
   }
 
   Future<void> resetPassword(String password) async {
-    emit(ForgotPasswordLoading());
+    emit(ResetPasswordLoading());
     final result = await authRepository.resetPassword(
       ResetPasswordRequestModel(
         email: appProvider.email,
@@ -70,10 +70,10 @@ class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
     );
     if (result is Success) {
       final _ = result as Success;
-      emit(ForgotPasswordComplete());
+      emit(ResetPasswordSuccess());
     } else if (result is Fail) {
       final failResult = result as Fail;
-      emit(ForgotPasswordError(failResult.exception?.toString() ?? "Error resetting password"));
+      emit(ResetPasswordError(failResult.exception?.toString() ?? "Error resetting password"));
     }
   }
 

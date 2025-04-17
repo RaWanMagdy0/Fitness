@@ -115,6 +115,6 @@ goals, and maintain a healthy lifestyle.
   <img src="assets/screenshots/photo_19_2025-04-15_17-06-09.jpg" width="150"/>
   <img src="assets/screenshots/photo_17_2025-04-15_17-06-09.jpg" width="150"/>
   <img src="assets/screenshots/photo_14_2025-04-15_17-06-09.jpg" width="150"/>
-
+  <img src="assets/screenshots/photo_2025-04-17_23-18-03.jpg" width="150"/>
 </p>
 

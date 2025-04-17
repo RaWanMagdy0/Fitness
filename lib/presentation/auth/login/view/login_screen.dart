@@ -46,7 +46,7 @@ class LoginScreen extends StatelessWidget {
           AppDialogs.showHideDialog(context);
           AppDialogs.showErrorDialog(
             context: context,
-            errorMassage: state.error,
+            errorMassage: "incorrect email or password",
           );
         }
       },
