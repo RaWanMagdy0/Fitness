@@ -1,14 +1,15 @@
-import 'package:fitness_app/core/api/api_result.dart';
-import 'package:fitness_app/data/data_source/auth_data_source/auth_remote_data_source.dart';
-import 'package:fitness_app/data/models/sign_up/request/sign_up_request_body.dart';
-import 'package:fitness_app/data/repository/auth_repository/auth_repository_impl.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
-import 'auth_repository_impl.mocks.dart';
+import 'package:fitness_app/core/api/api_result.dart';
+import 'package:fitness_app/data/data_source/auth_data_source/auth_remote_data_source.dart';
+import 'package:fitness_app/data/models/sign_up/request/sign_up_request_body.dart';
+import 'package:fitness_app/data/repository/auth_repository/auth_repository_impl.dart';
 
-@GenerateMocks([AuthRemoteDataSource])
+import 'auth_repository_impl.mocks.dart' show MockAuthRemoteDataSource;
+
+@GenerateMocks([AuthRemoteDataSource]) // 🟢 This tells Mockito what to mock
 void main() {
   late MockAuthRemoteDataSource mockAuthRemoteDataSource;
   late AuthRepositoryImpl authRepositoryImpl;

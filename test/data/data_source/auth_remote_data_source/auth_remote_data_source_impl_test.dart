@@ -6,7 +6,8 @@ import 'package:fitness_app/data/models/sign_up/response/sign_up_response_model.
 import 'package:mockito/annotations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'auth_remote_data_source_impl_test.mocks.dart';
+
+import 'auth_remote_data_source_impl_test.mocks.dart' show MockAuthApiManager;
 
 @GenerateMocks([AuthApiManager])
 void main() {
