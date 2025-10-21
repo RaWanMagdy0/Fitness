@@ -29,7 +29,7 @@ import 'auth_remote_data_source.dart';
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   final AuthApiManager authApiManager;
 
-  AuthRemoteDataSourceImpl(this.authApiManager);
+  AuthRemoteDataSourceImpl({required this.authApiManager});
 
   @override
   Future<Result<String?>> signUp(SignupRequestBody signupRequestBody) {

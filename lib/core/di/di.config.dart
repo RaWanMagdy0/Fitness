@@ -132,13 +132,14 @@ extension GetItInjectableX on _i174.GetIt {
         workoutRemoteDataSource: gh<_i1064.WorkoutRemoteDataSource>()));
     gh.factory<_i753.HomeRemoteDataSource>(
         () => _i1016.HomeRemoteDataSourceImpl(gh<_i968.HomeApiManager>()));
+    gh.factory<_i249.AuthRemoteDataSource>(() =>
+        _i1001.AuthRemoteDataSourceImpl(
+            authApiManager: gh<_i515.AuthApiManager>()));
     gh.factory<_i1034.MealRemoteDataSource>(() =>
         _i222.MealRemoteDataSourceImpl(
             mealApiManager: gh<_i1065.MealApiManager>()));
     gh.factory<_i265.ProfileRepository>(() => _i677.ProfileRepositoryImpl(
         profileRemoteDataSource: gh<_i2.ProfileRemoteDataSource>()));
-    gh.factory<_i249.AuthRemoteDataSource>(
-        () => _i1001.AuthRemoteDataSourceImpl(gh<_i515.AuthApiManager>()));
     gh.factory<_i97.HomeRepository>(
         () => _i117.HomeRepositoryImpl(gh<_i753.HomeRemoteDataSource>()));
     gh.factory<_i721.GeminiCubit>(
